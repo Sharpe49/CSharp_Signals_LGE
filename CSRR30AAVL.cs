@@ -1,39 +1,41 @@
-using Orts.Formats.Msts;
+using Orts.Simulation.Signalling;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Orts.Simulation.Signalling
+namespace ORTS.Scripting.Script
 {
     public class CSRR30AAVL : CsSignalScript
     {
         public CSRR30AAVL()
         {
-
         }
 
         public override void Initialize()
         {
-
         }
 
         public override void Update()
         {
-            List<string> nextSignalTextAspects = GetNextSignalTextAspects(MstsSignalFunction.NORMAL);
+            int nextNormalSignalId = NextSignalId("NORMAL");
+            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
+            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
             if (!Enabled
-                || BlockState == MstsBlockState.JN_OBSTRUCTED)
+                || CurrentBlockState == BlockState.Obstructed)
             {
-                MstsSignalAspect = MstsSignalAspect.STOP;
+                MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C";
             }
-            else if (BlockState == MstsBlockState.OCCUPIED)
+            else if (CurrentBlockState == BlockState.Occupied)
             {
-                MstsSignalAspect = MstsSignalAspect.STOP_AND_PROCEED;
+                MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
             else if (RouteSet)
             {
-                if (nextSignalTextAspects.FindAll(x => x == "FR_C"
+                if (nextNormalParts.FindAll(x => x == "EOA"
+                    || x == "FR_C"
+                    || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"
                     || x == "FR_S_BM"
@@ -46,25 +48,27 @@ namespace Orts.Simulation.Signalling
                     || x == "FR_RRCLI"
                     ).Count > 0)
                 {
-                    MstsSignalAspect = MstsSignalAspect.APPROACH_1;
+                    MstsSignalAspect = Aspect.Approach_1;
                     TextSignalAspect = "FR_A";
                 }
-                else if (nextSignalTextAspects.FindAll(x => x == "FR_A"
+                else if (nextNormalParts.FindAll(x => x == "FR_A"
                     || x == "FR_R"
                     ).Count > 0)
                 {
-                    MstsSignalAspect = MstsSignalAspect.APPROACH_2;
+                    MstsSignalAspect = Aspect.Approach_2;
                     TextSignalAspect = "FR_ACLI";
                 }
                 else
                 {
-                    MstsSignalAspect = MstsSignalAspect.CLEAR_1;
-                    TextSignalAspect = "FR_VL";
+                    MstsSignalAspect = Aspect.Clear_1;
+                    TextSignalAspect = "FR_VL_INF";
                 }
             }
             else
             {
-                if (nextSignalTextAspects.FindAll(x => x == "FR_C"
+                if (nextNormalParts.FindAll(x => x == "EOA"
+                    || x == "FR_C"
+                    || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"
                     || x == "FR_S_BM"
@@ -77,19 +81,19 @@ namespace Orts.Simulation.Signalling
                     || x == "FR_RRCLI"
                 ).Count > 0)
                 {
-                    MstsSignalAspect = MstsSignalAspect.RESTRICTING;
+                    MstsSignalAspect = Aspect.Restricting;
                     TextSignalAspect = "FR_RR_A";
                 }
-                else if (nextSignalTextAspects.FindAll(x => x == "FR_A"
+                else if (nextNormalParts.FindAll(x => x == "FR_A"
                     || x == "FR_R"
                     ).Count > 0)
                 {
-                    MstsSignalAspect = MstsSignalAspect.APPROACH_3;
+                    MstsSignalAspect = Aspect.Approach_3;
                     TextSignalAspect = "FR_RR_ACLI";
                 }
                 else
                 {
-                    MstsSignalAspect = MstsSignalAspect.CLEAR_2;
+                    MstsSignalAspect = Aspect.Clear_2;
                     TextSignalAspect = "FR_RR";
                 }
             }

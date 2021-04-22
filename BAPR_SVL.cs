@@ -1,8 +1,7 @@
-using Orts.Formats.Msts;
+using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Orts.Simulation.Signalling
+namespace ORTS.Scripting.Script
 {
     public class BAPR_SVL : CsSignalScript
     {
@@ -18,17 +17,15 @@ namespace Orts.Simulation.Signalling
 
         public override void Update()
         {
-            List<string> nextSignalTextAspects = GetNextSignalTextAspects(MstsSignalFunction.NORMAL);
-
-            if (BlockState != MstsBlockState.CLEAR)
+            if (CurrentBlockState != BlockState.Clear)
             {
-                MstsSignalAspect = MstsSignalAspect.STOP_AND_PROCEED;
+                MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAPR";
             }
             else
             {
-                MstsSignalAspect = MstsSignalAspect.CLEAR_1;
-                TextSignalAspect = "FR_VL";
+                MstsSignalAspect = Aspect.Clear_1;
+                TextSignalAspect = "FR_VL_INF";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

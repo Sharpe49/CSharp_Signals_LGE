@@ -1,75 +1,76 @@
-using Orts.Formats.Msts;
+using Orts.Simulation.Signalling;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Orts.Simulation.Signalling
+namespace ORTS.Scripting.Script
 {
     public class CSAAR60VL : CsSignalScript
     {
-        public bool AspectR = false;
-        public bool AspectRCLI = false;
-
         public CSAAR60VL()
         {
-
         }
 
         public override void Initialize()
         {
-
         }
 
         public override void Update()
         {
-            List<string> nextSignalTextAspects = GetNextSignalTextAspects(MstsSignalFunction.NORMAL);
+            int nextNormalSignalId = NextSignalId("NORMAL");
+            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
+            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
             if (!Enabled
-                || BlockState == MstsBlockState.JN_OBSTRUCTED)
+                || CurrentBlockState == BlockState.Obstructed)
             {
-                MstsSignalAspect = MstsSignalAspect.STOP;
+                MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C";
             }
-            else if (BlockState == MstsBlockState.OCCUPIED)
+            else if (CurrentBlockState == BlockState.Occupied)
             {
-                MstsSignalAspect = MstsSignalAspect.STOP_AND_PROCEED;
+                MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (nextSignalTextAspects.FindAll(x => x == "FR_C"
+            else if (nextNormalParts.FindAll(x => x == "EOA"
+                || x == "FR_C"
+                || x == "FR_CV"
                 || x == "FR_S_BAL"
                 || x == "FR_S_BAPR"
                 || x == "FR_S_BM"
                 || x == "FR_SCLI"
+                || x == "FR_MCLI"
+                || x == "FR_M"
                 || x == "FR_RR_A"
                 || x == "FR_RR_ACLI"
                 || x == "FR_RR"
                 ).Count > 0)
             {
-                MstsSignalAspect = MstsSignalAspect.APPROACH_1;
+                MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
             }
-            else if (nextSignalTextAspects.FindAll(x => x == "FR_A"
+            else if (nextNormalParts.FindAll(x => x == "FR_A"
                 || x == "FR_R"
                 ).Count > 0)
             {
-                MstsSignalAspect = MstsSignalAspect.APPROACH_2;
+                MstsSignalAspect = Aspect.Approach_2;
                 TextSignalAspect = "FR_ACLI";
             }
-            else if (nextSignalTextAspects.FindAll(x => x == "FR_RRCLI"
+            else if (nextNormalParts.FindAll(x => x == "FR_RRCLI"
                 || x == "FR_RRCLI_ACLI"
                 ).Count > 0)
             {
-                MstsSignalAspect = MstsSignalAspect.CLEAR_2;
+                MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_RCLI";
             }
-            else if (nextSignalTextAspects.FindAll(x => x == "FR_RRCLI_A").Count > 0)
+            else if (nextNormalParts.FindAll(x => x == "FR_RRCLI_A").Count > 0)
             {
-                MstsSignalAspect = MstsSignalAspect.RESTRICTING;
+                MstsSignalAspect = Aspect.Restricting;
                 TextSignalAspect = "FR_RCLI_ACLI";
             }
             else
             {
-                MstsSignalAspect = MstsSignalAspect.CLEAR_1;
-                TextSignalAspect = "FR_VL";
+                MstsSignalAspect = Aspect.Clear_1;
+                TextSignalAspect = "FR_VL_INF";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

@@ -1,13 +1,15 @@
-using Orts.Formats.Msts;
+using Orts.Simulation.Signalling;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Orts.Simulation.Signalling
+namespace ORTS.Scripting.Script
 {
     public class Ralentissement : CsSignalScript
     {
-        public bool AspectR = false;
-        public bool AspectRCLI = false;
+        // Aspect R and (R) have the same MSTS aspect, so the behaviour has been adapted
+        public int DrawStateR = -1;
+        public int DrawStateRCLI = -1;
 
         public Ralentissement()
         {
@@ -16,66 +18,85 @@ namespace Orts.Simulation.Signalling
 
         public override void Initialize()
         {
-            if (SignalHead is SignalHead)
-            {
-                AspectR = SignalHead.signalType.DrawStates.ContainsKey("r30");
-                AspectRCLI = SignalHead.signalType.DrawStates.ContainsKey("r60");
-            }
+            DrawStateR = Math.Max(GetDrawState("r30"), GetDrawState("r"));
+            DrawStateRCLI = Math.Max(GetDrawState("r60"), GetDrawState("rcli"));
         }
 
         public override void Update()
         {
-            List<string> nextSignalTextAspects = GetNextSignalTextAspects(MstsSignalFunction.NORMAL);
+            int nextNormalSignalId = NextSignalId("NORMAL");
+            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : string.Empty;
+            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
             if (!Enabled
-                || BlockState == MstsBlockState.JN_OBSTRUCTED)
+                || CurrentBlockState == BlockState.Obstructed)
             {
-                MstsSignalAspect = MstsSignalAspect.STOP;
+                MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C";
+                DrawState = DefaultDrawState(MstsSignalAspect);
             }
-            else if (BlockState == MstsBlockState.OCCUPIED)
+            else if (CurrentBlockState == BlockState.Occupied)
             {
-                MstsSignalAspect = MstsSignalAspect.STOP_AND_PROCEED;
+                MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
+                DrawState = DefaultDrawState(MstsSignalAspect);
             }
-            else if (nextSignalTextAspects.FindAll(x => x == "FR_C"
+            else if (nextNormalParts.FindAll(x => x == "FR_C"
+                || x == "FR_CV"
                 || x == "FR_S_BAL"
                 || x == "FR_S_BAPR"
                 || x == "FR_S_BM"
                 || x == "FR_SCLI"
-                || x == "FR_RRCLI_A"
-                || x == "FR_RRCLI_ACLI"
-                || x == "FR_RRCLI"
+                || x == "FR_MCLI"
+                || x == "FR_M"
                 ).Count > 0)
             {
-                MstsSignalAspect = MstsSignalAspect.APPROACH_1;
+                MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
+                DrawState = DefaultDrawState(MstsSignalAspect);
             }
-            else if (AspectR
-                && nextSignalTextAspects.FindAll(x => x == "FR_RR"
-                || x == "FR_RR_A"
+            else if (nextNormalParts.FindAll(x => x == "FR_RR_A"
                 || x == "FR_RR_ACLI"
+                || x == "FR_RR"
                 ).Count > 0)
             {
-                MstsSignalAspect = MstsSignalAspect.CLEAR_2;
-                TextSignalAspect = "FR_R";
+                if (DrawStateR >= 0)
+                {
+                    MstsSignalAspect = Aspect.Clear_2;
+                    TextSignalAspect = "FR_R";
+                    DrawState = DrawStateR;
+                }
+                else
+                {
+                    MstsSignalAspect = Aspect.Approach_1;
+                    TextSignalAspect = "FR_A";
+                    DrawState = DefaultDrawState(MstsSignalAspect);
+                }
             }
-            else if (AspectRCLI
-                && nextSignalTextAspects.FindAll(x => x == "FR_RRCLI"
+            else if (nextNormalParts.FindAll(x => x == "FR_RRCLI"
                 || x == "FR_RRCLI_A"
                 || x == "FR_RRCLI_ACLI"
                 ).Count > 0)
             {
-                MstsSignalAspect = MstsSignalAspect.CLEAR_2;
-                TextSignalAspect = "FR_RCLI";
+                if (DrawStateRCLI >= 0)
+                {
+                    MstsSignalAspect = Aspect.Clear_2;
+                    TextSignalAspect = "FR_RCLI";
+                    DrawState = DrawStateRCLI;
+                }
+                else
+                {
+                    MstsSignalAspect = Aspect.Approach_1;
+                    TextSignalAspect = "FR_A";
+                    DrawState = DefaultDrawState(MstsSignalAspect);
+                }
             }
             else
             {
-                MstsSignalAspect = MstsSignalAspect.CLEAR_1;
-                TextSignalAspect = "FR_VL";
+                MstsSignalAspect = Aspect.Clear_1;
+                TextSignalAspect = "FR_VL_INF";
+                DrawState = DefaultDrawState(MstsSignalAspect);
             }
-
-            DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }
 }
