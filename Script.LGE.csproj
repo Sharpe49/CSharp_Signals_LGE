@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -6,8 +6,9 @@
     <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>ClassLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -17,6 +18,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -25,6 +27,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>LGE.Signal</RootNamespace>
@@ -36,18 +39,35 @@
   <ItemGroup>
     <Compile Include="BAPR_AR60VL.cs" />
     <Compile Include="BAPR_AR30VL.cs" />
+    <Compile Include="Common.cs" />
     <Compile Include="CSAVL_TESCS.cs" />
     <Compile Include="CSAAVL_TECS.cs" />
     <Compile Include="CSA_HSL.cs" />
     <Compile Include="EO_M_T3.cs" />
+    <Compile Include="RM_TIDD.cs" />
+    <Compile Include="RM_Id5d.cs" />
+    <Compile Include="RM_Id3d.cs" />
     <Compile Include="KVB_DGV.cs" />
+    <Compile Include="KVB_FVL.cs" />
+    <Compile Include="KVB_FZ.cs" />
+    <Compile Include="KVB_DVL.cs" />
     <Compile Include="KVB_FGV.cs" />
+    <Compile Include="RM_CCTa.cs" />
+    <Compile Include="RM_CCTe.cs" />
+    <Compile Include="RM_CCTr.cs" />
+    <Compile Include="RM_BPr25000V.cs" />
+    <Compile Include="RM_BPr1500V.cs" />
+    <Compile Include="RM_BPr25000VLGV.cs" />
+    <Compile Include="RM_BPe.cs" />
+    <Compile Include="RM_BPa.cs" />
     <Compile Include="RM_BPmob.cs" />
     <Compile Include="RM_TECS.cs" />
     <Compile Include="RM_Pa.cs" />
     <Compile Include="RM_TIVa.cs" />
     <Compile Include="RM_TIVe.cs" />
+    <Compile Include="TVM430_CSMAVL_CGV1736.cs" />
     <Compile Include="TVM430_CSRR60AVL_FinCAB.cs" />
+    <Compile Include="TVM430_Cab.cs" />
     <Compile Include="TVM430_SEI170.cs" />
     <Compile Include="TVM430_SAVL_FinCAB.cs" />
     <Compile Include="TVM430_AG.cs" />
