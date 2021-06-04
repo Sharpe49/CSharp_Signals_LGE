@@ -23,9 +23,9 @@ namespace ORTS.Scripting.Script
             if (CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL FR_TVM430 Ve80 Vc000 Vpf160E";
+                TextSignalAspect = "FR_S_BAL FR_TVM430 Ve80 Vc000";
             }
-            else if (nextNormalParts.FindAll(x => x == "FR_C"
+            else if (nextNormalParts.FindAll(x => x == "FR_C_BAL"
                 || x == "FR_CV"
                 || x == "FR_S_BAL"
                 || x == "FR_S_BAPR"
@@ -42,12 +42,20 @@ namespace ORTS.Scripting.Script
                 ).Count > 0)
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_A FR_TVM430 Ve160 Vc160E Vpf160E";
+                TextSignalAspect = "FR_A FR_TVM430 Ve160 Vc160E";
+            }
+            else if (IsSignalFeatureEnabled("USER1")
+                && nextNormalParts.FindAll(x => x == "FR_A"
+                    || x == "FR_R"
+                    ).Count > 0)
+            {
+                MstsSignalAspect = Aspect.Approach_2;
+                TextSignalAspect = "FR_ACLI FR_TVM430 Ve160 Vc160E";
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_INF FR_TVM430 Ve160 Vc160E Vpf160E";
+                TextSignalAspect = "FR_VL_INF FR_TVM430 Ve160 Vc160E";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

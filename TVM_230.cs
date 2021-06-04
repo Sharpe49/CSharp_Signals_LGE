@@ -1,4 +1,5 @@
 using Orts.Simulation.Signalling;
+using ORTS.Scripting.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,15 @@ namespace ORTS.Scripting.Script
 {
     public class TVM_230 : CsSignalScript
     {
-        Dictionary<TVMSpeedType, TVMSpeedType> TAB1 = SNCFV320TAB1;
         Dictionary<TVMSpeedType, TVMSpeedType> TAB2 = SNCFV320TAB2;
-        Dictionary<TVMSpeedType, Aspect> MstsTranslation = SNCFV320MstsTranslation;
 
-        TVMSpeedType[] Vpf = new TVMSpeedType[2] { TVMSpeedType._320V, TVMSpeedType._230V };
+        TVMSpeedType[] Vpf = new TVMSpeedType[2] { TVMSpeedType._320V, TVMSpeedType._230E };
         TVMSpeedType Vcond = TVMSpeedType._320V;
+
+        Timer AspectChangeTimer;
+        TVMSpeedType VeE = TVMSpeedType._000;
+        TVMSpeedType VcE = TVMSpeedType._RRR;
+        TVMSpeedType VaE = TVMSpeedType.Any;
 
         public TVM_230()
         {
@@ -21,17 +25,25 @@ namespace ORTS.Scripting.Script
 
         public override void Initialize()
         {
+            AspectChangeTimer = new Timer(this);
+            AspectChangeTimer.Setup(6f);
         }
 
         public override void Update()
         {
             int nextNormalSignalId = NextSignalId("NORMAL");
-            List<string> nextNormalParts = new List<string>();
+            string nextNormalSignalTextAspect;
             if (nextNormalSignalId >= 0)
             {
-                nextNormalParts = IdTextSignalAspect(nextNormalSignalId, "NORMAL").Split(' ').ToList();
+                nextNormalSignalTextAspect = IdTextSignalAspect(nextNormalSignalId, "NORMAL");
                 SendSignalMessage(nextNormalSignalId, "FR_TVM430 Vpf" + Vpf[1].ToString().Substring(1));
             }
+            else
+            {
+                nextNormalSignalTextAspect = "FR_TVM430 Ve80 Vc000";
+            }
+
+            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
             TVMSpeedType[] Ve = new TVMSpeedType[2] { TVMSpeedType.Any, TVMSpeedType.Any };
             TVMSpeedType[] Vc = new TVMSpeedType[2] { TVMSpeedType.Any, TVMSpeedType.Any };
@@ -63,7 +75,7 @@ namespace ORTS.Scripting.Script
             else
             {
                 Vcond = Vpf[0];
-                Ve[1] = Min(Ve[1], Vpf[1]);
+                Ve[1] = Min(Ve[1], TAB2[Vpf[1]]);
             }
 
             Vc[0] = Min(Vcond, Vc[1]);
@@ -75,12 +87,38 @@ namespace ORTS.Scripting.Script
                 Va[0] = TVMSpeedType.Any;
             }
 
-            MstsSignalAspect = MstsTranslation[Vc[0]];
+            if (Ve[0] != VeE || Vc[0] != VcE || Va[0] != VaE)
+            {
+                if (Ve[0] < VeE || Vc[0] < VcE || VcE == TVMSpeedType._RRR)
+                {
+                    VeE = Ve[0];
+                    VcE = Vc[0];
+                    VaE = Va[0];
+                    AspectChangeTimer.Start();
+                }
+                else
+                {
+                    if (AspectChangeTimer.Started)
+                    {
+                        if (AspectChangeTimer.Triggered)
+                        {
+                            AspectChangeTimer.Stop();
+                        }
+                    }
+                    else
+                    {
+                        VeE = Ve[0];
+                        VcE = Vc[0];
+                        VaE = Va[0];
+                    }
+                }
+            }
+
+            MstsSignalAspect = TVMSpeedTypeToAspectV320(VcE, true);
             TextSignalAspect = "FR_TVM430"
-                + " Ve" + Ve[0].ToString().Substring(1)
-                + " Vc" + Vc[0].ToString().Substring(1)
-                + (Va[0] != TVMSpeedType.Any ? " Va" + Va[0].ToString().Substring(1) : string.Empty)
-                + " Vpf" + Vpf[0].ToString().Substring(1);
+                + " Ve" + VeE.ToString().Substring(1)
+                + " Vc" + VcE.ToString().Substring(1)
+                + (VaE != TVMSpeedType.Any ? " Va" + VaE.ToString().Substring(1) : string.Empty);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

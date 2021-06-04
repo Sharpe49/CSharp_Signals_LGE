@@ -215,8 +215,20 @@ namespace ORTS.Scripting.Script
             { TVMSpeedType._80E, Aspect.Restricting },
             { TVMSpeedType._60, Aspect.Restricting },
             { TVMSpeedType._60E, Aspect.Restricting },
-            { TVMSpeedType._000, Aspect.Stop },
+            { TVMSpeedType._000, Aspect.StopAndProceed },
             { TVMSpeedType._RRR, Aspect.StopAndProceed }
         };
+
+        public static Aspect TVMSpeedTypeToAspectV320(TVMSpeedType Vc, bool permissive)
+        {
+            if (!permissive)
+            {
+                return Aspect.Stop;
+            }
+            else
+            {
+                return SNCFV320MstsTranslation[Vc];
+            }
+        }
     }
 }

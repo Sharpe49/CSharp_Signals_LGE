@@ -18,7 +18,11 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            if (IsSignalFeatureEnabled("USER3"))
+            if (IsSignalFeatureEnabled("USER4"))
+            {
+                Vpf = TVMSpeedType._130E;
+            }
+            else if (IsSignalFeatureEnabled("USER3"))
             {
                 Vpf = TVMSpeedType._160E;
             }
@@ -43,14 +47,14 @@ namespace ORTS.Scripting.Script
                 || CurrentBlockState == BlockState.Obstructed)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C FR_TVM430 Ve80 Vc000";
+                TextSignalAspect = "FR_C_BAL FR_TVM430 Ve80 Vc000";
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL FR_TVM430 Ve80 Vc000";
             }
-            else if (nextNormalParts.FindAll(x => x == "FR_C"
+            else if (nextNormalParts.FindAll(x => x == "FR_C_BAL"
                 || x == "FR_CV"
                 || x == "FR_S_BAL"
                 || x == "FR_S_BAPR"
@@ -67,7 +71,19 @@ namespace ORTS.Scripting.Script
                 ).Count > 0)
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_A FR_TVM430 Ve160 Vc160E";
+                if (Vpf == TVMSpeedType._130E)
+                {
+                    TextSignalAspect = "FR_A FR_TVM430 Ve130 Vc130E";
+                }
+                else
+                {
+                    TextSignalAspect = "FR_A FR_TVM430 Ve160 Vc160E";
+                }
+            }
+            else if (Vpf == TVMSpeedType._130E)
+            {
+                MstsSignalAspect = Aspect.Clear_2;
+                TextSignalAspect = "FR_VL_INF FR_TVM430 Ve130 Vc130E";
             }
             else if (Vpf == TVMSpeedType._160E)
             {
