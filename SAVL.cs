@@ -25,7 +25,7 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (nextNormalParts.FindAll(x => x == "FR_C"
+            else if (nextNormalParts.FindAll(x => x == "FR_C_BAL"
                 || x == "FR_CV"
                 || x == "FR_S_BAL"
                 || x == "FR_S_BAPR"

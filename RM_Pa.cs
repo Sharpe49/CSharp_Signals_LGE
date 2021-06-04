@@ -32,7 +32,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_TABP_EFFACE";
             }
             // Tableau P présenté
-            else if (nextNormalParts.Contains("FR_C")
+            else if (nextNormalParts.Contains("FR_C_BAL")
                 || nextNormalParts.Contains("FR_S_BAL")
                 || nextNormalParts.Contains("FR_SCLI")
                 || nextRepeaterSignalTextAspect == "FR_TIVD_PRESENTE")

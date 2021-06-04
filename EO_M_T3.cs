@@ -21,10 +21,10 @@ namespace ORTS.Scripting.Script
             string thisNormalSignalTextAspect = IdTextSignalAspect(SignalId, "NORMAL");
             List<string> thisNormalSignalParts = thisNormalSignalTextAspect.Split(' ').ToList();
 
-            if (thisNormalSignalParts.Contains("FR_C"))
+            if (thisNormalSignalParts.Contains("FR_C_BAL"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_OFF";
+                TextSignalAspect = "FR_TLD_ETEINT";
             }
             else if (thisNormalSignalParts.Contains("FR_RR")
                 || thisNormalSignalParts.Contains("FR_RR_A")
@@ -44,7 +44,7 @@ namespace ORTS.Scripting.Script
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_OFF";
+                TextSignalAspect = "FR_TLD_ETEINT";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

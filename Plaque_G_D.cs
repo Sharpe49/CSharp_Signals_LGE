@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class Plaque_G_D : CsSignalScript
+    public class Plaque_G_D : SignalScript
     {
         public Plaque_G_D()
         {
@@ -22,15 +22,14 @@ namespace ORTS.Scripting.Script
             string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : string.Empty;
             List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
-            int nextInfoSignalId = NextSignalId("INFO");
-            string nextInfoSignalTextAspect = nextInfoSignalId >= 0 ? IdTextSignalAspect(nextInfoSignalId, "INFO") : string.Empty;
+            string direction = FindSignalAspect("DIR", "INFO", 5);
 
             List<string> thisNormalParts = IdTextSignalAspect(SignalId, "NORMAL").Split(' ').ToList();
 
             if (!Enabled
-                || thisNormalParts.Contains("FR_C")
+                || thisNormalParts.Contains("FR_C_BAL")
                 || !nextNormalParts.Contains("FR_TABLEAU_G_D")
-                || nextInfoSignalTextAspect == "DIR7")
+                || direction.Contains("DIR7"))
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = string.Empty;

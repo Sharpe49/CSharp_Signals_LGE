@@ -29,12 +29,12 @@ namespace ORTS.Scripting.Script
                 || !nextNormalParts.Contains("FR_TVM430"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C";
+                TextSignalAspect = "FR_C_BAL";
             }
             else if (nextNormalParts.Contains("VcRRR"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C";
+                TextSignalAspect = "FR_C_BAL";
             }
             else if (nextNormalParts.Contains("Ve60")
                 && nextNormalParts.Contains("Ve80"))
@@ -47,7 +47,7 @@ namespace ORTS.Scripting.Script
                 else
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_C";
+                    TextSignalAspect = "FR_C_BAL";
                 }
             }
             else if (nextNormalParts.Contains("Vc000")

@@ -35,7 +35,7 @@ namespace ORTS.Scripting.Script
                 || CurrentBlockState == BlockState.Obstructed)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C FR_TVM430 Ve80 Vc000";
+                TextSignalAspect = "FR_C_BAL FR_TVM430 Ve80 Vc000";
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
@@ -44,7 +44,7 @@ namespace ORTS.Scripting.Script
             }
             else if (RouteSet)
             {
-                if (nextNormalParts.FindAll(x => x == "FR_C"
+                if (nextNormalParts.FindAll(x => x == "FR_C_BAL"
                     || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"
@@ -87,7 +87,7 @@ namespace ORTS.Scripting.Script
             }
             else
             {
-                if (nextNormalParts.FindAll(x => x == "FR_C"
+                if (nextNormalParts.FindAll(x => x == "FR_C_BAL"
                     || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"

@@ -31,7 +31,7 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (nextNormalParts.Contains("FR_C") || nextNormalParts.Contains("FR_CV"))
+            else if (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV"))
             {
                 MstsSignalAspect = Aspect.Restricting;
                 TextSignalAspect = "FR_MCLI";
@@ -39,7 +39,7 @@ namespace ORTS.Scripting.Script
             else if (RouteSet)
             {
                 if (nextNormalParts.FindAll(x => x == "EOA"
-                    || x == "FR_C"
+                    || x == "FR_C_BAL"
                     || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"
@@ -67,7 +67,7 @@ namespace ORTS.Scripting.Script
             else
             {
                 if (nextNormalParts.FindAll(x => x == "EOA"
-                    || x == "FR_C"
+                    || x == "FR_C_BAL"
                     || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"

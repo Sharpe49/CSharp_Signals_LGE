@@ -8,7 +8,7 @@ namespace ORTS.Scripting.Script
     // EO - PE
     // L1 - L4
     // L1 - LGV
-    public class EO_PE : CsSignalScript
+    public class EO_PE : SignalScript
     {
         public EO_PE()
         {
@@ -20,26 +20,24 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            int nextSignalId = NextSignalId("INFO");
-            string nextInfoSignalTextAspect = nextSignalId >= 0 ? IdTextSignalAspect(nextSignalId, "INFO") : string.Empty;
-            List<string> parts = nextInfoSignalTextAspect.Split(' ').ToList();
+            string direction = FindSignalAspect("DIR", "INFO", 5);
 
             bool thisNormalSignalAspectC = IdTextSignalAspect(SignalId, "NORMAL")
                 .Split(' ')
                 .ToList()
-                .Contains("FR_C");
+                .Contains("FR_C_BAL");
 
             if (thisNormalSignalAspectC)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_OFF";
+                TextSignalAspect = "FR_TLD_ETEINT";
             }
-            else if (parts.Contains("DIR0"))
+            else if (direction.Contains("DIR0"))
             {
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_TLD_1";
             }
-            else if (parts.Contains("DIR1"))
+            else if (direction.Contains("DIR1"))
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_TLD_2";
@@ -47,7 +45,7 @@ namespace ORTS.Scripting.Script
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_OFF";
+                TextSignalAspect = "FR_TLD_ETEINT";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

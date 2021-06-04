@@ -32,7 +32,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_S_BAL";
             }
             else if (nextNormalParts.FindAll(x => x == "EOA"
-                || x == "FR_C"
+                || x == "FR_C_BAL"
                 || x == "FR_CV"
                 || x == "FR_S_BAL"
                 || x == "FR_S_BAPR"

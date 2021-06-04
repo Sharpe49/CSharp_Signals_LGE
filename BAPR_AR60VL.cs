@@ -21,7 +21,7 @@ namespace ORTS.Scripting.Script
             List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
             if (nextNormalParts.FindAll(x => x == "EOA"
-                || x == "FR_C"
+                || x == "FR_C_BAL"
                 || x == "FR_CV"
                 || x == "FR_S_BAL"
                 || x == "FR_S_BAPR"

@@ -21,7 +21,7 @@ namespace ORTS.Scripting.Script
                 || CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C";
+                TextSignalAspect = "FR_C_BAL";
             }
             else
             {

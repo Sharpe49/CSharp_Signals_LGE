@@ -1,11 +1,10 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
     // Tableau Baissez Panto mobile
-    public class RM_BPmob : CsSignalScript
+    public class RM_BPmob : SignalScript
     {
         public RM_BPmob()
         {
@@ -20,31 +19,39 @@ namespace ORTS.Scripting.Script
             string thisNormalSignalTextAspect = IdTextSignalAspect(SignalId, "NORMAL");
             List<string> thisNormalParts = thisNormalSignalTextAspect.Split(' ').ToList();
 
-            int nextInfoSignalId = NextSignalId("INFO");
-            string nextInfoSignalTextAspect = nextInfoSignalId >= 0 ? IdTextSignalAspect(nextInfoSignalId, "INFO") : string.Empty;
-            List<string> nextInfoParts = nextInfoSignalTextAspect.Split(' ').ToList();
+            string direction = FindSignalAspect("DIR", "INFO", 5);
 
-            if (!Enabled || thisNormalParts.Contains("FR_C"))
+            if (!Enabled || thisNormalParts.Contains("FR_C_BAL"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_BP_ETEINT";
+                TextSignalAspect = "FR_BP_ANNONCE_ETEINT";
             }
             // Tableau BP présenté
-            else if (IsSignalFeatureEnabled("USER2") && nextInfoParts.Contains("DIR1"))
+            else if (!IsSignalFeatureEnabled("USER2") && !IsSignalFeatureEnabled("USER3") && direction.Contains("DIR0"))
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_BP_PRESENTE";
+                TextSignalAspect = "FR_BP_ANNONCE_PRESENTE";
             }
-            else if (IsSignalFeatureEnabled("USER3") && nextInfoParts.Contains("DIR2"))
+            else if (IsSignalFeatureEnabled("USER2") && direction.Contains("DIR1"))
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_BP_PRESENTE";
+                TextSignalAspect = "FR_BP_ANNONCE_PRESENTE";
+            }
+            else if (IsSignalFeatureEnabled("USER3") && direction.Contains("DIR2"))
+            {
+                MstsSignalAspect = Aspect.Clear_1;
+                TextSignalAspect = "FR_BP_ANNONCE_PRESENTE";
             }
             // Tableau BP effacé
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_BP_EFFACE";
+                TextSignalAspect = "FR_BP_ANNONCE_EFFACE";
+            }
+
+            if (IsSignalFeatureEnabled("USER4") && TextSignalAspect == "FR_BP_ANNONCE_PRESENTE")
+            {
+                TextSignalAspect += " BSP_ABP";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class CSRR30AVL_BJ : CsSignalScript
+    public class CSRR30AVL_BJ : SignalScript
     {
         public CSRR30AVL_BJ()
         {
@@ -22,29 +22,27 @@ namespace ORTS.Scripting.Script
             string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : string.Empty;
             List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
-            int nextInfoSignalId = NextSignalId("INFO");
-            string nextInfoSignalTextAspect = nextInfoSignalId >= 0 ? IdTextSignalAspect(nextInfoSignalId, "INFO") : string.Empty;
-            List<string> nextInfoParts = nextInfoSignalTextAspect.Split(' ').ToList();
+            string direction = FindSignalAspect("DIR", "INFO", 5);
 
             if (!Enabled
                 || CurrentBlockState == BlockState.Obstructed)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C";
+                TextSignalAspect = "FR_C_BAL";
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (nextInfoParts.Contains("DIR7"))
+            else if (direction.Contains("DIR7"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C";
+                TextSignalAspect = "FR_C_BAL";
             }
             else if (RouteSet)
             {
-                if (nextNormalParts.FindAll(x => x == "FR_C"
+                if (nextNormalParts.FindAll(x => x == "FR_C_BAL"
                     || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"

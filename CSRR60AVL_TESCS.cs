@@ -26,14 +26,14 @@ namespace ORTS.Scripting.Script
                 || CurrentBlockState == BlockState.Obstructed)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C";
+                TextSignalAspect = "FR_C_BAL";
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
                 if (RouteSet)
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_C";
+                    TextSignalAspect = "FR_C_BAL";
                 }
                 else
                 {
@@ -48,7 +48,7 @@ namespace ORTS.Scripting.Script
             }
             else
             {
-                if (nextNormalParts.FindAll(x => x == "FR_C"
+                if (nextNormalParts.FindAll(x => x == "FR_C_BAL"
                     || x == "FR_CV"
                     || x == "FR_S_BAL"
                     || x == "FR_S_BAPR"

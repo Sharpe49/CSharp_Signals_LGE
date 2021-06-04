@@ -25,7 +25,7 @@ namespace ORTS.Scripting.Script
             bool thisNormalSignalAspectC = IdTextSignalAspect(SignalId, "NORMAL")
                 .Split(' ')
                 .ToList()
-                .Contains("FR_C");
+                .Contains("FR_C_BAL");
 
             if (!Enabled
                 || thisNormalSignalAspectC

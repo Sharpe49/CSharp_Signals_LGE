@@ -24,15 +24,21 @@ namespace ORTS.Scripting.Script
             int nextShuntingSignalId = NextSignalId("SHUNTING");
             string nextShuntingSignalTextAspect = nextShuntingSignalId >= 0 ? IdTextSignalAspect(nextShuntingSignalId, "SHUNTING") : string.Empty;
 
+            // Signal aval non trouvé => TIVD présenté
+            if (nextNormalSignalId < 0)
+            {
+                MstsSignalAspect = Aspect.Clear_1;
+                TextSignalAspect = "FR_TIVD_PRESENTE";
+            }
             // Signal aval non équipé de TIVR => TIVD effacé
-            if (nextShuntingSignalId < 0
+            else if (nextShuntingSignalId < 0
                 || !nextShuntingSignalTextAspect.StartsWith("FR_TIVR"))
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_TIVD_EFFACE";
             }
             // TIVR éteint ou présenté
-            else if (nextNormalParts.Contains("FR_C")
+            else if (nextNormalParts.Contains("FR_C_BAL")
                 || nextShuntingSignalTextAspect == "FR_TIVR_ETEINT"
                 || nextShuntingSignalTextAspect == "FR_TIVR_PRESENTE")
             {

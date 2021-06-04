@@ -31,7 +31,7 @@ namespace ORTS.Scripting.Script
                 parts = nextNormalSignalTextAspect.Split(' ').ToList();
             }
 
-            if (parts.Contains("FR_C"))
+            if (parts.Contains("FR_C_BAL"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_TIVR_ETEINT";
