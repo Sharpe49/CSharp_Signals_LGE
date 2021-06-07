@@ -31,12 +31,12 @@ namespace ORTS.Scripting.Script
             }
             else if (direction.Contains("FR_ID_1_FEU"))
             {
-                MstsSignalAspect = Aspect.Clear_1;
+                MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_TIDD_GAUCHE";
             }
             else if (direction.Contains("FR_ID_2_FEUX"))
             {
-                MstsSignalAspect = Aspect.Clear_2;
+                MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_TIDD_DROITE";
             }
             else

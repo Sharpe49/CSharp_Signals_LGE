@@ -44,6 +44,10 @@
     <Compile Include="CSAAVL_TECS.cs" />
     <Compile Include="CSA_HSL.cs" />
     <Compile Include="EO_M_T3.cs" />
+    <Compile Include="IndDir2fx.cs" />
+    <Compile Include="RM_TSCS_Id2d.cs" />
+    <Compile Include="RM_TECS_Id2d.cs" />
+    <Compile Include="RM_Id2d_TECS.cs" />
     <Compile Include="RM_TIDD.cs" />
     <Compile Include="RM_Id5d.cs" />
     <Compile Include="RM_Id3d.cs" />

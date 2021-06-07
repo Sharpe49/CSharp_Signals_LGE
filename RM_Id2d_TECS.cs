@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class RM_Id3d : SignalScript
+    public class RM_Id2d_TECS : SignalScript
     {
-        public RM_Id3d()
+        public RM_Id2d_TECS()
         {
         }
 
@@ -18,29 +18,25 @@ namespace ORTS.Scripting.Script
         {
             string direction = FindSignalAspect("DIR", "INFO", 5);
 
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
+            bool thisNormalSignalAspectC = IdTextSignalAspect(SignalId, "NORMAL")
+                .Split(' ')
+                .ToList()
+                .Contains("FR_C_BAL");
 
-            if (nextNormalParts.Contains("FR_C_BAL"))
+            if (!Enabled || thisNormalSignalAspectC)
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_ID_ETEINT";
             }
-            else if (direction.Contains("DIR1"))
+            else if (direction.Contains("DIR1") || direction.Contains("DIR3"))
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_ID_1_FEU";
             }
-            else if (direction.Contains("DIR2"))
+            else if (direction.Contains("DIR2") || direction.Contains("DIR4"))
             {
                 MstsSignalAspect = Aspect.Restricting;
                 TextSignalAspect = "FR_ID_2_FEUX";
-            }
-            else if (direction.Contains("DIR3"))
-            {
-                MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_ID_3_FEUX";
             }
             else
             {
