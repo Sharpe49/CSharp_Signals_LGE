@@ -34,8 +34,8 @@ namespace ORTS.Scripting.Script
             }
             else if (nextNormalParts.Contains("VcRRR"))
             {
-                MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                MstsSignalAspect = Aspect.Restricting;
+                TextSignalAspect = "FR_M";
             }
             else if (nextNormalParts.Contains("Ve60")
                 && nextNormalParts.Contains("Ve80"))
@@ -54,7 +54,7 @@ namespace ORTS.Scripting.Script
             else if (nextNormalParts.Contains("Vc000")
                 && nextNormalParts.Contains("Ve170"))
             {
-                MstsSignalAspect = Aspect.Approach_1;
+                MstsSignalAspect = Aspect.Approach_2;
                 TextSignalAspect = "FR_A";
             }
             else if (nextNormalParts.Contains("Ve170"))
@@ -74,7 +74,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_VL_SUP";
             }
 
-            TextSignalAspect += " BSP_ECS Vpf230E";
+            TextSignalAspect += " BSP_ECS";
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
