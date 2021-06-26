@@ -1,0 +1,33 @@
+using Orts.Simulation.Signalling;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ORTS.Scripting.Script
+{
+    public class BJ_Info_7 : SignalScript
+    {
+        public BJ_Info_7()
+        {
+        }
+
+        public override void Initialize()
+        {
+        }
+
+        public override void Update()
+        {
+            if (Enabled && CurrentBlockState != BlockState.Clear)
+            {
+                MstsSignalAspect = Aspect.Clear_2;
+                TextSignalAspect = "BJ_VOIE_OCCUPEE";
+            }
+            else
+            {
+                MstsSignalAspect = Aspect.Stop;
+                TextSignalAspect = "BJ_VOIE_LIBRE";
+            }
+
+            DrawState = DefaultDrawState(MstsSignalAspect);
+        }
+    }
+}
