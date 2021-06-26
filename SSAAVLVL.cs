@@ -67,12 +67,12 @@ namespace ORTS.Scripting.Script
                 ).Count > 0
                 && IsSignalFeatureEnabled("USER3"))
             {
-                MstsSignalAspect = Aspect.Clear_1;
+                MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_VLCLI_ANN";
             }
             else
             {
-                MstsSignalAspect = Aspect.Clear_2;
+                MstsSignalAspect = Aspect.Clear_1;
                 if (IsSignalFeatureEnabled("USER3"))
                 {
                     TextSignalAspect = "FR_VL_SUP";
