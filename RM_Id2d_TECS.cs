@@ -1,5 +1,3 @@
-using Orts.Simulation.Signalling;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ORTS.Scripting.Script

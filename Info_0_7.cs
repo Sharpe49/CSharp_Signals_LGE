@@ -2,10 +2,6 @@ using Orts.Simulation.Signalling;
 
 namespace ORTS.Scripting.Script
 {
-    // TLD
-    // EO - PE
-    // L1 - L4
-    // L1 - LGV
     public class Info_0_7 : CsSignalScript
     {
         public Info_0_7()
