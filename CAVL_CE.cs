@@ -20,22 +20,22 @@ namespace ORTS.Scripting.Script
             string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
             List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
-            bool nextSignalSubo = nextNormalParts.Contains("ESUBO");
-
             if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed)
+                || CurrentBlockState == BlockState.Obstructed
+                || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (nextSignalSubo && nextNormalParts.Contains("FR_C_BAL"))
+            else if (nextNormalParts.Contains("ESUBO")
+                && nextNormalParts.Contains("FR_C_BAL"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
-                if (nextSignalSubo)
+                if (nextNormalParts.Contains("ESUBO"))
                 {
                     MstsSignalAspect = Aspect.Stop;
                     TextSignalAspect = "FR_C_BAL";

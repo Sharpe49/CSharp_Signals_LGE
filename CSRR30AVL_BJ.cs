@@ -25,7 +25,8 @@ namespace ORTS.Scripting.Script
             string direction = FindSignalAspect("DIR", "INFO", 5);
 
             if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed)
+                || CurrentBlockState == BlockState.Obstructed
+                || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";

@@ -24,7 +24,8 @@ namespace ORTS.Scripting.Script
             Aspect nextSignalInfoAspect = IdSignalAspect(nextNormalSignalId, "INFO");
 
             if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed)
+                || CurrentBlockState == BlockState.Obstructed
+                || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
@@ -58,7 +59,7 @@ namespace ORTS.Scripting.Script
                 }
                 else
                 {
-                    MstsSignalAspect = Aspect.Clear_1;
+                    MstsSignalAspect = Aspect.Clear_2;
                     TextSignalAspect = "FR_RR";
                 }
             }
@@ -86,7 +87,7 @@ namespace ORTS.Scripting.Script
                 }
                 else
                 {
-                    MstsSignalAspect = Aspect.Clear_2;
+                    MstsSignalAspect = Aspect.Clear_1;
                     TextSignalAspect = "FR_VL_INF";
                 }
             }

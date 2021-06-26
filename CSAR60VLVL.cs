@@ -21,7 +21,8 @@ namespace ORTS.Scripting.Script
             List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
             if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed)
+                || CurrentBlockState == BlockState.Obstructed
+                || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";

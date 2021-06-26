@@ -18,10 +18,11 @@ namespace ORTS.Scripting.Script
         {
             int nextNormalSignalId = NextSignalId("NORMAL");
             string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
-            List<string> nextNormalparts = nextNormalSignalTextAspect.Split(' ').ToList();
+            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
 
             if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed)
+                || CurrentBlockState == BlockState.Obstructed
+                || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
@@ -31,7 +32,7 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (nextNormalparts.FindAll(x => x == "EOA"
+            else if (nextNormalParts.FindAll(x => x == "EOA"
                 || x == "FR_C_BAL"
                 || x == "FR_CV"
                 || x == "FR_S_BAL"
@@ -51,7 +52,7 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
             }
-            else if (nextNormalparts.FindAll(x => x == "FR_A"
+            else if (nextNormalParts.FindAll(x => x == "FR_A"
                 || x == "FR_R"
                 || x == "FR_ACLI"
                 || x == "FR_RCLI"
