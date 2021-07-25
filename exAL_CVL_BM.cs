@@ -1,18 +1,9 @@
-using Orts.Simulation.Signalling;
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
-    public class exAL_CVL_BM : CsSignalScript
+    public class exAL_CVL_BM : SignalScript
     {
         public exAL_CVL_BM()
         {
-
-        }
-
-        public override void Initialize()
-        {
-
         }
 
         public override void Update()

@@ -1,14 +1,8 @@
-using Orts.Simulation.Signalling;
-
 namespace ORTS.Scripting.Script
 {
-    public class KVB_FVL : CsSignalScript
+    public class KVB_FVL : SignalScript
     {
         public KVB_FVL()
-        {
-        }
-
-        public override void Initialize()
         {
         }
 

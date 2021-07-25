@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
@@ -10,15 +9,9 @@ namespace ORTS.Scripting.Script
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            string thisNormalSignalTextAspect = IdTextSignalAspect(SignalId, "NORMAL");
-            List<string> thisNormalParts = thisNormalSignalTextAspect.Split(' ').ToList();
-
+            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
             string direction = FindSignalAspect("DIR", "INFO", 5);
 
             if (!Enabled || thisNormalParts.Contains("FR_C_BAL"))

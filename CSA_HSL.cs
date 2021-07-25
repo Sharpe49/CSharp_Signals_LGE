@@ -1,14 +1,8 @@
-using Orts.Simulation.Signalling;
-
 namespace ORTS.Scripting.Script
 {
-    public class CSA_HSL : CsSignalScript
+    public class CSA_HSL : SignalScript
     {
         public CSA_HSL()
-        {
-        }
-
-        public override void Initialize()
         {
         }
 

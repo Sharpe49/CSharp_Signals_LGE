@@ -1,25 +1,18 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
     // TLD
     // M - T3
-    public class EO_M_T3 : CsSignalScript
+    public class EO_M_T3 : SignalScript
     {
         public EO_M_T3()
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            string thisNormalSignalTextAspect = IdTextSignalAspect(SignalId, "NORMAL");
-            List<string> thisNormalSignalParts = thisNormalSignalTextAspect.Split(' ').ToList();
+            List<string> thisNormalSignalParts = TextSignalAspectToList(SignalId, "NORMAL");
 
             if (thisNormalSignalParts.Contains("FR_C_BAL"))
             {

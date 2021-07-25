@@ -1,6 +1,4 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
@@ -8,23 +6,13 @@ namespace ORTS.Scripting.Script
     {
         public Plaque_G_D()
         {
-
-        }
-
-        public override void Initialize()
-        {
-
         }
 
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : string.Empty;
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
-
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
             string direction = FindSignalAspect("DIR", "INFO", 5);
-
-            List<string> thisNormalParts = IdTextSignalAspect(SignalId, "NORMAL").Split(' ').ToList();
 
             if (!Enabled
                 || thisNormalParts.Contains("FR_C_BAL")

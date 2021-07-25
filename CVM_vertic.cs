@@ -1,24 +1,16 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class CVM_vertic : CsSignalScript
+    public class CVM_vertic : SignalScript
     {
         public CVM_vertic()
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear

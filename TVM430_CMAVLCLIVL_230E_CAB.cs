@@ -1,17 +1,11 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_CMAVLCLIVL_230E_CAB : CsSignalScript
+    public class TVM430_CMAVLCLIVL_230E_CAB : SignalScript
     {
         public TVM430_CMAVLCLIVL_230E_CAB()
-        {
-
-        }
-
-        public override void Initialize()
         {
         }
 

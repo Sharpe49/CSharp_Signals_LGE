@@ -1,25 +1,17 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
     // Tableau P mobile
-    public class RM_Pa : CsSignalScript
+    public class RM_Pa : SignalScript
     {
         public RM_Pa()
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : string.Empty;
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             int nextRepeaterSignalId = NextSignalId("REPEATER");
             string nextRepeaterSignalTextAspect = nextRepeaterSignalId >= 0 ? IdTextSignalAspect(nextRepeaterSignalId, "REPEATER") : string.Empty;

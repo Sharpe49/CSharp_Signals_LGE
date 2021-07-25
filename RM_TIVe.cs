@@ -1,34 +1,27 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
     // TIVR
-    public class RM_TIVe : CsSignalScript
+    public class RM_TIVe : SignalScript
     {
         public RM_TIVe()
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string thisNormalSignalTextAspect = IdTextSignalAspect(SignalId, "NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : string.Empty;
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
 
             List<string> parts;
-            if (thisNormalSignalTextAspect.Length > 0)
+            if (thisNormalParts.Count > 0)
             {
-                parts = thisNormalSignalTextAspect.Split(' ').ToList();
+                parts = thisNormalParts;
             }
             else
             {
-                parts = nextNormalSignalTextAspect.Split(' ').ToList();
+                parts = nextNormalParts;
             }
 
             if (parts.Contains("FR_C_BAL"))

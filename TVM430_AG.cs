@@ -1,20 +1,10 @@
-using Orts.Simulation.Signalling;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using static ORTS.Scripting.Script.TVM430Common;
-
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_AG : CsSignalScript
+    public class TVM430_AG : SignalScript
     {
         TVMSpeedType VeAg = TVMSpeedType._320V;
 
         public TVM430_AG()
-        {
-        }
-
-        public override void Initialize()
         {
         }
 

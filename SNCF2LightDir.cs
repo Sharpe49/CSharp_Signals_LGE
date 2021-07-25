@@ -1,6 +1,4 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
@@ -10,15 +8,9 @@ namespace ORTS.Scripting.Script
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             if (nextNormalParts.Contains("FR_C_BAL"))
             {

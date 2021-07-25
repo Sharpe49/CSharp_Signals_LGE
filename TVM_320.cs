@@ -1,4 +1,3 @@
-using Orts.Simulation.Signalling;
 using ORTS.Scripting.Api;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using static ORTS.Scripting.Script.TVM430Common;
 
 namespace ORTS.Scripting.Script
 {
-    public class TVM_320 : CsSignalScript
+    public class TVM_320 : SignalScript
     {
         Dictionary<TVMSpeedType, TVMSpeedType> TAB2 = SNCFV320TAB2;
 

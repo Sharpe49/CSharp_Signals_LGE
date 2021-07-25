@@ -1,18 +1,9 @@
-using Orts.Simulation.Signalling;
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
-    public class BAPR_SVL : CsSignalScript
+    public class BAPR_SVL : SignalScript
     {
         public BAPR_SVL()
         {
-
-        }
-
-        public override void Initialize()
-        {
-
         }
 
         public override void Update()

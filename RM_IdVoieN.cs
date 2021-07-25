@@ -1,16 +1,8 @@
-using Orts.Simulation.Signalling;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace ORTS.Scripting.Script
 {
     public class RM_IdVoieN : SignalScript
     {
         public RM_IdVoieN()
-        {
-        }
-
-        public override void Initialize()
         {
         }
 

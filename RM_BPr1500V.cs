@@ -6,10 +6,6 @@ namespace ORTS.Scripting.Script
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Clear_2;

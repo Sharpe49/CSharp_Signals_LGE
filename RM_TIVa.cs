@@ -1,31 +1,23 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
     // TIVD mobile
-    public class RM_TIVa : CsSignalScript
+    public class RM_TIVa : SignalScript
     {
         public RM_TIVa()
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : string.Empty;
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             int nextShuntingSignalId = NextSignalId("SHUNTING");
             string nextShuntingSignalTextAspect = nextShuntingSignalId >= 0 ? IdTextSignalAspect(nextShuntingSignalId, "SHUNTING") : string.Empty;
 
             // Signal aval non trouvé => TIVD présenté
-            if (nextNormalSignalId < 0)
+            if (nextNormalParts.Count < 1)
             {
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_TIVD_PRESENTE";

@@ -1,17 +1,9 @@
-using Orts.Simulation.Signalling;
-
 namespace ORTS.Scripting.Script
 {
-    public class Pancarte_G_D : CsSignalScript
+    public class Pancarte_G_D : SignalScript
     {
         public Pancarte_G_D()
         {
-
-        }
-
-        public override void Initialize()
-        {
-
         }
 
         public override void Update()

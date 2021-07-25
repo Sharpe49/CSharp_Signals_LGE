@@ -1,24 +1,16 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class CvMSAR60VL : CsSignalScript
+    public class CvMSAR60VL : SignalScript
     {
         public CvMSAR60VL()
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             if (!Enabled
                 || CurrentBlockState == BlockState.Obstructed
@@ -37,24 +29,12 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Restricting;
                 TextSignalAspect = "FR_MCLI";
             }
-            else if (nextNormalParts.FindAll(x => x == "EOA"
-                || x == "FR_S_BAL"
-                || x == "FR_S_BAPR"
-                || x == "FR_S_BM"
-                || x == "FR_SCLI"
-                || x == "FR_MCLI"
-                || x == "FR_M"
-                || x == "FR_RR_A"
-                || x == "FR_RR_ACLI"
-                || x == "FR_RR"
-                ).Count > 0)
+            else if (AnnounceByA(nextNormalParts, true, false))
             {
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
             }
-            else if (nextNormalParts.Contains("FR_RRCLI_A")
-                || nextNormalParts.Contains("FR_RRCLI_ACLI")
-                || nextNormalParts.Contains("FR_RRCLI"))
+            else if (AnnounceByRCLI(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_RCLI";

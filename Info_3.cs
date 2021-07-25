@@ -1,14 +1,8 @@
-using Orts.Simulation.Signalling;
-
 namespace ORTS.Scripting.Script
 {
-    public class Info_3 : CsSignalScript
+    public class Info_3 : SignalScript
     {
         public Info_3()
-        {
-        }
-
-        public override void Initialize()
         {
         }
 

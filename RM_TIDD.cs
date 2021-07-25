@@ -1,6 +1,4 @@
-using Orts.Simulation.Signalling;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
@@ -10,21 +8,15 @@ namespace ORTS.Scripting.Script
         {
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
             string direction = FindSignalAspect("FR_ID", "REPEATER", 5);
 
-            List<string> thisNormalSignalAspect = IdTextSignalAspect(SignalId, "NORMAL")
-                .Split(' ')
-                .ToList();
+            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
 
-            if (thisNormalSignalAspect.Contains("FR_C_BAL")
-                || thisNormalSignalAspect.Contains("FR_S_BAL")
-                || thisNormalSignalAspect.Contains("FR_SCLI"))
+            if (thisNormalParts.Contains("FR_C_BAL")
+                || thisNormalParts.Contains("FR_S_BAL")
+                || thisNormalParts.Contains("FR_SCLI"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_TIDD_ETEINT";

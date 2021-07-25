@@ -1,14 +1,8 @@
-using Orts.Simulation.Signalling;
-
 namespace ORTS.Scripting.Script
 {
-    public class RM_CtrVoie : CsSignalScript
+    public class RM_CtrVoie : SignalScript
     {
         public RM_CtrVoie()
-        {
-        }
-
-        public override void Initialize()
         {
         }
 

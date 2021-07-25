@@ -1,11 +1,9 @@
-using Orts.Simulation.Signalling;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class CSRR60AAR30VL : CsSignalScript
+    public class CSRR60AAR30VL : SignalScript
     {
         // Aspect R and (R) have the same MSTS aspect, so the behaviour has been adapted
         public int DrawStateR = -1;
@@ -27,9 +25,9 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            int nextNormalSignalId = NextSignalId("NORMAL");
-            string nextNormalSignalTextAspect = nextNormalSignalId >= 0 ? IdTextSignalAspect(nextNormalSignalId, "NORMAL") : "EOA";
-            List<string> nextNormalParts = nextNormalSignalTextAspect.Split(' ').ToList();
+            List<string> nextNormalParts = NextNormalSignalTextAspects;
+
+            DrawState = -1;
 
             if (!Enabled
                 || CurrentBlockState == BlockState.Obstructed
@@ -37,140 +35,75 @@ namespace ORTS.Scripting.Script
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
-                DrawState = DefaultDrawState(MstsSignalAspect);
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
-                DrawState = DefaultDrawState(MstsSignalAspect);
             }
             else if (RouteSet)
             {
-                if (nextNormalParts.FindAll(x => x == "EOA"
-                    || x == "FR_C_BAL"
-                    || x == "FR_CV"
-                    || x == "FR_S_BAL"
-                    || x == "FR_S_BAPR"
-                    || x == "FR_S_BM"
-                    || x == "FR_SCLI"
-                    || x == "FR_MCLI"
-                    || x == "FR_M"
-                    ).Count > 0)
+                if (AnnounceByA(nextNormalParts, DrawStateR < 0, DrawStateRCLI < 0))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
                     TextSignalAspect = "FR_A";
-                    DrawState = DefaultDrawState(MstsSignalAspect);
                 }
-                else if (nextNormalParts.FindAll(x => x == "FR_RR_A"
-                    || x == "FR_RR_ACLI"
-                    || x == "FR_RR"
-                    ).Count > 0)
+                else if (DrawStateR >= 0
+                    && AnnounceByR(nextNormalParts))
                 {
-                    if (DrawStateR >= 0)
-                    {
-                        MstsSignalAspect = Aspect.Approach_2;
-                        TextSignalAspect = "FR_R";
-                        DrawState = DrawStateR;
-                    }
-                    else
-                    {
-                        MstsSignalAspect = Aspect.Approach_1;
-                        TextSignalAspect = "FR_A";
-                        DrawState = DefaultDrawState(MstsSignalAspect);
-                    }
+                    MstsSignalAspect = Aspect.Approach_2;
+                    TextSignalAspect = "FR_R";
+                    DrawState = DrawStateR;
                 }
-                else if (nextNormalParts.FindAll(x => x == "FR_RRCLI_A").Count > 0)
+                else if (DrawStateRCLI_ACLI >= 0
+                    && AnnounceByRCLI_ACLI(nextNormalParts))
                 {
-                    if (DrawStateRCLI_ACLI >= 0)
-                    {
-                        MstsSignalAspect = Aspect.Approach_3;
-                        TextSignalAspect = "FR_RCLI_ACLI";
-                        DrawState = DrawStateRCLI_ACLI;
-                    }
-                    else if (DrawStateRCLI >= 0)
-                    {
-                        MstsSignalAspect = Aspect.Approach_2;
-                        TextSignalAspect = "FR_RCLI";
-                        DrawState = DrawStateRCLI;
-                    }
-                    else
-                    {
-                        MstsSignalAspect = Aspect.Approach_1;
-                        TextSignalAspect = "FR_A";
-                        DrawState = DefaultDrawState(MstsSignalAspect);
-                    }
+                    MstsSignalAspect = Aspect.Approach_3;
+                    TextSignalAspect = "FR_RCLI_ACLI";
+                    DrawState = DrawStateRCLI_ACLI;
                 }
-                else if (nextNormalParts.FindAll(x => x == "FR_RRCLI"
-                    || x == "FR_RRCLI_ACLI"
-                    ).Count > 0)
+                else if (AnnounceByACLI(nextNormalParts))
                 {
-                    if (DrawStateRCLI >= 0)
-                    {
-                        MstsSignalAspect = Aspect.Approach_2;
-                        TextSignalAspect = "FR_RCLI";
-                        DrawState = DrawStateRCLI;
-                    }
-                    else
-                    {
-                        MstsSignalAspect = Aspect.Approach_1;
-                        TextSignalAspect = "FR_A";
-                        DrawState = DefaultDrawState(MstsSignalAspect);
-                    }
+                    MstsSignalAspect = Aspect.Approach_3;
+                    TextSignalAspect = "FR_ACLI";
+                }
+                else if (DrawStateRCLI >= 0
+                    && AnnounceByRCLI(nextNormalParts))
+                {
+                    MstsSignalAspect = Aspect.Approach_2;
+                    TextSignalAspect = "FR_RCLI";
+                    DrawState = DrawStateRCLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
                     TextSignalAspect = "FR_VL_INF";
-                    DrawState = DefaultDrawState(MstsSignalAspect);
                 }
             }
             else
             {
-                if (nextNormalParts.FindAll(x => x == "EOA"
-                    || x == "FR_C_BAL"
-                    || x == "FR_CV"
-                    || x == "FR_S_BAL"
-                    || x == "FR_S_BAPR"
-                    || x == "FR_S_BM"
-                    || x == "FR_SCLI"
-                    || x == "FR_MCLI"
-                    || x == "FR_M"
-                    || x == "FR_RR_A"
-                    || x == "FR_RR_ACLI"
-                    || x == "FR_RR"
-                    || x == "FR_RRCLI_A"
-                    || x == "FR_RRCLI_ACLI"
-                    || x == "FR_RRCLI"
-                ).Count > 0)
+                if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Restricting;
                     TextSignalAspect = "FR_RRCLI_A";
-                    DrawState = DefaultDrawState(MstsSignalAspect);
                 }
-                else if (nextNormalParts.FindAll(x => x == "FR_A"
-                    || x == "FR_R"
-                    ).Count > 0)
+                else if (DrawStateRRCLI_ACLI >= 0
+                    && AnnounceByACLI(nextNormalParts))
                 {
-                    if (DrawStateRRCLI_ACLI >= 0)
-                    {
-                        MstsSignalAspect = Aspect.Restricting;
-                        TextSignalAspect = "FR_RRCLI_ACLI";
-                        DrawState = DrawStateRRCLI_ACLI;
-                    }
-                    else
-                    {
-                        MstsSignalAspect = Aspect.Clear_2;
-                        TextSignalAspect = "FR_RRCLI";
-                        DrawState = DefaultDrawState(MstsSignalAspect);
-                    }
+                    MstsSignalAspect = Aspect.Restricting;
+                    TextSignalAspect = "FR_RRCLI_ACLI";
+                    DrawState = DrawStateRRCLI_ACLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
                     TextSignalAspect = "FR_RRCLI";
-                    DrawState = DefaultDrawState(MstsSignalAspect);
                 }
+            }
+
+            if (DrawState < 0)
+            {
+                DrawState = DefaultDrawState(MstsSignalAspect);
             }
         }
     }

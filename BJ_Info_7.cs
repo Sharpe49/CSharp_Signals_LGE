@@ -1,16 +1,8 @@
-using Orts.Simulation.Signalling;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace ORTS.Scripting.Script
 {
     public class BJ_Info_7 : SignalScript
     {
         public BJ_Info_7()
-        {
-        }
-
-        public override void Initialize()
         {
         }
 
