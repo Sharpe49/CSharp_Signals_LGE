@@ -2,15 +2,16 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class CSAVLVL : SignalScript
+    public class CSAVLVL_cond : SignalScript
     {
-        public CSAVLVL()
+        public CSAVLVL_cond()
         {
         }
 
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
+            List<string> thisRepeaterParts = TextSignalAspectToList(SignalId, "REPEATER");
 
             if (!Enabled
                 || CurrentBlockState == BlockState.Obstructed
@@ -35,15 +36,24 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Approach_2;
                 TextSignalAspect = "FR_ACLI";
             }
-            else if (AnnounceByVLCLI(nextNormalParts))
+            else if (thisRepeaterParts.Contains("FR_TIVR_EFFACE")
+                && AnnounceByVLCLI(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Approach_3;
                 TextSignalAspect = "FR_VLCLI_ANN";
             }
             else
             {
-                MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_SUP";
+                if (thisRepeaterParts.Contains("FR_TIVR_EFFACE"))
+                {
+                    MstsSignalAspect = Aspect.Clear_1;
+                    TextSignalAspect = "FR_VL_SUP";
+                }
+                else
+                {
+                    MstsSignalAspect = Aspect.Clear_1;
+                    TextSignalAspect = "FR_VL_INF";
+                }
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

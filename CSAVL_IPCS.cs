@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class CvSAVL : SignalScript
+    public class CSAVL_IPCS : SignalScript
     {
-        public CvSAVL()
+        public CSAVL_IPCS()
         {
         }
 
@@ -13,21 +13,11 @@ namespace ORTS.Scripting.Script
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
+                || CurrentBlockState != BlockState.Clear
                 || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
-            }
-            else if (CurrentBlockState == BlockState.Occupied)
-            {
-                MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
-            }
-            else if (AnnounceByA(nextNormalParts))
-            {
-                MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_A";
+                TextSignalAspect = "FR_C_BAL";
             }
             else
             {

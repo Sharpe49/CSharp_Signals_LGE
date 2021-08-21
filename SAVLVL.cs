@@ -22,9 +22,15 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
             }
-            else if (AnnounceByVLCLI(nextNormalParts))
+            else if (IsSignalFeatureEnabled("USER1")
+                && AnnounceByACLI(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Approach_2;
+                TextSignalAspect = "FR_ACLI";
+            }
+            else if (AnnounceByVLCLI(nextNormalParts))
+            {
+                MstsSignalAspect = Aspect.Approach_3;
                 TextSignalAspect = "FR_VLCLI_ANN";
             }
             else

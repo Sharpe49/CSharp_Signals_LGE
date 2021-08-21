@@ -29,6 +29,12 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
             }
+            else if (IsSignalFeatureEnabled("USER1")
+                && AnnounceByACLI(nextNormalParts))
+            {
+                MstsSignalAspect = Aspect.Approach_2;
+                TextSignalAspect = "FR_ACLI";
+            }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;

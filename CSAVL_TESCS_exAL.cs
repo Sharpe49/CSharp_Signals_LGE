@@ -2,16 +2,15 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class CSRR30AVL_BJ : SignalScript
+    public class CSAVL_TESCS_exAL : SignalScript
     {
-        public CSRR30AVL_BJ()
+        public CSAVL_TESCS_exAL()
         {
         }
 
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
-            string direction = FindSignalAspect("DIR", "INFO", 5);
 
             if (!Enabled
                 || CurrentBlockState == BlockState.Obstructed
@@ -20,14 +19,14 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (!RouteSet)
             {
-                MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
-            }
-            else if (RouteSet)
-            {
-                if (AnnounceByA(nextNormalParts))
+                if (CurrentBlockState == BlockState.Occupied)
+                {
+                    MstsSignalAspect = Aspect.StopAndProceed;
+                    TextSignalAspect = "FR_S_BAL";
+                }
+                else if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
                     TextSignalAspect = "FR_A";
@@ -40,8 +39,16 @@ namespace ORTS.Scripting.Script
             }
             else
             {
-                MstsSignalAspect = Aspect.Restricting;
-                TextSignalAspect = "FR_RR_A";
+                if (CurrentBlockState == BlockState.Occupied)
+                {
+                    MstsSignalAspect = Aspect.Stop;
+                    TextSignalAspect = "FR_C_BAL";
+                }
+                else
+                {
+                    MstsSignalAspect = Aspect.Clear_1;
+                    TextSignalAspect = "FR_VL_INF";
+                }
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

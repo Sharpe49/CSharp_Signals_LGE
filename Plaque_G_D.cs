@@ -19,13 +19,13 @@ namespace ORTS.Scripting.Script
                 || !nextNormalParts.Contains("FR_TABLEAU_G_D")
                 || direction.Contains("DIR7"))
             {
-                MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = string.Empty;
+                MstsSignalAspect = Aspect.Clear_1;
+                TextSignalAspect = "FR_TABLEAU_G_D_EFFACE";
             }
             else
             {
-                MstsSignalAspect = Aspect.Approach_3;
-                TextSignalAspect = "FR_TABLEAU_G_D";
+                MstsSignalAspect = Aspect.Clear_2;
+                TextSignalAspect = "FR_TABLEAU_G_D_PRESENTE";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

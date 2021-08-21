@@ -2,14 +2,16 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class CSRR30AVL : SignalScript
+    public class CSAAVL_exAL : SignalScript
     {
-        public CSRR30AVL()
+        public CSAAVL_exAL()
         {
         }
 
         public override void Update()
         {
+            string direction = FindSignalAspect("DIR", "INFO", 5);
+
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             if (!Enabled
@@ -19,23 +21,15 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (direction.Contains("DIR1")
+                || direction.Contains("DIR2"))
             {
-                if (IsSignalFeatureEnabled("USER2")
-                    && !TrainHasCallOn())
-                {
-                    MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_C_BAL";
-                }
-                else
+                if (CurrentBlockState == BlockState.Occupied)
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
                     TextSignalAspect = "FR_S_BAL";
                 }
-            }
-            else if (RouteSet)
-            {
-                if (AnnounceByA(nextNormalParts))
+                else if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
                     TextSignalAspect = "FR_A";
@@ -54,15 +48,15 @@ namespace ORTS.Scripting.Script
             }
             else
             {
-                if (AnnounceByA(nextNormalParts))
+                if (CurrentBlockState == BlockState.Occupied)
                 {
-                    MstsSignalAspect = Aspect.Restricting;
-                    TextSignalAspect = "FR_RR_A";
+                    MstsSignalAspect = Aspect.Stop;
+                    TextSignalAspect = "FR_C_BAL";
                 }
                 else
                 {
-                    MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_RR";
+                    MstsSignalAspect = Aspect.Clear_1;
+                    TextSignalAspect = "FR_VL_INF";
                 }
             }
 

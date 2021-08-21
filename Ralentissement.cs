@@ -5,28 +5,17 @@ namespace ORTS.Scripting.Script
 {
     public class Ralentissement : SignalScript
     {
-        // Aspect R and (R) have the same MSTS aspect, so the behaviour has been adapted
-        public int DrawStateR = -1;
-        public int DrawStateRCLI = -1;
-
         public Ralentissement()
         {
-        }
-
-        public override void Initialize()
-        {
-            DrawStateR = Math.Max(GetDrawState("r30"), GetDrawState("r"));
-            DrawStateRCLI = Math.Max(GetDrawState("r60"), GetDrawState("rcli"));
         }
 
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            DrawState = -1;
-
             if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed)
+                || CurrentBlockState == BlockState.Obstructed
+                || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
@@ -36,24 +25,20 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (AnnounceByA(nextNormalParts, DrawStateR < 0, DrawStateRCLI < 0))
+            else if (AnnounceByA(nextNormalParts, false, false))
             {
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
             }
-            else if (DrawStateR >= 0
-                && AnnounceByR(nextNormalParts))
+            else if (AnnounceByR(nextNormalParts))
             {
-                MstsSignalAspect = Aspect.Clear_2;
+                MstsSignalAspect = Aspect.Approach_2;
                 TextSignalAspect = "FR_R";
-                DrawState = DrawStateR;
             }
-            else if (DrawStateRCLI >= 0
-                && AnnounceByRCLI(nextNormalParts))
+            else if (AnnounceByRCLI(nextNormalParts))
             {
-                MstsSignalAspect = Aspect.Clear_2;
+                MstsSignalAspect = Aspect.Approach_3;
                 TextSignalAspect = "FR_RCLI";
-                DrawState = DrawStateRCLI;
             }
             else
             {
@@ -61,10 +46,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_VL_INF";
             }
 
-            if (DrawState < 0)
-            {
-                DrawState = DefaultDrawState(MstsSignalAspect);
-            }
+            DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            if (CurrentBlockState != BlockState.Clear || IdSignalAspect(NextSignalId("NORMAL"), "NORMAL") <= Aspect.Restricting)
+            if (CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.Stop;
             }

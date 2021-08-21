@@ -19,7 +19,7 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (nextNormalParts.Contains("ESUBO")
+            else if (IsSignalFeatureEnabled("USER3")
                 && nextNormalParts.Contains("FR_C_BAL"))
             {
                 MstsSignalAspect = Aspect.Stop;
@@ -27,7 +27,8 @@ namespace ORTS.Scripting.Script
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
-                if (nextNormalParts.Contains("ESUBO"))
+                if (IsSignalFeatureEnabled("USER2")
+                    || IsSignalFeatureEnabled("USER3"))
                 {
                     MstsSignalAspect = Aspect.Stop;
                     TextSignalAspect = "FR_C_BAL";

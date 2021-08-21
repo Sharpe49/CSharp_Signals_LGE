@@ -14,6 +14,8 @@ namespace ORTS.Scripting.Script
 
         public override void Initialize()
         {
+            base.Initialize();
+
             DrawStateRCLI = Math.Max(GetDrawState("r60"), GetDrawState("rcli"));
             DrawStateRCLI_ACLI = Math.Max(GetDrawState("r60+aa"), GetDrawState("rcli_acli"));
         }

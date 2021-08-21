@@ -13,6 +13,7 @@ namespace ORTS.Scripting.Script
             List<string> nextNormalParts = NextNormalSignalTextAspects;
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
             List<string> thisRepeaterParts = TextSignalAspectToList(SignalId, "REPEATER");
+            string ipcsInformation = FindSignalAspect("FR_IPCS", "INFO", 3);
 
             if (!Enabled
                 || thisNormalParts.Contains("FR_C_BAL")
@@ -21,6 +22,19 @@ namespace ORTS.Scripting.Script
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_TECS_EFFACE";
+            }
+            else if (ipcsInformation.Contains("FR_IPCS"))
+            {
+                if (ipcsInformation.Contains("FR_IPCS_ENTREE_CONTRE_SENS"))
+                {
+                    MstsSignalAspect = Aspect.Clear_2;
+                    TextSignalAspect = "FR_TECS_PRESENTE";
+                }
+                else
+                {
+                    MstsSignalAspect = Aspect.Stop;
+                    TextSignalAspect = "FR_TECS_EFFACE";
+                }
             }
             else if (!RouteSet)
             {
