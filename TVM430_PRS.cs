@@ -153,7 +153,7 @@ namespace ORTS.Scripting.Script
                 }
                 else
                 {
-                    if (AspectChangeTimer.Started)
+                    if (!PreUpdate() && AspectChangeTimer.Started)
                     {
                         if (AspectChangeTimer.Triggered)
                         {
