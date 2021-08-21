@@ -15,7 +15,8 @@ namespace ORTS.Scripting.Script
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
-            string infoSignal = FindSignalAspect("BJ_VOIE", "INFO", 5);
+            string directionInformation = FindSignalAspect("DIR", "INFO", 5);
+            string trackOccupiedInformation = FindSignalAspect("BJ_VOIE", "INFO", 5);
 
             if (!Enabled
                 || thisNormalParts.Contains("FR_C_BAL")
@@ -25,7 +26,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_BJ_EFFACEE";
             }
-            else if (infoSignal.Contains("BJ_VOIE_OCCUPEE"))
+            else if (directionInformation.Contains("DIR7")
+                || trackOccupiedInformation.Contains("BJ_VOIE_OCCUPEE"))
             {
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_BJ_PRESENTEE";
