@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public abstract class SignalScript : CsSignalScript
+    public abstract partial class SignalScript : CsSignalScript
     {
         public List<string> NextNormalSignalTextAspects
         {
@@ -14,12 +14,10 @@ namespace ORTS.Scripting.Script
             }
         }
 
-        int InitialSignalNumClearAhead;
         public List<int> SignalsWithResume = new List<int>();
 
         public override void Initialize()
         {
-            InitialSignalNumClearAhead = SignalNumClearAhead;
         }
 
         public string FindSignalAspect(string text, string signalType, int maxSignals)
@@ -76,151 +74,28 @@ namespace ORTS.Scripting.Script
             }
         }
 
-        public void UpdateSignalNumClearAhead()
-        {
-            int id = NextSignalId("NORMAL");
-
-            if (id >= 0)
-            {
-                if (SignalsWithResume.Contains(id))
-                {
-                    SignalNumClearAhead = InitialSignalNumClearAhead + 1;
-                }
-                else
-                {
-                    SignalNumClearAhead = InitialSignalNumClearAhead;
-                }
-            }
-        }
-
         public List<string> TextSignalAspectToList(int signalId, string signalType)
         {
-            string textAspect = signalId >= 0
-                ? IdTextSignalAspect(signalId, signalType)
-                : (signalType == "NORMAL"
-                    ? "EOA"
-                    : string.Empty);
-
-            return textAspect.Split(' ').ToList();
-        }
-
-        public bool AnnounceByA(List<string> aspects, bool announceRR = true, bool announceRRCLI = true)
-        {
-            foreach (string aspect in aspects)
+            if (signalId < 0)
             {
-                switch (aspect)
-                {
-                    case "EOA":
-                    case "FR_C_BAL":
-                    case "FR_C_BAPR":
-                    case "FR_C_BM":
-                    case "FR_CV":
-                    case "FR_S_BAL":
-                    case "FR_S_BAPR":
-                    case "FR_S_BM":
-                    case "FR_SCLI":
-                    case "FR_MCLI":
-                    case "FR_M":
-                        return true;
-
-                    case "FR_RR_A":
-                    case "FR_RR_ACLI":
-                    case "FR_RR":
-                        return announceRR;
-
-                    case "FR_RRCLI_A":
-                    case "FR_RRCLI_ACLI":
-                    case "FR_RRCLI":
-                        return announceRRCLI;
-                }
+                return (signalType == "NORMAL" ? "EOA" : string.Empty).Split(' ').ToList();
             }
-
-            return false;
-        }
-
-        public bool AnnounceByACLI(List<string> aspects)
-        {
-            foreach (string aspect in aspects)
+            else
             {
-                switch (aspect)
+                string textAspect = IdTextSignalAspect(signalId, signalType);
+                List<string> list = new List<string>();
+                int i = 0;
+
+                while (textAspect.Length > 0 && i < 5)
                 {
-                    case "FR_A":
-                    case "FR_R":
-                        return true;
+                    list = list.Concat(textAspect.Split(' ')).ToList();
+
+                    i++;
+                    textAspect = IdTextSignalAspect(signalId, signalType, i);
                 }
+
+                return list;
             }
-
-            return false;
-        }
-
-        public bool AnnounceByVLCLI(List<string> aspects)
-        {
-            foreach (string aspect in aspects)
-            {
-                switch (aspect)
-                {
-                    case "FR_A":
-                    case "FR_R":
-                    case "FR_ACLI":
-                    case "FR_RCLI":
-                    case "FR_RCLI_ACLI":
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        public bool AnnounceByR(List<string> aspects, bool doubleAnnounce = false)
-        {
-            foreach (string aspect in aspects)
-            {
-                switch (aspect)
-                {
-                    case "FR_RR":
-                    case "FR_RR_A":
-                    case "FR_RR_ACLI":
-                        return true;
-
-                    case "FR_R":
-                        return doubleAnnounce;
-                }
-            }
-
-            return false;
-        }
-
-        public bool AnnounceByRCLI(List<string> aspects, bool doubleAnnounce = false)
-        {
-            foreach (string aspect in aspects)
-            {
-                switch (aspect)
-                {
-                    case "FR_RRCLI":
-                    case "FR_RRCLI_A":
-                    case "FR_RRCLI_ACLI":
-                        return true;
-
-                    case "FR_RCLI":
-                        return doubleAnnounce;
-                }
-            }
-
-            return false;
-        }
-
-        public bool AnnounceByRCLI_ACLI(List<string> aspects)
-        {
-            foreach (string aspect in aspects)
-            {
-                switch (aspect)
-                {
-                    case "FR_RRCLI_A":
-                        return true;
-                }
-            }
-
-            return false;
         }
     }
 }
