@@ -28,7 +28,7 @@ namespace ORTS.Scripting.Script
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
             List<string> thisRepeaterParts = TextSignalAspectToList(SignalId, "REPEATER");
-            List<string> thisSpeedParts = TextSignalAspectToList(SignalId, "SPEED");
+            List<string> thisSpeedParts = TextSignalAspectToList(SignalId, "TIVR");
 
             DrawState = -1;
 

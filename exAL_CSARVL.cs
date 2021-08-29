@@ -80,12 +80,12 @@ namespace ORTS.Scripting.Script
             else if (IsSignalFeatureEnabled("USER3")
                 && AnnounceByVLCLI(nextNormalParts))
             {
-                MstsSignalAspect = Aspect.Clear_2;
+                MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VLCLI_ANN";
             }
             else
             {
-                MstsSignalAspect = Aspect.Clear_1;
+                MstsSignalAspect = Aspect.Clear_2;
                 if (IsSignalFeatureEnabled("USER3"))
                 {
                     TextSignalAspect = "FR_VL_SUP";
