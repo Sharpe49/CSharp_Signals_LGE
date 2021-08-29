@@ -78,7 +78,7 @@ namespace ORTS.Scripting.Script
         {
             if (signalId < 0)
             {
-                return (signalType == "NORMAL" ? "EOA" : string.Empty).Split(' ').ToList();
+                return (signalType == "NORMAL" ? new List<string>() { "EOA" } : new List<string>());
             }
             else
             {
@@ -94,7 +94,7 @@ namespace ORTS.Scripting.Script
                     textAspect = IdTextSignalAspect(signalId, signalType, i);
                 }
 
-                return list;
+                return list.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList();
             }
         }
     }
