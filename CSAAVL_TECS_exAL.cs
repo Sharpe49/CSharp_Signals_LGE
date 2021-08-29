@@ -37,10 +37,24 @@ namespace ORTS.Scripting.Script
                     MstsSignalAspect = Aspect.Approach_2;
                     TextSignalAspect = "FR_ACLI";
                 }
-                else
+                else if (IsSignalFeatureEnabled("USER2")
+                    && AnnounceByVLCLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_VL_INF";
+                    TextSignalAspect = "FR_VLCLI_ANN";
+                }
+                else
+                {
+                    if (IsSignalFeatureEnabled("USER2"))
+                    {
+                        MstsSignalAspect = Aspect.Clear_2;
+                        TextSignalAspect = "FR_VL_SUP";
+                    }
+                    else
+                    {
+                        MstsSignalAspect = Aspect.Clear_2;
+                        TextSignalAspect = "FR_VL_INF";
+                    }
                 }
             }
             else

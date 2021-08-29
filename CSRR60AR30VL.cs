@@ -1,16 +1,28 @@
+using System;
 using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
     public class CSRR60AR30VL : SignalScript
     {
+        public int DrawStateRRCLI_ACLI = -1;
+
         public CSRR60AR30VL()
         {
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            DrawStateRRCLI_ACLI = Math.Max(GetDrawState("rr60+aa"), GetDrawState("rrcli_acli"));
         }
 
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
+
+            DrawState = -1;
 
             if (!Enabled
                 || CurrentBlockState == BlockState.Obstructed
@@ -36,9 +48,15 @@ namespace ORTS.Scripting.Script
                     MstsSignalAspect = Aspect.Approach_2;
                     TextSignalAspect = "FR_R";
                 }
+                else if (IsSignalFeatureEnabled("USER1")
+                    && AnnounceByACLI(nextNormalParts))
+                {
+                    MstsSignalAspect = Aspect.Approach_3;
+                    TextSignalAspect = "FR_ACLI";
+                }
                 else
                 {
-                    MstsSignalAspect = Aspect.Clear_1;
+                    MstsSignalAspect = Aspect.Clear_2;
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
@@ -49,14 +67,24 @@ namespace ORTS.Scripting.Script
                     MstsSignalAspect = Aspect.Restricting;
                     TextSignalAspect = "FR_RRCLI_A";
                 }
+                else if (IsSignalFeatureEnabled("USER1")
+                    && AnnounceByACLI(nextNormalParts))
+                {
+                    MstsSignalAspect = Aspect.Restricting;
+                    TextSignalAspect = "FR_RRCLI_ACLI";
+                    DrawState = DrawStateRRCLI_ACLI;
+                }
                 else
                 {
-                    MstsSignalAspect = Aspect.Clear_2;
+                    MstsSignalAspect = Aspect.Clear_1;
                     TextSignalAspect = "FR_RRCLI";
                 }
             }
 
-            DrawState = DefaultDrawState(MstsSignalAspect);
+            if (DrawState < 0)
+            {
+                DrawState = DefaultDrawState(MstsSignalAspect);
+            }
         }
     }
 }
