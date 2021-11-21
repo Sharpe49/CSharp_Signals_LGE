@@ -5,10 +5,6 @@ namespace ORTS.Scripting.Script
 {
     public class Ralentissement : SignalScript
     {
-        public Ralentissement()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
@@ -45,6 +41,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VL_INF";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

@@ -7,10 +7,6 @@ namespace ORTS.Scripting.Script
     {
         public int DrawStateRCLI_ACLI = -1;
 
-        public exAL_DARVL()
-        {
-        }
-
         public override void Initialize()
         {
             DrawStateRCLI_ACLI = Math.Max(GetDrawState("r60+aa"), GetDrawState("rcli_acli"));
@@ -70,6 +66,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VL_INF";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, false, true);
 
             if (DrawState < 0)
             {

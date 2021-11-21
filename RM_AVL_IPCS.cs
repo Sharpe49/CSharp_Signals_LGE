@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_AVL_IPCS : SignalScript
     {
-        public RM_AVL_IPCS()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CFL_TIVmobE : SignalScript
     {
-        public RM_CFL_TIVmobE()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

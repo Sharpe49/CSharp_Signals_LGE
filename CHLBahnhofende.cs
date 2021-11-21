@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class CHLBahnhofende : SignalScript
     {
-        public CHLBahnhofende()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

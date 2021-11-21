@@ -4,13 +4,9 @@ namespace ORTS.Scripting.Script
 {
     public class RM_TIDD : SignalScript
     {
-        public RM_TIDD()
-        {
-        }
-
         public override void Update()
         {
-            string direction = FindSignalAspect("FR_ID", "REPEATER", 5);
+            string direction = FindSignalAspect("FR_ID", "ID", 1);
 
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
 

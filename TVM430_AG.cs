@@ -4,11 +4,7 @@ namespace ORTS.Scripting.Script
     {
         TVMSpeedType VeAg = TVMSpeedType._320V;
 
-        public TVM430_AG()
-        {
-        }
-
-        public override void Update()
+        public override void Initialize()
         {
             if (HasHead(8))
             {
@@ -46,7 +42,10 @@ namespace ORTS.Scripting.Script
             {
                 VeAg = TVMSpeedType._230;
             }
+        }
 
+        public override void Update()
+        {
             MstsSignalAspect = Aspect.Clear_2;
             TextSignalAspect = "FR_TVM430_AG Ve" + VeAg.ToString().Substring(1);
             DrawState = DefaultDrawState(MstsSignalAspect);

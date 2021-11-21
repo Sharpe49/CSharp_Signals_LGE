@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class TVM430_M : SignalScript
     {
-        public TVM430_M()
-        {
-        }
-
         public override void Update()
         {
             if (!Enabled

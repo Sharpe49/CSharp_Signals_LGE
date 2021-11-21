@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class ChZwergAbfrage : SignalScript
     {
-        public ChZwergAbfrage()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

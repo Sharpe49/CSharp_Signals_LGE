@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CFL_IU : SignalScript
     {
-        public RM_CFL_IU()
-        {
-        }
-
         public override void Update()
         {
             if (CurrentBlockState != BlockState.Clear

@@ -10,10 +10,6 @@ namespace ORTS.Scripting.Script
         public int DrawStateRRCLI_A = -1;
         public int DrawStateRRCLI_ACLI = -1;
 
-        public exAL_CSRRAVL()
-        {
-        }
-
         public override void Initialize()
         {
             base.Initialize();
@@ -27,25 +23,24 @@ namespace ORTS.Scripting.Script
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisRepeaterParts = TextSignalAspectToList(SignalId, "REPEATER");
+            List<string> thisTabGParts = TextSignalAspectToList(SignalId, "TABG");
+            List<string> nextTabGParts = TextSignalAspectToList(NextSignalId("TABG"), "TABG");
             List<string> thisSpeedParts = TextSignalAspectToList(SignalId, "TIVR");
 
             DrawState = -1;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (nextNormalParts.Contains("FR_TABLEAU_G_D")
-                || thisRepeaterParts.Contains("FR_TABLEAU_G_D"))
+            else if (nextTabGParts.Contains("FR_TABLEAU_G_D")
+                || thisTabGParts.Contains("FR_TABLEAU_G_D"))
             {
                 MstsSignalAspect = Aspect.Restricting;
                 TextSignalAspect = "FR_RR_A";
@@ -128,6 +123,8 @@ namespace ORTS.Scripting.Script
                     }
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             if (DrawState < 0)
             {

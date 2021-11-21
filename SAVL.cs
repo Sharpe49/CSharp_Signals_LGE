@@ -4,15 +4,11 @@ namespace ORTS.Scripting.Script
 {
     public class SAVL : SignalScript
     {
-        public SAVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (CurrentBlockState != BlockState.Clear)
+            if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
@@ -27,6 +23,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VL_INF";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

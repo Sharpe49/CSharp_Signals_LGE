@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class ChLEinf60 : SignalScript
     {
-        public ChLEinf60()
-        {
-        }
-
         public override void Update()
         {
             if (!Enabled

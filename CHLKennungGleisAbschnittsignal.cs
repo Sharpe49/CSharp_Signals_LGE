@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class CHLKennungGleisAbschnittsignal : SignalScript
     {
-        public CHLKennungGleisAbschnittsignal()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Restricting;

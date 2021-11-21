@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class SNCF2LightDir : SignalScript
     {
-        public SNCF2LightDir()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

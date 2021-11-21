@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_BPa : SignalScript
     {
-        public RM_BPa()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Clear_2;

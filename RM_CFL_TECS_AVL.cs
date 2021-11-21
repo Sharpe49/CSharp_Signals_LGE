@@ -5,10 +5,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CFL_TECS_AVL : SignalScript
     {
-        public RM_CFL_TECS_AVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

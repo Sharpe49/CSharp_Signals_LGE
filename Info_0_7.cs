@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class Info_0_7 : SignalScript
     {
-        public Info_0_7()
-        {
-        }
-
         public override void Update()
         {
             int direction = 0;

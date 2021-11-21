@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class TVM430_SAVL_FinCAB : SignalScript
     {
-        public TVM430_SAVL_FinCAB()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

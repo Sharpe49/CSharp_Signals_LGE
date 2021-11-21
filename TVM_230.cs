@@ -18,10 +18,6 @@ namespace ORTS.Scripting.Script
         TVMSpeedType VcE = TVMSpeedType._RRR;
         TVMSpeedType VaE = TVMSpeedType.Any;
 
-        public TVM_230()
-        {
-        }
-
         public override void Initialize()
         {
             AspectChangeTimer = new Timer(this);

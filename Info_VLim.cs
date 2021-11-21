@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class Info_VLim : SignalScript
     {
-        public Info_VLim()
-        {
-        }
-
         public override void Update()
         {
             if (HasHead(1))

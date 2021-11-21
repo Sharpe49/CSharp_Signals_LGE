@@ -10,10 +10,6 @@ namespace ORTS.Scripting.Script
     {
         Dictionary<TVMSpeedType, Aspect> MstsTranslation = SNCFV320MstsTranslation;
 
-        public TVM430_FinCab()
-        {
-        }
-
         public override void Update()
         {
             int nextNormalSignalId = NextSignalId("NORMAL");

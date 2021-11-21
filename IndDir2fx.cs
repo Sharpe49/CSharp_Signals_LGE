@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class IndDir2fx : SignalScript
     {
-        public IndDir2fx()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

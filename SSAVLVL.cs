@@ -4,15 +4,11 @@ namespace ORTS.Scripting.Script
 {
     public class SSAVLVL : SignalScript
     {
-        public SSAVLVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (CurrentBlockState != BlockState.Clear)
+            if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_SCLI";
@@ -32,6 +28,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VL_SUP";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

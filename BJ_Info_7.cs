@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class BJ_Info_7 : SignalScript
     {
-        public BJ_Info_7()
-        {
-        }
-
         public override void Update()
         {
             if (Enabled && CurrentBlockState != BlockState.Clear)

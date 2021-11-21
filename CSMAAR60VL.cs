@@ -4,23 +4,17 @@ namespace ORTS.Scripting.Script
 {
     public class CSMAAR60VL : SignalScript
     {
-        public CSMAAR60VL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
             string ipcsInformation = FindSignalAspect("FR_IPCS", "INFO", 3);
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 if (ipcsInformation.Contains("FR_IPCS_ENTREE_CONTRE_SENS")
                     && !IsSignalFeatureEnabled("USER3"))
@@ -89,6 +83,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

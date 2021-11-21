@@ -2,13 +2,9 @@ namespace ORTS.Scripting.Script
 {
     public class BAPR_SVL : SignalScript
     {
-        public BAPR_SVL()
-        {
-        }
-
         public override void Update()
         {
-            if (CurrentBlockState != BlockState.Clear)
+            if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAPR";
@@ -18,6 +14,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VL_INF";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

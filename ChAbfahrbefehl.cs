@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class ChAbfahrbefehl : SignalScript
     {
-        public ChAbfahrbefehl()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

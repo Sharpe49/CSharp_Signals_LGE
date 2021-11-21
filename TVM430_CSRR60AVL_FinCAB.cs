@@ -6,11 +6,7 @@ namespace ORTS.Scripting.Script
     {
         TVMSpeedType Vpf = TVMSpeedType._160E;
 
-        public TVM430_CSRR60AVL_FinCAB()
-        {
-        }
-
-        public override void Update()
+        public override void Initialize()
         {
             if (IsSignalFeatureEnabled("USER1"))
             {
@@ -20,7 +16,10 @@ namespace ORTS.Scripting.Script
             {
                 Vpf = TVMSpeedType._160E;
             }
+        }
 
+        public override void Update()
+        {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             if (!Enabled

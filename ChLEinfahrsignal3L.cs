@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class ChLEinfahrsignal3L : SignalScript
     {
-        public ChLEinfahrsignal3L()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisDistantParts = TextSignalAspectToList(SignalId, "DISTANCE");
@@ -71,15 +67,15 @@ namespace ORTS.Scripting.Script
                 switch (TextSignalAspect)
                 {
                     case "CH_IMAGE_H":
-                        TextSignalAspect += " CH_CROCODILE_SF CH_KVB_CHAMP_S_C_BM CH_KVB_CHAMP_VRA_V40";
+                        TextSignalAspect += " CROCODILE_SF KVB_S_S_BM KVB_TIVE_G_AA";
                         break;
 
                     case "CH_IMAGE_2":
-                        TextSignalAspect += " CH_CROCODILE_SO CH_KVB_CHAMP_S_VL_INF CH_KVB_CHAMP_VRA_V40";
+                        TextSignalAspect += " CROCODILE_SO KVB_S_VL_INF KVB_TIVE_G_V40";
                         break;
 
                     default:
-                        TextSignalAspect += " CH_CROCODILE_SO CH_KVB_CHAMP_S_VL_INF";
+                        TextSignalAspect += " CROCODILE_SO KVB_S_VL_INF KVB_TIVE_G_AA";
                         break;
                 }
             }

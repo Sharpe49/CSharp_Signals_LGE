@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_IdVoieN : SignalScript
     {
-        public RM_IdVoieN()
-        {
-        }
-
         public override void Update()
         {
             string direction = FindSignalAspect("DIR", "INFO", 5);

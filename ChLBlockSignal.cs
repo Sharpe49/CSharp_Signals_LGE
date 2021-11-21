@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class ChLBlockSignal : SignalScript
     {
-        public ChLBlockSignal()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
@@ -70,27 +66,27 @@ namespace ORTS.Scripting.Script
             switch (TextSignalAspect)
             {
                 case "CH_IMAGE_H":
-                    TextSignalAspect += " CH_CROCODILE_SF CH_KVB_CHAMP_S_C_BM CH_KVB_CHAMP_VRA_V40";
+                    TextSignalAspect += " CROCODILE_SF KVB_S_S_BM";
                     break;
 
                 case "CH_IMAGE_W":
-                    TextSignalAspect += " CH_CROCODILE_SF CH_KVB_CHAMP_S_A";
+                    TextSignalAspect += " CROCODILE_SF KVB_S_A";
                     break;
 
                 case "CH_IMAGE_2*":
-                    TextSignalAspect += " CH_CROCODILE_SF CH_KVB_CHAMP_S_VL_INF CH_KVB_CHAMP_VAN_V40";
+                    TextSignalAspect += " CROCODILE_SF KVB_S_VL_INF KVB_TIVD_G_V40";
                     break;
 
                 case "CH_IMAGE_3*":
-                    TextSignalAspect += " CH_CROCODILE_SF CH_KVB_CHAMP_S_VL_INF CH_KVB_CHAMP_VAN_V60";
+                    TextSignalAspect += " CROCODILE_SF KVB_S_VL_INF KVB_TIVD_G_V60";
                     break;
 
                 case "CH_IMAGE_5*":
-                    TextSignalAspect += " CH_CROCODILE_SF CH_KVB_CHAMP_S_VL_INF CH_KVB_CHAMP_VAN_V90";
+                    TextSignalAspect += " CROCODILE_SF KVB_S_VL_INF KVB_TIVD_G_V90";
                     break;
 
                 default:
-                    TextSignalAspect += " CH_CROCODILE_SO CH_KVB_CHAMP_S_VL_INF";
+                    TextSignalAspect += " CROCODILE_SO KVB_S_VL_INF";
                     break;
             }
         }

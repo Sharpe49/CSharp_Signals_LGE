@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class CHLKennungNormal : SignalScript
     {
-        public CHLKennungNormal()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Stop;

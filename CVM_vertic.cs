@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class CVM_vertic : SignalScript
     {
-        public CVM_vertic()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class BAPR_AR30VL : SignalScript
     {
-        public BAPR_AR30VL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
@@ -27,6 +23,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VL_INF";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, false, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

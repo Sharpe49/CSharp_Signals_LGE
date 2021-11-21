@@ -22,17 +22,7 @@ namespace ORTS.Scripting.Script
         TVMSpeedType VcE = TVMSpeedType._RRR;
         TVMSpeedType VaE = TVMSpeedType.Any;
 
-        public TVM430_Nf_300()
-        {
-        }
-
         public override void Initialize()
-        {
-            AspectChangeTimer = new Timer(this);
-            AspectChangeTimer.Setup(6f);
-        }
-
-        public override void Update()
         {
             if (IsSignalFeatureEnabled("USER4"))
             {
@@ -55,6 +45,12 @@ namespace ORTS.Scripting.Script
                 Vpf[1] = TVMSpeedType._300V;
             }
 
+            AspectChangeTimer = new Timer(this);
+            AspectChangeTimer.Setup(6f);
+        }
+
+        public override void Update()
+        {
             int nextNormalSignalId = NextSignalId("NORMAL");
             List<string> nextNormalParts = new List<string>();
             if (nextNormalSignalId >= 0)

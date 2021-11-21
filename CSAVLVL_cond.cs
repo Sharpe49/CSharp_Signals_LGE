@@ -4,23 +4,17 @@ namespace ORTS.Scripting.Script
 {
     public class CSAVLVL_cond : SignalScript
     {
-        public CSAVLVL_cond()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisRepeaterParts = TextSignalAspectToList(SignalId, "REPEATER");
+            List<string> thisTIVRParts = TextSignalAspectToList(SignalId, "TIVR");
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
@@ -36,7 +30,7 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Approach_2;
                 TextSignalAspect = "FR_ACLI";
             }
-            else if (thisRepeaterParts.Contains("FR_TIVR_EFFACE")
+            else if (thisTIVRParts.Contains("FR_TIVR_EFFACE")
                 && AnnounceByVLCLI(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Approach_3;
@@ -44,7 +38,7 @@ namespace ORTS.Scripting.Script
             }
             else
             {
-                if (thisRepeaterParts.Contains("FR_TIVR_EFFACE"))
+                if (thisTIVRParts.Contains("FR_TIVR_EFFACE"))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
                     TextSignalAspect = "FR_VL_SUP";
@@ -55,6 +49,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

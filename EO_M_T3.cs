@@ -6,10 +6,6 @@ namespace ORTS.Scripting.Script
     // M - T3
     public class EO_M_T3 : SignalScript
     {
-        public EO_M_T3()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalSignalParts = TextSignalAspectToList(SignalId, "NORMAL");

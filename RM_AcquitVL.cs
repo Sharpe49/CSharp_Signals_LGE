@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_AcquitVL : SignalScript
     {
-        public RM_AcquitVL()
-        {
-        }
-
         public override void Update()
         {
             if (CurrentBlockState == BlockState.Obstructed)

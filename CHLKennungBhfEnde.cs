@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class CHLKennungBhfEnde : SignalScript
     {
-        public CHLKennungBhfEnde()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Approach_2;

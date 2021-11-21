@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class CVM_horiz : SignalScript
     {
-        public CVM_horiz()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

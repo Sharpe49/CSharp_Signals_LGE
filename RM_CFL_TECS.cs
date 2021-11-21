@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CFL_TECS : SignalScript
     {
-        public RM_CFL_TECS()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

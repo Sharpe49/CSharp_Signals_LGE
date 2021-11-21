@@ -4,31 +4,26 @@ namespace ORTS.Scripting.Script
 {
     public class CSRR60RR30_G : SignalScript
     {
-        public CSRR60RR30_G()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisRepeaterParts = TextSignalAspectToList(SignalId, "REPEATER");
+            List<string> thisTabGParts = TextSignalAspectToList(SignalId, "TABG");
+            List<string> nextTabGParts = TextSignalAspectToList(NextSignalId("TABG"), "TABG");
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
             }
-            else if (nextNormalParts.Contains("FR_TABLEAU_G_D")
-                || thisRepeaterParts.Contains("FR_TABLEAU_G_D"))
+            else if (nextTabGParts.Contains("FR_TABLEAU_G_D")
+                || thisTabGParts.Contains("FR_TABLEAU_G_D"))
             {
-                MstsSignalAspect = Aspect.Approach_3;
+                MstsSignalAspect = Aspect.Approach_2;
                 TextSignalAspect = "FR_RR_A";
             }
             else if (RouteSet)
@@ -38,10 +33,23 @@ namespace ORTS.Scripting.Script
                     MstsSignalAspect = Aspect.Approach_1;
                     TextSignalAspect = "FR_A";
                 }
-                else
+                else if (IsSignalFeatureEnabled("USER3")
+                    && AnnounceByVLCLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_VL_INF";
+                    TextSignalAspect = "FR_VLCLI_ANN";
+                }
+                else
+                {
+                    MstsSignalAspect = Aspect.Clear_2;
+                    if (IsSignalFeatureEnabled("USER3"))
+                    {
+                        TextSignalAspect = "FR_VL_SUP";
+                    }
+                    else
+                    {
+                        TextSignalAspect = "FR_VL_INF";
+                    }
                 }
             }
             else
@@ -53,10 +61,12 @@ namespace ORTS.Scripting.Script
                 }
                 else
                 {
-                    MstsSignalAspect = Aspect.Clear_2;
+                    MstsSignalAspect = Aspect.Approach_3;
                     TextSignalAspect = "FR_RRCLI";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

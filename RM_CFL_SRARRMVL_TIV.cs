@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CFL_SRARRMVL_TIV : SignalScript
     {
-        public RM_CFL_SRARRMVL_TIV()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

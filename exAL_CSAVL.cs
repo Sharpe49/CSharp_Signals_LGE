@@ -6,22 +6,16 @@ namespace ORTS.Scripting.Script
 {
     public class exAL_CSAVL : SignalScript
     {
-        public exAL_CSAVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 if (IsSignalFeatureEnabled("USER1"))
                 {
@@ -63,6 +57,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

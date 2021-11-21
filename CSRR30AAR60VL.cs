@@ -7,10 +7,7 @@ namespace ORTS.Scripting.Script
     {
         public int DrawStateRCLI_ACLI = -1;
         public int DrawStateRR_ACLI = -1;
-
-        public CSRR30AAR60VL()
-        {
-        }
+        public int DrawStateVLCLI = -1;
 
         public override void Initialize()
         {
@@ -18,6 +15,7 @@ namespace ORTS.Scripting.Script
 
             DrawStateRCLI_ACLI = Math.Max(GetDrawState("r60+aa"), GetDrawState("rcli_acli"));
             DrawStateRR_ACLI = Math.Max(GetDrawState("rr30+aa"), GetDrawState("rr_acli"));
+            DrawStateVLCLI = Math.Max(GetDrawState("vlvl"), GetDrawState("vlcli"));
         }
 
         public override void Update()
@@ -26,14 +24,12 @@ namespace ORTS.Scripting.Script
 
             DrawState = -1;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
@@ -64,10 +60,25 @@ namespace ORTS.Scripting.Script
                     MstsSignalAspect = Aspect.Approach_2;
                     TextSignalAspect = "FR_RCLI";
                 }
+                else if (IsSignalFeatureEnabled("USER3")
+                    && DrawStateVLCLI >= 0
+                    && AnnounceByVLCLI(nextNormalParts))
+                {
+                    MstsSignalAspect = Aspect.Clear_1;
+                    TextSignalAspect = "FR_VLCLI_ANN";
+                    DrawState = DrawStateVLCLI;
+                }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_VL_INF";
+                    if (IsSignalFeatureEnabled("USER3"))
+                    {
+                        TextSignalAspect = "FR_VL_SUP";
+                    }
+                    else
+                    {
+                        TextSignalAspect = "FR_VL_INF";
+                    }
                 }
             }
             else
@@ -91,6 +102,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_RR";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             if (DrawState < 0)
             {

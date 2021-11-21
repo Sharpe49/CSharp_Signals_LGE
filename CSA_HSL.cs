@@ -2,19 +2,14 @@ namespace ORTS.Scripting.Script
 {
     public class CSA_HSL : SignalScript
     {
-        public CSA_HSL()
-        {
-        }
-
         public override void Update()
         {
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed)
+            if (CommandAspectC(NextNormalSignalTextAspects))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 if (TrainHasCallOn())
                 {
@@ -40,6 +35,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

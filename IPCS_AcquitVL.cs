@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class IPCS_AcquitVL : SignalScript
     {
-        public IPCS_AcquitVL()
-        {
-        }
-
         public override void Update()
         {
             if (CurrentBlockState != BlockState.Clear)

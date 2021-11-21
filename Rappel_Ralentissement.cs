@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class Rappel_Ralentissement : SignalScript
     {
-        public Rappel_Ralentissement()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
@@ -93,6 +89,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_RRCLI";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

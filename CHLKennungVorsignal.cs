@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class CHLKennungVorsignal : SignalScript
     {
-        public CHLKennungVorsignal()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Approach_3;

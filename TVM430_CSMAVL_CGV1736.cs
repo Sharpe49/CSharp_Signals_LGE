@@ -5,10 +5,6 @@ namespace ORTS.Scripting.Script
 {
     public class TVM430_CSMAVL_CGV1736 : SignalScript
     {
-        public TVM430_CSMAVL_CGV1736()
-        {
-        }
-
         public override void Update()
         {
             int nextNormalSignalId = NextSignalId("NORMAL");

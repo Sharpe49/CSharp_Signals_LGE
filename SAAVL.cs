@@ -4,15 +4,11 @@ namespace ORTS.Scripting.Script
 {
     public class SAAVL : SignalScript
     {
-        public SAAVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (CurrentBlockState != BlockState.Clear)
+            if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
@@ -28,11 +24,26 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Approach_2;
                 TextSignalAspect = "FR_ACLI";
             }
-            else
+            else if (IsSignalFeatureEnabled("USER3")
+                && AnnounceByVLCLI(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_INF";
+                TextSignalAspect = "FR_VLCLI_ANN";
             }
+            else
+            {
+                MstsSignalAspect = Aspect.Clear_2;
+                if (IsSignalFeatureEnabled("USER3"))
+                {
+                    TextSignalAspect = "FR_VL_SUP";
+                }
+                else
+                {
+                    TextSignalAspect = "FR_VL_INF";
+                }
+            }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

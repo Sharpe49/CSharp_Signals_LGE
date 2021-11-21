@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class exAL_SAVL : SignalScript
     {
-        public exAL_SAVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
@@ -54,6 +50,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

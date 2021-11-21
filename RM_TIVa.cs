@@ -1,20 +1,26 @@
+using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace ORTS.Scripting.Script
 {
     // TIVD mobile
     public class RM_TIVa : SignalScript
     {
-        public RM_TIVa()
+        int SpeedKpH = 0;
+
+        public override void Initialize()
         {
+            SpeedKpH = int.Parse(Regex.Match(SignalShapeName, @"[0-9]{2,3}").Value);
         }
 
         public override void Update()
         {
+
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            int nextShuntingSignalId = NextSignalId("SHUNTING");
-            string nextShuntingSignalTextAspect = nextShuntingSignalId >= 0 ? IdTextSignalAspect(nextShuntingSignalId, "SHUNTING") : string.Empty;
+            int nextTIVRId = NextSignalId("TIVR");
+            string nextTIVRTextAspect = nextTIVRId >= 0 ? IdTextSignalAspect(nextTIVRId, "TIVR") : string.Empty;
 
             // Signal aval non trouvé => TIVD présenté
             if (nextNormalParts.Count < 1)
@@ -23,16 +29,16 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_TIVD_PRESENTE";
             }
             // Signal aval non équipé de TIVR => TIVD effacé
-            else if (nextShuntingSignalId < 0
-                || !nextShuntingSignalTextAspect.StartsWith("FR_TIVR"))
+            else if (nextTIVRId < 0
+                || !nextTIVRTextAspect.StartsWith("FR_TIVR"))
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_TIVD_EFFACE";
             }
             // TIVR éteint ou présenté
             else if (nextNormalParts.Contains("FR_C_BAL")
-                || nextShuntingSignalTextAspect == "FR_TIVR_ETEINT"
-                || nextShuntingSignalTextAspect == "FR_TIVR_PRESENTE")
+                || nextTIVRTextAspect == "FR_TIVR_ETEINT"
+                || nextTIVRTextAspect == "FR_TIVR_PRESENTE")
             {
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_TIVD_PRESENTE";
@@ -42,6 +48,16 @@ namespace ORTS.Scripting.Script
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_TIVD_EFFACE";
+            }
+
+            if (IsSignalFeatureEnabled("USER3"))
+            {
+                TextSignalAspect += " KVB_TPAA";
+            }
+
+            if (TextSignalAspect == "FR_TIVD_PRESENTE")
+            {
+                TextSignalAspect += $" KVB_VAN_V{SpeedKpH}";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

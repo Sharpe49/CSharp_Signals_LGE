@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CCTe : SignalScript
     {
-        public RM_CCTe()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Clear_2;

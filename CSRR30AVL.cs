@@ -4,22 +4,16 @@ namespace ORTS.Scripting.Script
 {
     public class CSRR30AVL : SignalScript
     {
-        public CSRR30AVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 if (IsSignalFeatureEnabled("USER2")
                     && !TrainHasCallOn())
@@ -65,6 +59,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_RR";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

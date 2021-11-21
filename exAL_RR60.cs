@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class exAL_RR60 : SignalScript
     {
-        public exAL_RR60()
-        {
-        }
-
         public override void Update()
         {
             if (!Enabled

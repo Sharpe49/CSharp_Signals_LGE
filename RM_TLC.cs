@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_TLC : SignalScript
     {
-        public RM_TLC()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class CARRVL_CE : SignalScript
     {
-        public CARRVL_CE()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
@@ -15,14 +11,12 @@ namespace ORTS.Scripting.Script
             Aspect thisSignalInfoAspect = IdSignalAspect(SignalId, "INFO");
             Aspect nextSignalInfoAspect = IdSignalAspect(NextSignalId("INFO"), "INFO");
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
@@ -53,6 +47,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

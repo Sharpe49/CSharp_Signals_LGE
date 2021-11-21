@@ -4,24 +4,18 @@ namespace ORTS.Scripting.Script
 {
     public class CSAVL_TESCS_exAL : SignalScript
     {
-        public CSAVL_TESCS_exAL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
             else if (!RouteSet)
             {
-                if (CurrentBlockState == BlockState.Occupied)
+                if (CommandAspectS())
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
                     TextSignalAspect = "FR_S_BAL";
@@ -70,6 +64,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

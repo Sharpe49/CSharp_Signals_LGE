@@ -18,17 +18,7 @@ namespace ORTS.Scripting.Script
         TVMSpeedType VcE = TVMSpeedType._RRR;
         TVMSpeedType VaE = TVMSpeedType.Any;
 
-        public TVM_320()
-        {
-        }
-
         public override void Initialize()
-        {
-            AspectChangeTimer = new Timer(this);
-            AspectChangeTimer.Setup(6f);
-        }
-
-        public override void Update()
         {
             if (IsSignalFeatureEnabled("USER4"))
             {
@@ -51,6 +41,12 @@ namespace ORTS.Scripting.Script
                 Vpf[1] = TVMSpeedType._320V;
             }
 
+            AspectChangeTimer = new Timer(this);
+            AspectChangeTimer.Setup(6f);
+        }
+
+        public override void Update()
+        {
             int nextNormalSignalId = NextSignalId("NORMAL");
             string nextNormalSignalTextAspect;
             if (nextNormalSignalId >= 0)

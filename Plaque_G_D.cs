@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class Plaque_G_D : SignalScript
     {
-        public Plaque_G_D()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

@@ -5,10 +5,6 @@ namespace ORTS.Scripting.Script
     // Tableau Baissez Panto mobile
     public class RM_BPmob : SignalScript
     {
-        public RM_BPmob()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

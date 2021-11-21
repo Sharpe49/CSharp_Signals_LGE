@@ -4,22 +4,16 @@ namespace ORTS.Scripting.Script
 {
     public class CSRR60AVL_TESCS : SignalScript
     {
-        public CSRR60AVL_TESCS()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 if (RouteSet)
                 {
@@ -50,6 +44,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_RRCLI";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

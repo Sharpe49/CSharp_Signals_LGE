@@ -5,10 +5,6 @@ namespace ORTS.Scripting.Script
     /// </summary>
     public class exAL_D_A : SignalScript
     {
-        public exAL_D_A()
-        {
-        }
-
         public override void Update()
         {
             if (IsSignalFeatureEnabled("USER1"))

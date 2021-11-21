@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class Info_IPCS : SignalScript
     {
-        public Info_IPCS()
-        {
-        }
-
         public override void Update()
         {
             if (IsSignalFeatureEnabled("USER1"))

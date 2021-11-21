@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class CSAVL_IPCS : SignalScript
     {
-        public CSAVL_IPCS()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
@@ -24,6 +20,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_VL_INF";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

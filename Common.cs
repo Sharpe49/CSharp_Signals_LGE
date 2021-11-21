@@ -1,4 +1,5 @@
 ﻿using Orts.Simulation.Signalling;
+using ORTS.Common;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -96,6 +97,16 @@ namespace ORTS.Scripting.Script
 
                 return list.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList();
             }
+        }
+
+        public override void HandleEvent(SignalEvent evt, string message = "")
+        {
+            Update();
+        }
+
+        public void SetSpeedLimitKpH(float passengerSpeedLimitKpH, float freightSpeedLimitKpH, bool asap, bool reset, bool noSpeedReduction, bool isWarning)
+        {
+            SetSpeedLimit(MpS.FromKpH(passengerSpeedLimitKpH), MpS.FromKpH(freightSpeedLimitKpH), asap, reset, noSpeedReduction, isWarning);
         }
     }
 }

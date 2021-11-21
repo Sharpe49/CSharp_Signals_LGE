@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class Oeilleton : SignalScript
     {
-        public Oeilleton()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

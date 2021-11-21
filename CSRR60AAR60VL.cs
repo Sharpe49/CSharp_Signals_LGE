@@ -11,10 +11,6 @@ namespace ORTS.Scripting.Script
         public int DrawStateRCLI_ACLI = -1;
         public int DrawStateRRCLI_ACLI = -1;
 
-        public CSRR60AAR60VL()
-        {
-        }
-
         public override void Initialize()
         {
             base.Initialize();
@@ -31,14 +27,12 @@ namespace ORTS.Scripting.Script
 
             DrawState = -1;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
                 TextSignalAspect = "FR_S_BAL";
@@ -105,6 +99,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_RRCLI";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect, true);
 
             if (DrawState < 0)
             {

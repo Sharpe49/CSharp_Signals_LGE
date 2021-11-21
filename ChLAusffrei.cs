@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class ChLAusffrei : SignalScript
     {
-        public ChLAusffrei()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

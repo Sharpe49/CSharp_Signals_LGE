@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class Info_5 : SignalScript
     {
-        public Info_5()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Approach_3;

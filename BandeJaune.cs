@@ -4,14 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class BandeJaune : SignalScript
     {
-        public BandeJaune()
-        {
-        }
-
-        public override void Initialize()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

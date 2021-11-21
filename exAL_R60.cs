@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class exAL_R60 : SignalScript
     {
-        public exAL_R60()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

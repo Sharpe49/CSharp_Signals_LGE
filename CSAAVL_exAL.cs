@@ -4,19 +4,13 @@ namespace ORTS.Scripting.Script
 {
     public class CSAAVL_exAL : SignalScript
     {
-        public CSAAVL_exAL()
-        {
-        }
-
         public override void Update()
         {
             string direction = FindSignalAspect("DIR", "INFO", 5);
 
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
@@ -24,7 +18,7 @@ namespace ORTS.Scripting.Script
             else if (direction.Contains("DIR1")
                 || direction.Contains("DIR2"))
             {
-                if (CurrentBlockState == BlockState.Occupied)
+                if (CommandAspectS())
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
                     TextSignalAspect = "FR_S_BAL";
@@ -59,6 +53,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

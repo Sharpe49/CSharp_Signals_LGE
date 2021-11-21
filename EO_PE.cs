@@ -8,10 +8,6 @@ namespace ORTS.Scripting.Script
     // L1 - LGV
     public class EO_PE : SignalScript
     {
-        public EO_PE()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

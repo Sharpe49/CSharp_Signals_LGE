@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CFL_MVL : SignalScript
     {
-        public RM_CFL_MVL()
-        {
-        }
-
         public override void Update()
         {
             if (!Enabled

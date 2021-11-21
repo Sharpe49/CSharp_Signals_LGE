@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class RM_BPe : SignalScript
     {
-        public RM_BPe()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Clear_2;
@@ -13,7 +9,7 @@ namespace ORTS.Scripting.Script
 
             if (IsSignalFeatureEnabled("USER2"))
             {
-                string aspect = IdTextSignalAspect(NextSignalId("REPEATER"), "REPEATER");
+                string aspect = IdTextSignalAspect(NextSignalId("BP_FP"), "BP_FP");
 
                 if (aspect == "FR_BP_FP_1500V_PRESENTE")
                 {

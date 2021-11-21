@@ -4,17 +4,11 @@ namespace ORTS.Scripting.Script
 {
     public class CAVL_CE : SignalScript
     {
-        public CAVL_CE()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
@@ -25,7 +19,7 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 if (IsSignalFeatureEnabled("USER2")
                     || IsSignalFeatureEnabled("USER3"))
@@ -49,6 +43,8 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_VL_INF";
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             TextSignalAspect += " ESUBO";
             DrawState = DefaultDrawState(MstsSignalAspect);

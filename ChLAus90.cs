@@ -4,10 +4,6 @@ namespace ORTS.Scripting.Script
 {
     public class ChLAusf90 : SignalScript
     {
-        public ChLAusf90()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;

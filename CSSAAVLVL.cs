@@ -4,22 +4,16 @@ namespace ORTS.Scripting.Script
 {
     public class CSSAAVLVL : SignalScript
     {
-        public CSSAAVLVL()
-        {
-        }
-
         public override void Update()
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState == BlockState.Obstructed
-                || nextNormalParts.Contains("FR_FSO"))
+            if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
             }
-            else if (CurrentBlockState == BlockState.Occupied)
+            else if (CommandAspectS())
             {
                 if (IsSignalFeatureEnabled("USER1"))
                 {
@@ -46,12 +40,12 @@ namespace ORTS.Scripting.Script
             else if (IsSignalFeatureEnabled("USER3")
                 && AnnounceByVLCLI(nextNormalParts))
             {
-                MstsSignalAspect = Aspect.Clear_2;
+                MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_VLCLI_ANN";
             }
             else
             {
-                MstsSignalAspect = Aspect.Clear_1;
+                MstsSignalAspect = Aspect.Clear_2;
                 if (IsSignalFeatureEnabled("USER3"))
                 {
                     TextSignalAspect = "FR_VL_SUP";
@@ -61,6 +55,8 @@ namespace ORTS.Scripting.Script
                     TextSignalAspect = "FR_VL_INF";
                 }
             }
+
+            TextSignalAspect = AddTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

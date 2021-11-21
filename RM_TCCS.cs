@@ -5,10 +5,6 @@ namespace ORTS.Scripting.Script
     // TECS/TSCS
     public class RM_TCCS : SignalScript
     {
-        public RM_TCCS()
-        {
-        }
-
         public override void Update()
         {
             List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");

@@ -2,10 +2,6 @@ namespace ORTS.Scripting.Script
 {
     public class CHLKennungBlocksignal : SignalScript
     {
-        public CHLKennungBlocksignal()
-        {
-        }
-
         public override void Update()
         {
             MstsSignalAspect = Aspect.Approach_1;

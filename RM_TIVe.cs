@@ -1,12 +1,17 @@
+using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace ORTS.Scripting.Script
 {
     // TIVR
     public class RM_TIVe : SignalScript
     {
-        public RM_TIVe()
+        int SpeedKpH = 0;
+
+        public override void Initialize()
         {
+            SpeedKpH = int.Parse(Regex.Match(SignalShapeName, @"[0-9]{2,3}").Value);
         }
 
         public override void Update()
@@ -64,6 +69,15 @@ namespace ORTS.Scripting.Script
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_TIVR_EFFACE";
+            }
+
+            if (TextSignalAspect == "FR_TIVR_PRESENTE")
+            {
+                TextSignalAspect += $" KVB_VRA_V{SpeedKpH}";
+            }
+            else
+            {
+                TextSignalAspect += " KVB_VRA_AA";
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

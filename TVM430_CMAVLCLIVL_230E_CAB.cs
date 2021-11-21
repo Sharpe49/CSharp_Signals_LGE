@@ -5,10 +5,6 @@ namespace ORTS.Scripting.Script
 {
     public class TVM430_CMAVLCLIVL_230E_CAB : SignalScript
     {
-        public TVM430_CMAVLCLIVL_230E_CAB()
-        {
-        }
-
         public override void Update()
         {
             int nextNormalSignalId = NextSignalId("NORMAL");
