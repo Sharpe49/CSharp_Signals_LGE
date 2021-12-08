@@ -138,12 +138,12 @@ namespace ORTS.Scripting.Script
             return false;
         }
 
-        protected string AddTCS(string textAspect, bool signalHasSpeedRepeater = false, bool distantSignal = false)
+        protected string FrenchTCS(string textAspect, bool signalHasSpeedRepeater = false, bool distantSignal = false)
         {
-            return textAspect + " " + AddCrocodile(textAspect) + " " + AddKvb(textAspect, signalHasSpeedRepeater, distantSignal);
+            return " " + FrenchCrocodile(textAspect) + " " + FrenchKVB(textAspect, signalHasSpeedRepeater, distantSignal);
         }
 
-        protected string AddCrocodile(string textAspect)
+        protected string FrenchCrocodile(string textAspect)
         {
             switch (textAspect)
             {
@@ -177,7 +177,7 @@ namespace ORTS.Scripting.Script
             }
         }
 
-        protected string AddKvb(string textAspect, bool signalHasSpeedRepeater = false, bool distantSignal = false)
+        protected string FrenchKVB(string textAspect, bool signalHasSpeedRepeater = false, bool distantSignal = false)
         {
             List<string> kvbFields = new List<string>();
 

@@ -29,7 +29,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_VL_SUP";
             }
 
-            TextSignalAspect = AddTCS(TextSignalAspect);
+            TextSignalAspect += FrenchTCS(TextSignalAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

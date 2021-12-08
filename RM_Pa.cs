@@ -7,7 +7,7 @@ namespace ORTS.Scripting.Script
     {
         public override void Initialize()
         {
-            SpeedLimitOverriden = true;
+//            SpeedLimitOverriden = true;
         }
 
         public override void Update()
@@ -60,7 +60,7 @@ namespace ORTS.Scripting.Script
             }
             else
             {
-                RemoveSpeedLimit();
+                //RemoveSpeedLimit();
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

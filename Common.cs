@@ -106,7 +106,7 @@ namespace ORTS.Scripting.Script
 
         public void SetSpeedLimitKpH(float passengerSpeedLimitKpH, float freightSpeedLimitKpH, bool asap, bool reset, bool noSpeedReduction, bool isWarning)
         {
-            SetSpeedLimit(MpS.FromKpH(passengerSpeedLimitKpH), MpS.FromKpH(freightSpeedLimitKpH), asap, reset, noSpeedReduction, isWarning);
+            //SetSpeedLimit(MpS.FromKpH(passengerSpeedLimitKpH), MpS.FromKpH(freightSpeedLimitKpH), asap, reset, noSpeedReduction, isWarning);
         }
     }
 }

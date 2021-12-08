@@ -59,7 +59,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_RRCLI";
             }
 
-            TextSignalAspect = AddTCS(TextSignalAspect, true);
+            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

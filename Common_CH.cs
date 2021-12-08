@@ -78,5 +78,182 @@ namespace ORTS.Scripting.Script
 
             return false;
         }
+
+        public string SwissTCS(string normalAspect, string distantAspect)
+        {
+            return " " + SwissCrocodile(normalAspect, distantAspect) + " " + SwissKVB(normalAspect, distantAspect);
+        }
+
+        public string SwissCombinedTCS(string aspect)
+        {
+            return SwissTCS(aspect, aspect);
+        }
+
+        public string SwissCrocodile(string normalAspect, string distantAspect)
+        {
+            switch (normalAspect)
+            {
+                case "CH_IMAGE_H":
+                case "CH_IMAGE_6":
+                    return "CROCODILE_SF";
+
+                case "CH_IMAGE_2":
+                    switch (distantAspect)
+                    {
+                        case "CH_IMAGE_W":
+                            return "CROCODILE_SF";
+
+                        default:
+                            return "CROCODILE_SO";
+                    }
+
+                case "CH_IMAGE_3":
+                    switch (distantAspect)
+                    {
+                        case "CH_IMAGE_W":
+                        case "CH_IMAGE_2*":
+                            return "CROCODILE_SF";
+
+                        default:
+                            return "CROCODILE_SO";
+                    }
+
+                case "CH_IMAGE_5":
+                    switch (distantAspect)
+                    {
+                        case "CH_IMAGE_W":
+                        case "CH_IMAGE_2*":
+                        case "CH_IMAGE_3*":
+                            return "CROCODILE_SF";
+
+                        default:
+                            return "CROCODILE_SO";
+                    }
+
+                default:
+                    switch (distantAspect)
+                    {
+                        case "CH_IMAGE_W":
+                        case "CH_IMAGE_2*":
+                        case "CH_IMAGE_3*":
+                        case "CH_IMAGE_5*":
+                            return "CROCODILE_SF";
+
+                        default:
+                            return "CROCODILE_SO";
+                    }
+            }
+        }
+
+        public string SwissKVB(string normalAspect, string distantAspect)
+        {
+            if (normalAspect.Length > 0)
+            {
+                switch (normalAspect)
+                {
+                    case "CH_IMAGE_H":
+                        return "KVB_S_S_BM KVB_TIVE_G_AA";
+
+                    case "CH_IMAGE_6":
+                        return "KVB_S_A KVB_TIVE_G_V40";
+
+                    case "CH_IMAGE_2":
+                        switch (distantAspect)
+                        {
+                            case "CH_IMAGE_W":
+                                return "KVB_S_A KVB_TIVE_G_V40";
+
+                            case "CH_IMAGE_2*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V40 KVB_TIVD_G_V40";
+
+                            case "CH_IMAGE_3*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V40 KVB_TIVD_G_V60";
+
+                            case "CH_IMAGE_5*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V40 KVB_TIVD_G_V90";
+
+                            default:
+                                return "KVB_S_VL_INF KVB_TIVE_G_V40";
+                        }
+
+                    case "CH_IMAGE_3":
+                        switch (distantAspect)
+                        {
+                            case "CH_IMAGE_W":
+                                return "KVB_S_A KVB_TIVE_G_V60";
+
+                            case "CH_IMAGE_2*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V60 KVB_TIVD_G_V40";
+
+                            case "CH_IMAGE_3*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V60 KVB_TIVD_G_V60";
+
+                            case "CH_IMAGE_5*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V60 KVB_TIVD_G_V90";
+
+                            default:
+                                return "KVB_S_VL_INF KVB_TIVE_G_V60";
+                        }
+
+                    case "CH_IMAGE_5":
+                        switch (distantAspect)
+                        {
+                            case "CH_IMAGE_W":
+                                return "KVB_S_A KVB_TIVE_G_V90";
+
+                            case "CH_IMAGE_2*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V90 KVB_TIVD_G_V40";
+
+                            case "CH_IMAGE_3*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V90 KVB_TIVD_G_V60";
+
+                            case "CH_IMAGE_5*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_V90 KVB_TIVD_G_V90";
+
+                            default:
+                                return "KVB_S_VL_INF KVB_TIVE_G_V90";
+                        }
+
+                    default:
+                        switch (distantAspect)
+                        {
+                            case "CH_IMAGE_W":
+                                return "KVB_S_A KVB_TIVE_G_AA";
+
+                            case "CH_IMAGE_2*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_AA KVB_TIVD_G_V40";
+
+                            case "CH_IMAGE_3*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_AA KVB_TIVD_G_V60";
+
+                            case "CH_IMAGE_5*":
+                                return "KVB_S_VL_INF KVB_TIVE_G_AA KVB_TIVD_G_V90";
+
+                            default:
+                                return "KVB_S_VL_INF KVB_TIVE_G_AA";
+                        }
+                }
+            }
+            else
+            {
+                switch (distantAspect)
+                {
+                    case "CH_IMAGE_W":
+                        return "KVB_S_REOCS";
+
+                    case "CH_IMAGE_2*":
+                        return "KVB_S_REOVL KVB_TIVD_G_V40";
+
+                    case "CH_IMAGE_3*":
+                        return "KVB_S_REOVL KVB_TIVD_G_V60";
+
+                    case "CH_IMAGE_5*":
+                        return "KVB_S_REOVL KVB_TIVD_G_V90";
+
+                    default:
+                        return "KVB_S_REOVL";
+                }
+            }
+        }
     }
 }

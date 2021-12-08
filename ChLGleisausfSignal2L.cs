@@ -46,19 +46,14 @@ namespace ORTS.Scripting.Script
                 }
             }
 
-            if (thisDistantParts.Count <= 0)
-            {
-                switch (TextSignalAspect)
-                {
-                    case "CH_IMAGE_H":
-                        TextSignalAspect += " CROCODILE_SF KVB_S_S_BM";
-                        break;
+            string distantAspect = string.Empty;
 
-                    default:
-                        TextSignalAspect += " CROCODILE_SO KVB_S_VL_INF";
-                        break;
-                }
+            if (thisDistantParts.Count > 0)
+            {
+                distantAspect = thisDistantParts.Find(s => s.StartsWith("CH_IMAGE"));
             }
+
+            TextSignalAspect += SwissTCS(TextSignalAspect, distantAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

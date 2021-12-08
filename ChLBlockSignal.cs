@@ -63,32 +63,7 @@ namespace ORTS.Scripting.Script
                 }
             }
 
-            switch (TextSignalAspect)
-            {
-                case "CH_IMAGE_H":
-                    TextSignalAspect += " CROCODILE_SF KVB_S_S_BM";
-                    break;
-
-                case "CH_IMAGE_W":
-                    TextSignalAspect += " CROCODILE_SF KVB_S_A";
-                    break;
-
-                case "CH_IMAGE_2*":
-                    TextSignalAspect += " CROCODILE_SF KVB_S_VL_INF KVB_TIVD_G_V40";
-                    break;
-
-                case "CH_IMAGE_3*":
-                    TextSignalAspect += " CROCODILE_SF KVB_S_VL_INF KVB_TIVD_G_V60";
-                    break;
-
-                case "CH_IMAGE_5*":
-                    TextSignalAspect += " CROCODILE_SF KVB_S_VL_INF KVB_TIVD_G_V90";
-                    break;
-
-                default:
-                    TextSignalAspect += " CROCODILE_SO KVB_S_VL_INF";
-                    break;
-            }
+            TextSignalAspect += SwissCombinedTCS(TextSignalAspect);
         }
     }
 }

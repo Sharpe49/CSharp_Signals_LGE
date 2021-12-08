@@ -78,23 +78,14 @@ namespace ORTS.Scripting.Script
                 }
             }
 
-            if (thisDistantParts.Count <= 0)
+            string distantAspect = string.Empty;
+
+            if (thisDistantParts.Count > 0)
             {
-                switch (TextSignalAspect)
-                {
-                    case "CH_IMAGE_H":
-                        TextSignalAspect += " CROCODILE_SF KVB_S_S_BM KVB_TIVE_G_AA";
-                        break;
-
-                    case "CH_IMAGE_2":
-                        TextSignalAspect += " CROCODILE_SO KVB_S_VL_INF KVB_TIVE_G_V40";
-                        break;
-
-                    default:
-                        TextSignalAspect += " CROCODILE_SO KVB_S_VL_INF KVB_TIVE_G_AA";
-                        break;
-                }
+                distantAspect = thisDistantParts.Find(s => s.StartsWith("CH_IMAGE"));
             }
+
+            TextSignalAspect += SwissTCS(TextSignalAspect, distantAspect);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

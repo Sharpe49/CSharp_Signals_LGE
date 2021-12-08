@@ -53,7 +53,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_C_BAL";
             }
 
-            TextSignalAspect = AddTCS(TextSignalAspect, true);
+            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
 
             DrawState = DefaultDrawState(MstsSignalAspect);
         }

@@ -50,6 +50,15 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_TIVD_EFFACE";
             }
 
+            if (TextSignalAspect == "FR_TIVD_PRESENTE")
+            {
+                TextSignalAspect += " CROCODILE_SF";
+            }
+            else
+            {
+                TextSignalAspect += " CROCODILE_SO";
+            }
+
             if (IsSignalFeatureEnabled("USER3"))
             {
                 TextSignalAspect += " KVB_TPAA";
