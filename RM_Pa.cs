@@ -41,7 +41,7 @@ namespace ORTS.Scripting.Script
             else if (nextNormalParts.Contains("FR_C_BAL")
                 || nextNormalParts.Contains("FR_S_BAL")
                 || nextNormalParts.Contains("FR_SCLI")
-                || nextTIVDTextAspect == "FR_TIVD_PRESENTE")
+                || nextTIVDTextAspect.Contains("FR_TIVD_PRESENTE"))
             {
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_TABP_PRESENTE";
@@ -56,7 +56,7 @@ namespace ORTS.Scripting.Script
             if (TextSignalAspect == "FR_TABP_PRESENTE")
             {
                 TextSignalAspect += " KVB_VPMOB";
-                SetSpeedLimitKpH(160f, 100f, false, false, false, true);
+                //SetSpeedLimitKpH(160f, 100f, false, false, false, true);
             }
             else
             {

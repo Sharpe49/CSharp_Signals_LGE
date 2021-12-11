@@ -37,8 +37,8 @@ namespace ORTS.Scripting.Script
             }
             // TIVR éteint ou présenté
             else if (nextNormalParts.Contains("FR_C_BAL")
-                || nextTIVRTextAspect == "FR_TIVR_ETEINT"
-                || nextTIVRTextAspect == "FR_TIVR_PRESENTE")
+                || nextTIVRTextAspect.Contains("FR_TIVR_ETEINT")
+                || nextTIVRTextAspect.Contains("FR_TIVR_PRESENTE"))
             {
                 MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_TIVD_PRESENTE";
@@ -50,7 +50,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect = "FR_TIVD_EFFACE";
             }
 
-            if (TextSignalAspect == "FR_TIVD_PRESENTE")
+            if (TextSignalAspect.Contains("FR_TIVD_PRESENTE"))
             {
                 TextSignalAspect += " CROCODILE_SF";
             }
@@ -64,7 +64,7 @@ namespace ORTS.Scripting.Script
                 TextSignalAspect += " KVB_TPAA";
             }
 
-            if (TextSignalAspect == "FR_TIVD_PRESENTE")
+            if (TextSignalAspect.Contains("FR_TIVD_PRESENTE"))
             {
                 TextSignalAspect += $" KVB_VAN_V{SpeedKpH}";
             }
