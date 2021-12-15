@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_CSMAVL_CGV1736 : SignalScript
+    public class TVM430_CSMAVL_CGV1736 : FrSignalScript
     {
         public override void Update()
         {

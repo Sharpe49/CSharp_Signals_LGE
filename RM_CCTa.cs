@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class RM_CCTa : SignalScript
+    public class RM_CCTa : FrSignalScript
     {
         public override void Update()
         {

@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class KVB_FGV : SignalScript
+    public class KVB_FGV : FrSignalScript
     {
         public override void Update()
         {

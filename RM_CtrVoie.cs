@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class RM_CtrVoie : SignalScript
+    public class RM_CtrVoie : FrSignalScript
     {
         public override void Update()
         {

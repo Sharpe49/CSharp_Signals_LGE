@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class CHLKennungBlocksignal : SignalScript
+    public class CHLKennungBlocksignal : ChSignalScript
     {
         public override void Update()
         {

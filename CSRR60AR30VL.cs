@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class CSRR60AR30VL : SignalScript
+    public class CSRR60AR30VL : FrSignalScript
     {
         public int DrawStateRRCLI_ACLI = -1;
         public int DrawStateVLCLI = -1;

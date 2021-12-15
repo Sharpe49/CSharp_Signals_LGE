@@ -3,7 +3,7 @@ namespace ORTS.Scripting.Script
     /// <summary>
     /// Plaque d'identification
     /// </summary>
-    public class exAL_D_A : SignalScript
+    public class exAL_D_A : FrSignalScript
     {
         public override void Update()
         {

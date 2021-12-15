@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class Info_1 : SignalScript
+    public class Info_1 : FrSignalScript
     {
         public override void Update()
         {

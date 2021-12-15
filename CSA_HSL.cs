@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class CSA_HSL : SignalScript
+    public class CSA_HSL : FrSignalScript
     {
         public override void Update()
         {

@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class CHLKennungVorsignal : SignalScript
+    public class CHLKennungVorsignal : ChSignalScript
     {
         public override void Update()
         {

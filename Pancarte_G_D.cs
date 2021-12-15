@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class Pancarte_G_D : SignalScript
+    public class Pancarte_G_D : FrSignalScript
     {
         public override void Update()
         {

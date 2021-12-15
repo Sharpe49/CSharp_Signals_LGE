@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class RM_CFL_MVL : SignalScript
+    public class RM_CFL_MVL : FrSignalScript
     {
         public override void Update()
         {

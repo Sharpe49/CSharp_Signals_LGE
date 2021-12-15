@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace ORTS.Scripting.Script
 {
     // Tableau Baissez Panto mobile
-    public class RM_BPmob : SignalScript
+    public class RM_BPmob : FrSignalScript
     {
         public override void Update()
         {

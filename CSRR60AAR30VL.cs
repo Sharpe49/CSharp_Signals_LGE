@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class CSRR60AAR30VL : SignalScript
+    public class CSRR60AAR30VL : FrSignalScript
     {
         // Aspect R and (R) have the same MSTS aspect, so the behaviour has been adapted
         public int DrawStateR = -1;

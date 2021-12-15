@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace ORTS.Scripting.Script
 {
     // TIVR
-    public class RM_TIVe : SignalScript
+    public class RM_TIVe : FrSignalScript
     {
         int SpeedKpH = 0;
 

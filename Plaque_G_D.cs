@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class Plaque_G_D : SignalScript
+    public class Plaque_G_D : FrSignalScript
     {
         public override void Update()
         {

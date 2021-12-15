@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class CHLKennungGleisAbschnittsignal : SignalScript
+    public class CHLKennungGleisAbschnittsignal : ChSignalScript
     {
         public override void Update()
         {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_CSAVL_FinCAB : SignalScript
+    public class TVM430_CSAVL_FinCAB : FrSignalScript
     {
         TVMSpeedType Vpf = TVMSpeedType._220V;
 

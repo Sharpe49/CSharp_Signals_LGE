@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class exAL_SAVL : SignalScript
+    public class exAL_SAVL : FrSignalScript
     {
         public override void Update()
         {

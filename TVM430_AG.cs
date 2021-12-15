@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_AG : SignalScript
+    public class TVM430_AG : FrSignalScript
     {
         TVMSpeedType VeAg = TVMSpeedType._320V;
 

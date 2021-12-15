@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class exAL_RR60 : SignalScript
+    public class exAL_RR60 : FrSignalScript
     {
         public override void Update()
         {

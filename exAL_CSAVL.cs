@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class exAL_CSAVL : SignalScript
+    public class exAL_CSAVL : FrSignalScript
     {
         public override void Update()
         {

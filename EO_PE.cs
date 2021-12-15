@@ -6,7 +6,7 @@ namespace ORTS.Scripting.Script
     // EO - PE
     // L1 - L4
     // L1 - LGV
-    public class EO_PE : SignalScript
+    public class EO_PE : FrSignalScript
     {
         public override void Update()
         {

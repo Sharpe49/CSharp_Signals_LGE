@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class CHLKennungBhfEnde : SignalScript
+    public class CHLKennungBhfEnde : ChSignalScript
     {
         public override void Update()
         {

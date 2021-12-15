@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class ChLEinf60 : SignalScript
+    public class ChLEinf60 : ChSignalScript
     {
         public override void Update()
         {

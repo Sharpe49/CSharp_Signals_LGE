@@ -2,7 +2,7 @@ using Orts.Simulation.Signalling;
 
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_M : SignalScript
+    public class TVM430_M : FrSignalScript
     {
         public override void Update()
         {

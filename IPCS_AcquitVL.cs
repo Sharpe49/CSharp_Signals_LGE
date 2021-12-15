@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class IPCS_AcquitVL : SignalScript
+    public class IPCS_AcquitVL : FrSignalScript
     {
         public override void Update()
         {

@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class RM_AcquitVL : SignalScript
+    public class RM_AcquitVL : FrSignalScript
     {
         public override void Update()
         {

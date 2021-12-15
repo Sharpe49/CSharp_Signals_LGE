@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public class RM_CFL_TECS_AVL : SignalScript
+    public class RM_CFL_TECS_AVL : FrSignalScript
     {
         public override void Update()
         {

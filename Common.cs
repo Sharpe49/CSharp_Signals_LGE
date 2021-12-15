@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ORTS.Scripting.Script
 {
-    public abstract partial class SignalScript : CsSignalScript
+    public abstract class SignalScript : CsSignalScript
     {
         public List<string> NextNormalSignalTextAspects
         {

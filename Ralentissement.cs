@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class Ralentissement : SignalScript
+    public class Ralentissement : FrSignalScript
     {
         public override void Update()
         {

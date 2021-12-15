@@ -6,7 +6,7 @@ using static ORTS.Scripting.Script.TVM430Common;
 
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_FinCab : SignalScript
+    public class TVM430_FinCab : FrSignalScript
     {
         Dictionary<TVMSpeedType, Aspect> MstsTranslation = SNCFV320MstsTranslation;
 

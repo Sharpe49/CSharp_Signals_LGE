@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace ORTS.Scripting.Script
 {
     // Tableau P mobile
-    public class RM_Pa : SignalScript
+    public class RM_Pa : FrSignalScript
     {
         public override void Initialize()
         {

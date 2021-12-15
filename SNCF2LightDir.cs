@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public class SNCF2LightDir : SignalScript
+    public class SNCF2LightDir : FrSignalScript
     {
         public override void Update()
         {

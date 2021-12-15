@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace ORTS.Scripting.Script
 {
     // TIVD mobile
-    public class RM_TIVa : SignalScript
+    public class RM_TIVa : FrSignalScript
     {
         int SpeedKpH = 0;
 

@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class RM_BPe : SignalScript
+    public class RM_BPe : FrSignalScript
     {
         public override void Update()
         {

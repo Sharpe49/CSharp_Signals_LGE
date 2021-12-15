@@ -4,7 +4,7 @@ namespace ORTS.Scripting.Script
 {
     // TLD
     // M - T3
-    public class EO_M_T3 : SignalScript
+    public class EO_M_T3 : FrSignalScript
     {
         public override void Update()
         {

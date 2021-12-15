@@ -7,7 +7,7 @@ using static ORTS.Scripting.Script.TVM430Common;
 
 namespace ORTS.Scripting.Script
 {
-    public class TVM430_F : CsSignalScript
+    public class TVM430_F : FrSignalScript
     {
         Dictionary<TVMSpeedType, TVMSpeedType> TAB1 = SNCFV320TAB1;
         Dictionary<TVMSpeedType, TVMSpeedType> TAB2 = SNCFV320TAB2;

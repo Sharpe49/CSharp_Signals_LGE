@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public abstract partial class SignalScript : CsSignalScript
+    public abstract class ChSignalScript : SignalScript
     {
         public bool AnnounceByImageW(List<string> aspects)
         {
