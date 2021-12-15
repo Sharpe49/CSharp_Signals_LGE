@@ -21,6 +21,10 @@ namespace ORTS.Scripting.Script
         {
         }
 
+        public override void Update()
+        {
+        }
+
         public string FindSignalAspect(string text, string signalType, int maxSignals)
         {
             string result = string.Empty;

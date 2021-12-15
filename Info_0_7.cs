@@ -2,7 +2,7 @@ namespace ORTS.Scripting.Script
 {
     public class Info_0_7 : FrSignalScript
     {
-        public override void Update()
+        public override void Initialize()
         {
             int direction = 0;
             direction += IsSignalFeatureEnabled("USER1") ? 1 : 0;

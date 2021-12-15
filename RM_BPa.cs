@@ -2,7 +2,7 @@ namespace ORTS.Scripting.Script
 {
     public class RM_BPa : FrSignalScript
     {
-        public override void Update()
+        public override void Initialize()
         {
             MstsSignalAspect = Aspect.Clear_2;
             TextSignalAspect = "FR_BP_ANNONCE_PRESENTE";

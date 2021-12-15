@@ -2,7 +2,7 @@ namespace ORTS.Scripting.Script
 {
     public class Info_IPCS : FrSignalScript
     {
-        public override void Update()
+        public override void Initialize()
         {
             if (IsSignalFeatureEnabled("USER1"))
             {

@@ -2,7 +2,7 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CCTa : FrSignalScript
     {
-        public override void Update()
+        public override void Initialize()
         {
             MstsSignalAspect = Aspect.Clear_2;
             TextSignalAspect = "FR_CCT_ANNONCE_PRESENTE";

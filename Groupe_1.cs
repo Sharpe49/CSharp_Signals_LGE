@@ -2,7 +2,7 @@ namespace ORTS.Scripting.Script
 {
     public class Groupe_1 : FrSignalScript
     {
-        public override void Update()
+        public override void Initialize()
         {
             MstsSignalAspect = Aspect.Restricting;
             TextSignalAspect = "GROUPE1";
