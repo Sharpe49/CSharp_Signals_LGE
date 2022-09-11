@@ -5,8 +5,10 @@ namespace ORTS.Scripting.Script
 {
     public abstract class FrSignalScript : SignalScript
     {
-        public bool CommandAspectC(List<string> nextNormalParts) => !Enabled
+        public bool CommandAspectC(List<string> nextNormalParts, bool absoluteBlock = false, bool automatic = false) =>
+                !automatic && !Enabled
                 || CurrentBlockState == BlockState.Obstructed
+                || absoluteBlock && CurrentBlockState == BlockState.Occupied
                 || nextNormalParts.Contains("FR_FSO")
                 || HoldState == HoldState.StationStop
                 || HoldState == HoldState.ManualLock;

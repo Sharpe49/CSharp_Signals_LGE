@@ -9,7 +9,7 @@ namespace ORTS.Scripting.Script
             List<string> nextNormalParts = NextNormalSignalTextAspects;
             List<string> thisTIVRParts = TextSignalAspectToList(SignalId, "TIVR");
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalParts, IsSignalFeatureEnabled("USER2"), IsSignalFeatureEnabled("USER4")))
             {
                 MstsSignalAspect = Aspect.Stop;
                 TextSignalAspect = "FR_C_BAL";
