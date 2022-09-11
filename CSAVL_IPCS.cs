@@ -8,8 +8,7 @@ namespace ORTS.Scripting.Script
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled
-                || CurrentBlockState != BlockState.Clear
+            if (CurrentBlockState != BlockState.Clear
                 || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
@@ -23,7 +22,7 @@ namespace ORTS.Scripting.Script
 
             TextSignalAspect += FrenchTCS(TextSignalAspect);
 
-            DrawState = DefaultDrawState(MstsSignalAspect);
+            DrawState = !Enabled ? GetDrawState("Off") : DefaultDrawState(MstsSignalAspect);
         }
     }
 }

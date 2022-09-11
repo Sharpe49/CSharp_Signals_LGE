@@ -8,33 +8,47 @@ namespace ORTS.Scripting.Script
         {
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
-            if (!Enabled)
-            {
-                MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_ETEINT_IPCS";
-            }
-            else if (AnnounceByA(nextNormalParts, false, false))
+            if (AnnounceByA(nextNormalParts, false, false))
             {
                 MstsSignalAspect = Aspect.Approach_1;
                 TextSignalAspect = "FR_A";
+                DrawState = GetDrawState("A");
+            }
+            else if (IsSignalFeatureEnabled("USER1") && AnnounceByACLI(nextNormalParts))
+            {
+                MstsSignalAspect = Aspect.Approach_2;
+                TextSignalAspect = "FR_ACLI";
+                DrawState = GetDrawState("ACLI");
             }
             else if (AnnounceByR(nextNormalParts))
             {
-                MstsSignalAspect = Aspect.Approach_2;
+                MstsSignalAspect = Aspect.Approach_3;
                 TextSignalAspect = "FR_R";
+                DrawState = GetDrawState("R");
+            }
+            else if (IsSignalFeatureEnabled("USER1") && AnnounceByRCLI_ACLI(nextNormalParts))
+            {
+                MstsSignalAspect = Aspect.Clear_1;
+                TextSignalAspect = "FR_RCLI_ACLI";
+                DrawState = GetDrawState("RCLI_ACLI");
             }
             else if (AnnounceByRCLI(nextNormalParts))
             {
-                MstsSignalAspect = Aspect.Approach_3;
+                MstsSignalAspect = Aspect.Clear_1;
                 TextSignalAspect = "FR_RCLI";
+                DrawState = GetDrawState("RCLI");
             }
             else
             {
-                MstsSignalAspect = Aspect.Clear_1;
+                MstsSignalAspect = Aspect.Clear_2;
                 TextSignalAspect = "FR_VL_INF";
+                DrawState = GetDrawState("VL");
             }
 
-            DrawState = DefaultDrawState(MstsSignalAspect);
+            if (!IsSignalFeatureEnabled("USER4") && !Enabled)
+            {
+                DrawState = GetDrawState("Off");
+            }
         }
     }
 }
