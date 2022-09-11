@@ -7,7 +7,7 @@ namespace ORTS.Scripting.Script
     {
         public override void Initialize()
         {
-//            SpeedLimitOverriden = true;
+            SpeedLimitSetByScript = true;
         }
 
         public override void Update()
@@ -56,11 +56,11 @@ namespace ORTS.Scripting.Script
             if (TextSignalAspect == "FR_TABP_PRESENTE")
             {
                 TextSignalAspect += " KVB_VPMOB";
-                //SetSpeedLimitKpH(160f, 100f, false, false, false, true);
+                SetSpeedLimitKpH(160f, 100f, false, false, false, true);
             }
             else
             {
-                //RemoveSpeedLimit();
+                RemoveSpeedLimit();
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);

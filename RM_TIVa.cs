@@ -12,11 +12,11 @@ namespace ORTS.Scripting.Script
         public override void Initialize()
         {
             SpeedKpH = int.Parse(Regex.Match(SignalShapeName, @"[0-9]{2,3}").Value);
+            SpeedLimitSetByScript = true;
         }
 
         public override void Update()
         {
-
             List<string> nextNormalParts = NextNormalSignalTextAspects;
 
             int nextTIVRId = NextSignalId("TIVR");
@@ -67,6 +67,11 @@ namespace ORTS.Scripting.Script
             if (TextSignalAspect.Contains("FR_TIVD_PRESENTE"))
             {
                 TextSignalAspect += $" KVB_VAN_V{SpeedKpH}";
+                SetSpeedLimitKpH(SpeedKpH, Math.Min(SpeedKpH, 100f), false, false, false, true);
+            }
+            else
+            {
+                RemoveSpeedLimit();
             }
 
             DrawState = DefaultDrawState(MstsSignalAspect);
