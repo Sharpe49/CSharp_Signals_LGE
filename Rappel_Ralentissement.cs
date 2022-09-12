@@ -14,12 +14,12 @@ namespace ORTS.Scripting.Script
                 || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
+                SignalAspect = FrSignalAspect.FR_S_BAL;
             }
             else if (speedInformation.Contains("FR_VITESSE_AIGUILLE"))
             {
@@ -28,12 +28,12 @@ namespace ORTS.Scripting.Script
                     if (AnnounceByA(nextNormalParts))
                     {
                         MstsSignalAspect = Aspect.Approach_2;
-                        TextSignalAspect = "FR_RR_A";
+                        SignalAspect = FrSignalAspect.FR_RR_A;
                     }
                     else
                     {
                         MstsSignalAspect = Aspect.Approach_3;
-                        TextSignalAspect = "FR_RR";
+                        SignalAspect = FrSignalAspect.FR_RR;
                     }
                 }
                 else if (speedInformation.Contains("FR_VITESSE_AIGUILLE_60"))
@@ -41,12 +41,12 @@ namespace ORTS.Scripting.Script
                     if (AnnounceByA(nextNormalParts))
                     {
                         MstsSignalAspect = Aspect.Restricting;
-                        TextSignalAspect = "FR_RRCLI_A";
+                        SignalAspect = FrSignalAspect.FR_RRCLI_A;
                     }
                     else
                     {
                         MstsSignalAspect = Aspect.Clear_2;
-                        TextSignalAspect = "FR_RRCLI";
+                        SignalAspect = FrSignalAspect.FR_RRCLI;
                     }
                 }
                 else
@@ -54,12 +54,12 @@ namespace ORTS.Scripting.Script
                     if (AnnounceByA(nextNormalParts))
                     {
                         MstsSignalAspect = Aspect.Approach_1;
-                        TextSignalAspect = "FR_A";
+                        SignalAspect = FrSignalAspect.FR_A;
                     }
                     else
                     {
                         MstsSignalAspect = Aspect.Clear_1;
-                        TextSignalAspect = "FR_VL_INF";
+                        SignalAspect = FrSignalAspect.FR_VL_INF;
                     }
                 }
             }
@@ -68,12 +68,12 @@ namespace ORTS.Scripting.Script
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    TextSignalAspect = "FR_A";
+                    SignalAspect = FrSignalAspect.FR_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_VL_INF";
+                    SignalAspect = FrSignalAspect.FR_VL_INF;
                 }
             }
             else
@@ -81,17 +81,18 @@ namespace ORTS.Scripting.Script
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    TextSignalAspect = "FR_RRCLI_A";
+                    SignalAspect = FrSignalAspect.FR_RRCLI_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_RRCLI";
+                    SignalAspect = FrSignalAspect.FR_RRCLI;
                 }
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
+            FrenchTCS(true);
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

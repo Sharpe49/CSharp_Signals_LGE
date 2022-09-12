@@ -11,42 +11,43 @@ namespace ORTS.Scripting.Script
             if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 if (RouteSet)
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_C_BAL";
+                    SignalAspect = FrSignalAspect.FR_C_BAL;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    TextSignalAspect = "FR_S_BAL";
+                    SignalAspect = FrSignalAspect.FR_S_BAL;
                 }
             }
             else if (RouteSet)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_INF";
+                SignalAspect = FrSignalAspect.FR_VL_INF;
             }
             else
             {
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    TextSignalAspect = "FR_RRCLI_A";
+                    SignalAspect = FrSignalAspect.FR_RRCLI_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_RRCLI";
+                    SignalAspect = FrSignalAspect.FR_RRCLI;
                 }
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
+            FrenchTCS(true);
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

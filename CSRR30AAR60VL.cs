@@ -27,45 +27,45 @@ namespace ORTS.Scripting.Script
             if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
+                SignalAspect = FrSignalAspect.FR_S_BAL;
             }
             else if (RouteSet)
             {
                 if (AnnounceByA(nextNormalParts, true, false))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    TextSignalAspect = "FR_A";
+                    SignalAspect = FrSignalAspect.FR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
                     && DrawStateRCLI_ACLI >= 0
                     && AnnounceByRCLI_ACLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_3;
-                    TextSignalAspect = "FR_RCLI_ACLI";
+                    SignalAspect = FrSignalAspect.FR_RCLI_ACLI;
                     DrawState = DrawStateRCLI_ACLI;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
                     && AnnounceByACLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_3;
-                    TextSignalAspect = "FR_ACLI";
+                    SignalAspect = FrSignalAspect.FR_ACLI;
                 }
                 else if (AnnounceByRCLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_2;
-                    TextSignalAspect = "FR_RCLI";
+                    SignalAspect = FrSignalAspect.FR_RCLI;
                 }
                 else if (IsSignalFeatureEnabled("USER3")
                     && DrawStateVLCLI >= 0
                     && AnnounceByVLCLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_VLCLI_ANN";
+                    SignalAspect = FrSignalAspect.FR_VLCLI_ANN;
                     DrawState = DrawStateVLCLI;
                 }
                 else
@@ -73,11 +73,11 @@ namespace ORTS.Scripting.Script
                     MstsSignalAspect = Aspect.Clear_1;
                     if (IsSignalFeatureEnabled("USER3"))
                     {
-                        TextSignalAspect = "FR_VL_SUP";
+                        SignalAspect = FrSignalAspect.FR_VL_SUP;
                     }
                     else
                     {
-                        TextSignalAspect = "FR_VL_INF";
+                        SignalAspect = FrSignalAspect.FR_VL_INF;
                     }
                 }
             }
@@ -86,25 +86,26 @@ namespace ORTS.Scripting.Script
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    TextSignalAspect = "FR_RR_A";
+                    SignalAspect = FrSignalAspect.FR_RR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
                     && DrawStateRR_ACLI >= 0
                     && AnnounceByACLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    TextSignalAspect = "FR_RR_ACLI";
+                    SignalAspect = FrSignalAspect.FR_RR_ACLI;
                     DrawState = DrawStateRR_ACLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_RR";
+                    SignalAspect = FrSignalAspect.FR_RR;
                 }
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
+            FrenchTCS(true);
 
+            SerializeAspect();
             if (DrawState < 0)
             {
                 DrawState = DefaultDrawState(MstsSignalAspect);

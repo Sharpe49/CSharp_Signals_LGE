@@ -11,21 +11,22 @@ namespace ORTS.Scripting.Script
             if (AnnounceByA(nextNormalParts, false, true))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_A";
+                SignalAspect = FrSignalAspect.FR_A;
             }
             else if (AnnounceByR(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                TextSignalAspect = "FR_R";
+                SignalAspect = FrSignalAspect.FR_R;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_INF";
+                SignalAspect = FrSignalAspect.FR_VL_INF;
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect, false, true);
+            FrenchTCS(false, true);
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -14,36 +14,37 @@ namespace ORTS.Scripting.Script
                 || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else if (CurrentBlockState == BlockState.Occupied)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
+                SignalAspect = FrSignalAspect.FR_S_BAL;
             }
             else if (AnnounceByA(nextNormalParts, false, false))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_A";
+                SignalAspect = FrSignalAspect.FR_A;
             }
             else if (AnnounceByR(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                TextSignalAspect = "FR_R";
+                SignalAspect = FrSignalAspect.FR_R;
             }
             else if (AnnounceByRCLI(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                TextSignalAspect = "FR_RCLI";
+                SignalAspect = FrSignalAspect.FR_RCLI;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_INF";
+                SignalAspect = FrSignalAspect.FR_VL_INF;
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect);
+            FrenchTCS();
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

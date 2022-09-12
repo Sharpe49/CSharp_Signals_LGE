@@ -11,25 +11,26 @@ namespace ORTS.Scripting.Script
             if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
+                SignalAspect = FrSignalAspect.FR_CV;
             }
             else if (nextNormalParts.Contains("ESUBO")
                 && (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV")))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
+                SignalAspect = FrSignalAspect.FR_CV;
             }
             else if (IsSignalFeatureEnabled("USER1") && CurrentBlockState == BlockState.Occupied)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
+                SignalAspect = FrSignalAspect.FR_CV;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_M";
+                SignalAspect = FrSignalAspect.FR_M;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

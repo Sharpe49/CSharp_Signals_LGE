@@ -20,12 +20,12 @@ namespace ORTS.Scripting.Script
                 || !nextNormalParts.Contains("FR_TVM430"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else if (nextNormalParts.Contains("VcRRR"))
             {
                 MstsSignalAspect = Aspect.Restricting;
-                TextSignalAspect = "FR_M";
+                SignalAspect = FrSignalAspect.FR_M;
             }
             else if (nextNormalParts.Contains("Ve60")
                 && nextNormalParts.Contains("Ve80"))
@@ -33,39 +33,39 @@ namespace ORTS.Scripting.Script
                 if (ApproachControlPosition(100f))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    TextSignalAspect = "FR_A";
+                    SignalAspect = FrSignalAspect.FR_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_C_BAL";
+                    SignalAspect = FrSignalAspect.FR_C_BAL;
                 }
             }
             else if (nextNormalParts.Contains("Vc000")
                 && nextNormalParts.Contains("Ve170"))
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                TextSignalAspect = "FR_A";
+                SignalAspect = FrSignalAspect.FR_A;
             }
             else if (nextNormalParts.Contains("Ve170"))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_VLCLI_EXE";
+                SignalAspect = FrSignalAspect.FR_VLCLI_EXE;
             }
             else if (nextNormalParts.Contains("Ve230")
                 && nextNormalParts.Contains("Vc170"))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_VLCLI_ANN";
+                SignalAspect = FrSignalAspect.FR_VLCLI_ANN;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_SUP";
+                SignalAspect = FrSignalAspect.FR_VL_SUP;
             }
 
+            SerializeAspect();
             TextSignalAspect += " BSP_ECS";
-
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

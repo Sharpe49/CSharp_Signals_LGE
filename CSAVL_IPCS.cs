@@ -12,16 +12,17 @@ namespace ORTS.Scripting.Script
                 || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_VL_INF";
+                SignalAspect = FrSignalAspect.FR_VL_INF;
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect);
+            FrenchTCS();
 
+            SerializeAspect();
             DrawState = !Enabled ? GetDrawState("Off") : DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -11,12 +11,12 @@ namespace ORTS.Scripting.Script
             if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
+                SignalAspect = FrSignalAspect.FR_S_BAL;
             }
             else if (RouteSet)
             {
@@ -25,12 +25,12 @@ namespace ORTS.Scripting.Script
                     if (IsSignalFeatureEnabled("USER1"))
                     {
                         MstsSignalAspect = Aspect.Approach_3;
-                        TextSignalAspect = "FR_RR_A";
+                        SignalAspect = FrSignalAspect.FR_RR_A;
                     }
                     else
                     {
                         MstsSignalAspect = Aspect.Restricting;
-                        TextSignalAspect = "FR_RRCLI_A";
+                        SignalAspect = FrSignalAspect.FR_RRCLI_A;
                     }
                 }
                 else
@@ -38,23 +38,24 @@ namespace ORTS.Scripting.Script
                     if (IsSignalFeatureEnabled("USER1"))
                     {
                         MstsSignalAspect = Aspect.Approach_2;
-                        TextSignalAspect = "FR_RR";
+                        SignalAspect = FrSignalAspect.FR_RR;
                     }
                     else
                     {
                         MstsSignalAspect = Aspect.Clear_2;
-                        TextSignalAspect = "FR_RRCLI";
+                        SignalAspect = FrSignalAspect.FR_RRCLI;
                     }
                 }
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
+            FrenchTCS(true);
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -2,9 +2,46 @@
 using ORTS.Common;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace ORTS.Scripting.Script
 {
+    public sealed class TextAspectBuilder
+    {
+        private readonly StringBuilder StringBuilder = new StringBuilder();
+
+        public TextAspectBuilder Append(string value)
+        {
+            if (StringBuilder.Length > 0)
+            {
+                StringBuilder.Append(" ");
+            }
+            StringBuilder.Append(value);
+
+            return this;
+        }
+
+        public TextAspectBuilder Append(string format, object arg0)
+        {
+            if (StringBuilder.Length > 0)
+            {
+                StringBuilder.Append(" ");
+            }
+            StringBuilder.AppendFormat(format, arg0);
+
+            return this;
+        }
+
+        public TextAspectBuilder Clear()
+        {
+            StringBuilder.Clear();
+
+            return this;
+        }
+
+        public override string ToString() => StringBuilder.ToString();
+    }
+
     public abstract class SignalScript : CsSignalScript
     {
         public List<string> NextNormalSignalTextAspects

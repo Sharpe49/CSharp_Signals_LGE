@@ -11,29 +11,29 @@ namespace ORTS.Scripting.Script
             if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
+                SignalAspect = FrSignalAspect.FR_CV;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
+                SignalAspect = FrSignalAspect.FR_S_BAL;
             }
             else if (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV"))
             {
                 MstsSignalAspect = Aspect.Restricting;
-                TextSignalAspect = "FR_MCLI";
+                SignalAspect = FrSignalAspect.FR_MCLI;
             }
             else if (RouteSet)
             {
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    TextSignalAspect = "FR_A";
+                    SignalAspect = FrSignalAspect.FR_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_VL_INF";
+                    SignalAspect = FrSignalAspect.FR_VL_INF;
                 }
             }
             else
@@ -41,17 +41,18 @@ namespace ORTS.Scripting.Script
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_3;
-                    TextSignalAspect = "FR_RR_A";
+                    SignalAspect = FrSignalAspect.FR_RR_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_RR";
+                    SignalAspect = FrSignalAspect.FR_RR;
                 }
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
+            FrenchTCS(distantSignal: true);
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

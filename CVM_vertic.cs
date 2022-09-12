@@ -13,20 +13,21 @@ namespace ORTS.Scripting.Script
                 || nextNormalParts.Contains("FR_FSO"))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
+                SignalAspect = FrSignalAspect.FR_CV;
             }
             else if (nextNormalParts.Contains("ESUBO")
                 && (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV")))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
+                SignalAspect = FrSignalAspect.FR_CV;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_M";
+                SignalAspect = FrSignalAspect.FR_M;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

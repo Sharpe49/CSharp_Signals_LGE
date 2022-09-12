@@ -11,24 +11,24 @@ namespace ORTS.Scripting.Script
             if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_CV";
+                SignalAspect = FrSignalAspect.FR_CV;
             }
             else if (CommandAspectS())
             {
                 if (IsSignalFeatureEnabled("USER2"))
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_CV";
+                    SignalAspect = FrSignalAspect.FR_CV;
                 }
                 else if (IsSignalFeatureEnabled("USER1"))
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    TextSignalAspect = "FR_MCLI";
+                    SignalAspect = FrSignalAspect.FR_MCLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_M";
+                    SignalAspect = FrSignalAspect.FR_M;
                 }
             }
             else
@@ -37,15 +37,16 @@ namespace ORTS.Scripting.Script
                     && (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV")))
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_CV";
+                    SignalAspect = FrSignalAspect.FR_CV;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_M";
+                    SignalAspect = FrSignalAspect.FR_M;
                 }
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

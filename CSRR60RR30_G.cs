@@ -13,42 +13,42 @@ namespace ORTS.Scripting.Script
             if (CommandAspectC(nextNormalParts))
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_C_BAL";
+                SignalAspect = FrSignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL";
+                SignalAspect = FrSignalAspect.FR_S_BAL;
             }
             else if (nextTabGParts.Contains("FR_TABLEAU_G_D")
                 || thisTabGParts.Contains("FR_TABLEAU_G_D"))
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                TextSignalAspect = "FR_RR_A";
+                SignalAspect = FrSignalAspect.FR_RR_A;
             }
             else if (RouteSet)
             {
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    TextSignalAspect = "FR_A";
+                    SignalAspect = FrSignalAspect.FR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER3")
                     && AnnounceByVLCLI(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_VLCLI_ANN";
+                    SignalAspect = FrSignalAspect.FR_VLCLI_ANN;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
                     if (IsSignalFeatureEnabled("USER3"))
                     {
-                        TextSignalAspect = "FR_VL_SUP";
+                        SignalAspect = FrSignalAspect.FR_VL_SUP;
                     }
                     else
                     {
-                        TextSignalAspect = "FR_VL_INF";
+                        SignalAspect = FrSignalAspect.FR_VL_INF;
                     }
                 }
             }
@@ -57,17 +57,18 @@ namespace ORTS.Scripting.Script
                 if (AnnounceByA(nextNormalParts))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    TextSignalAspect = "FR_RRCLI_A";
+                    SignalAspect = FrSignalAspect.FR_RRCLI_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Approach_3;
-                    TextSignalAspect = "FR_RRCLI";
+                    SignalAspect = FrSignalAspect.FR_RRCLI;
                 }
             }
 
-            TextSignalAspect += FrenchTCS(TextSignalAspect, true);
+            FrenchTCS(true);
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }
