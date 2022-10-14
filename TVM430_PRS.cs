@@ -1,4 +1,3 @@
-using Orts.Simulation.Signalling;
 using ORTS.Scripting.Api;
 using System;
 using System.Collections.Generic;
@@ -9,81 +8,66 @@ namespace ORTS.Scripting.Script
 {
     public class TVM430_PRS : FrSignalScript
     {
-        Dictionary<TVMSpeedType, TVMSpeedType> TAB1 = SNCFV320TAB1;
-        Dictionary<TVMSpeedType, TVMSpeedType> TAB2 = SNCFV320TAB2;
+        Dictionary<TvmSpeedType, TvmSpeedType> TAB1 = SNCFV320TAB1;
+        Dictionary<TvmSpeedType, TvmSpeedType> TAB2 = SNCFV320TAB2;
 
-        TVMSpeedType[] Vpf = new TVMSpeedType[2] { TVMSpeedType._320V, TVMSpeedType._320V };
-        TVMSpeedType Vcond = TVMSpeedType._320V;
+        TvmSpeedType[] Vpf = new TvmSpeedType[2] { TvmSpeedType._320V, TvmSpeedType._320V };
+        TvmSpeedType Vcond = TvmSpeedType._320V;
         bool CNf = false;
-        bool RRRAval = false;
 
         Timer AspectChangeTimer;
-        TVMSpeedType VeE = TVMSpeedType._000;
-        TVMSpeedType VcE = TVMSpeedType._RRR;
-        TVMSpeedType VaE = TVMSpeedType.Any;
 
         public override void Initialize()
         {
             if (IsSignalFeatureEnabled("USER4"))
             {
-                Vpf[1] = TVMSpeedType._80E;
+                Vpf[1] = TvmSpeedType._80E;
             }
             else if (IsSignalFeatureEnabled("USER3"))
             {
-                Vpf[1] = TVMSpeedType._170E;
+                Vpf[1] = TvmSpeedType._170E;
             }
             else if (IsSignalFeatureEnabled("USER2"))
             {
-                Vpf[1] = TVMSpeedType._270V;
+                Vpf[1] = TvmSpeedType._270V;
             }
             else if (IsSignalFeatureEnabled("USER1"))
             {
-                Vpf[1] = TVMSpeedType._300V;
+                Vpf[1] = TvmSpeedType._300V;
             }
             else
             {
-                Vpf[1] = TVMSpeedType._320V;
+                Vpf[1] = TvmSpeedType._320V;
             }
 
             AspectChangeTimer = new Timer(this);
             AspectChangeTimer.Setup(6f);
+
+            TvmType = TvmType.FR_TVM430;
+            VeE = TvmSpeedType._000;
+            VcE = TvmSpeedType._RRR;
+            VaE = TvmSpeedType.Any;
         }
 
         public override void Update()
         {
             int nextNormalSignalId = NextSignalId("NORMAL");
-            List<string> nextNormalParts = new List<string>();
             if (nextNormalSignalId >= 0)
             {
-                nextNormalParts = IdTextSignalAspect(nextNormalSignalId, "NORMAL").Split(' ').ToList();
                 SendSignalMessage(nextNormalSignalId, "FR_TVM430 Vpf" + Vpf[1].ToString().Substring(1));
             }
+
+            SignalInfo nextNormalSignalInfo = DeserializeAspect(nextNormalSignalId, "NORMAL");
+
+            TvmSpeedType[] Ve = new TvmSpeedType[2] { TvmSpeedType.Any, nextNormalSignalInfo.Ve };
+            TvmSpeedType[] Vc = new TvmSpeedType[2] { TvmSpeedType.Any, nextNormalSignalInfo.Vc };
+            TvmSpeedType[] Va = new TvmSpeedType[2] { TvmSpeedType.Any, nextNormalSignalInfo.Va };
 
             int nextInfoSignalId = NextSignalId("INFO");
             string nextInfoSignalTextAspect = nextInfoSignalId >= 0 ? IdTextSignalAspect(nextInfoSignalId, "INFO") : string.Empty;
             List<string> nextInfoParts = nextInfoSignalTextAspect.Split(' ').ToList();
 
-            TVMSpeedType[] Ve = new TVMSpeedType[2] { TVMSpeedType.Any, TVMSpeedType.Any };
-            TVMSpeedType[] Vc = new TVMSpeedType[2] { TVMSpeedType.Any, TVMSpeedType.Any };
-            TVMSpeedType[] Va = new TVMSpeedType[2] { TVMSpeedType.Any, TVMSpeedType.Any };
-
-            foreach (string part in nextNormalParts)
-            {
-                if (part.StartsWith("Ve"))
-                {
-                    Ve[1] = (TVMSpeedType)Enum.Parse(typeof(TVMSpeedType), "_" + part.Substring(2));
-                }
-                else if (part.StartsWith("Vc"))
-                {
-                    Vc[1] = (TVMSpeedType)Enum.Parse(typeof(TVMSpeedType), "_" + part.Substring(2));
-                }
-                else if (part.StartsWith("Va"))
-                {
-                    Va[1] = (TVMSpeedType)Enum.Parse(typeof(TVMSpeedType), "_" + part.Substring(2));
-                }
-            }
-
-            TVMSpeedType VeAg = TVMSpeedType._170E;
+            TvmSpeedType VeAg = TvmSpeedType._170E;
 
             if (nextInfoParts.Contains("FR_TVM430_AG"))
             {
@@ -91,7 +75,7 @@ namespace ORTS.Scripting.Script
                 {
                     if (part.StartsWith("Ve"))
                     {
-                        VeAg = (TVMSpeedType)Enum.Parse(typeof(TVMSpeedType), "_" + part.Substring(2));
+                        VeAg = (TvmSpeedType)Enum.Parse(typeof(TvmSpeedType), "_" + part.Substring(2));
                     }
                 }
             }
@@ -99,23 +83,23 @@ namespace ORTS.Scripting.Script
             // Repère Nf fermé => Arret réduit + BSP CNf puis marche à vue (RRR)
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear
-                || Ve[1] == TVMSpeedType.Any
-                || Vc[1] == TVMSpeedType.Any)
+                || Ve[1] == TvmSpeedType.None
+                || Vc[1] == TvmSpeedType.None
+                || Ve[1] == TvmSpeedType.Any
+                || Vc[1] == TvmSpeedType.Any)
             {
-                Vcond = TVMSpeedType._80E;
-                Ve[1] = TVMSpeedType._000;
-                Vc[1] = TVMSpeedType._RRR;
+                Vcond = TvmSpeedType._80E;
+                Ve[1] = TvmSpeedType._000;
+                Vc[1] = TvmSpeedType._RRR;
                 CNf = true;
-                RRRAval = true;
             }
             // Entrée sur VS => Arrêt réduit puis marche à vue (RRR)
-            else if (!nextNormalParts.Contains("FR_TVM430"))
+            else if (nextNormalSignalInfo.TvmType != TvmType.FR_TVM430)
             {
-                Vcond = TVMSpeedType._80E;
-                Ve[1] = TVMSpeedType._000;
-                Vc[1] = TVMSpeedType._RRR;
+                Vcond = TvmSpeedType._80E;
+                Ve[1] = TvmSpeedType._000;
+                Vc[1] = TvmSpeedType._RRR;
                 CNf = false;
-                RRRAval = true;
             }
             else
             {
@@ -126,7 +110,6 @@ namespace ORTS.Scripting.Script
                 }
                 Ve[1] = Min(Ve[1], Vpf[1]);
                 CNf = false;
-                RRRAval = false;
             }
 
             Vc[0] = Min(Vcond, Ve[1]);
@@ -135,12 +118,12 @@ namespace ORTS.Scripting.Script
 
             if (Va[0] >= Vc[0])
             {
-                Va[0] = TVMSpeedType.Any;
+                Va[0] = TvmSpeedType.Any;
             }
 
             if (Ve[0] != VeE || Vc[0] != VcE || Va[0] != VaE)
             {
-                if (Ve[0] < VeE || Vc[0] < VcE || VcE == TVMSpeedType._RRR)
+                if (Ve[0] < VeE || Vc[0] < VcE || VcE == TvmSpeedType._RRR)
                 {
                     VeE = Ve[0];
                     VcE = Vc[0];
@@ -165,14 +148,10 @@ namespace ORTS.Scripting.Script
                 }
             }
 
-            MstsSignalAspect = TVMSpeedTypeToAspectV320(VcE, !CNf);
-            TextSignalAspect = "FR_TVM430"
-                + " Ve" + VeE.ToString().Substring(1)
-                + " Vc" + VcE.ToString().Substring(1)
-                + (VaE != TVMSpeedType.Any ? " Va" + VaE.ToString().Substring(1) : string.Empty)
-                + (CNf ? " BSP_CNf" : string.Empty)
-                + (RRRAval ? " RRRAval" : string.Empty);
+            Tvm430BspMessage = CNf ? Tvm430BspMessage.BSP_CNf : Tvm430BspMessage.None;
 
+            MstsSignalAspect = TVMSpeedTypeToAspectV320(VcE, !CNf);
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
 
@@ -185,7 +164,7 @@ namespace ORTS.Scripting.Script
                 {
                     if (part.StartsWith("Vpf"))
                     {
-                        Vpf[0] = (TVMSpeedType)Enum.Parse(typeof(TVMSpeedType), "_" + part.Substring(3));
+                        Vpf[0] = (TvmSpeedType)Enum.Parse(typeof(TvmSpeedType), "_" + part.Substring(3));
                     }
                 }
             }

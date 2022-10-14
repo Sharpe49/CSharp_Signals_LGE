@@ -2,11 +2,12 @@ namespace ORTS.Scripting.Script
 {
     public class RM_CtrVoie : FrSignalScript
     {
-        public override void Update()
+        public override void Initialize()
         {
             MstsSignalAspect = Aspect.Stop;
-            TextSignalAspect = "FR_FSO";
+            SignalAspect = SignalAspect.FR_FSO;
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,56 +1,54 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CSAVLVL_cond : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisTIVRParts = TextSignalAspectToList(SignalId, "TIVR");
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo thisTIVRSignalInfo = DeserializeAspect(SignalId, "TIVR");
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                SignalAspect = FrSignalAspect.FR_S_BAL;
+                SignalAspect = SignalAspect.FR_S_BAL;
             }
-            else if (AnnounceByA(nextNormalParts))
+            else if (AnnounceByA(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                SignalAspect = FrSignalAspect.FR_A;
+                SignalAspect = SignalAspect.FR_A;
             }
             else if (IsSignalFeatureEnabled("USER1")
-                && AnnounceByACLI(nextNormalParts))
+                && AnnounceByACLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                SignalAspect = FrSignalAspect.FR_ACLI;
+                SignalAspect = SignalAspect.FR_ACLI;
             }
-            else if (thisTIVRParts.Contains("FR_TIVR_EFFACE")
-                && AnnounceByVLCLI(nextNormalParts))
+            else if (thisTIVRSignalInfo.Aspect == SignalAspect.FR_TIVR_EFFACE
+                && AnnounceByVLCLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                SignalAspect = FrSignalAspect.FR_VLCLI_ANN;
+                SignalAspect = SignalAspect.FR_VLCLI_ANN;
             }
             else
             {
-                if (thisTIVRParts.Contains("FR_TIVR_EFFACE"))
+                if (thisTIVRSignalInfo.Aspect == SignalAspect.FR_TIVR_EFFACE)
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_VL_SUP;
+                    SignalAspect = SignalAspect.FR_VL_SUP;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

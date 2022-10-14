@@ -5,8 +5,9 @@ namespace ORTS.Scripting.Script
         public override void Initialize()
         {
             MstsSignalAspect = Aspect.Approach_3;
-            TextSignalAspect = "DIR5";
+            DirectionInfoAspect = DirectionInfoAspect.DIR5;
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

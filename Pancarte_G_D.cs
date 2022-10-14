@@ -5,8 +5,9 @@ namespace ORTS.Scripting.Script
         public override void Initialize()
         {
             MstsSignalAspect = Aspect.Approach_3;
-            TextSignalAspect = "FR_TABLEAU_G_D";
+            SignalAspect = SignalAspect.FR_TABLEAU_G_D;
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -5,42 +5,35 @@ namespace ORTS.Scripting.Script
         public override void Update()
         {
             MstsSignalAspect = Aspect.Clear_2;
-            TextSignalAspect = "FR_BP_EXECUTION_PRESENTE";
+            SignalAspect = SignalAspect.FR_BP_EXECUTION_PRESENTE;
 
             if (IsSignalFeatureEnabled("USER2"))
             {
-                string aspect = IdTextSignalAspect(NextSignalId("BP_FP"), "BP_FP");
+                SignalAspect aspect = DeserializeAspect(NextSignalId("BP_FP"), "BP_FP").Aspect;
 
-                if (aspect == "FR_BP_FP_1500V_PRESENTE")
+                if (aspect == SignalAspect.FR_BP_FP_1500V_PRESENTE)
                 {
-                    TextSignalAspect += " BSP_ELC1,5";
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_ELC1_5;
                 }
-                else if (aspect == "FR_BP_FP_3000V_PRESENTE")
+                else if (aspect == SignalAspect.FR_BP_FP_3000V_PRESENTE)
                 {
-                    TextSignalAspect += " BSP_ELC3";
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_ELC3;
                 }
-                else if (aspect == "FR_BP_FP_25000V_PRESENTE")
+                else if (aspect == SignalAspect.FR_BP_FP_25000V_PRESENTE)
                 {
-                    TextSignalAspect += " BSP_ELC25";
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_ELC25;
                 }
-                else if (aspect == "FR_BP_FP_25000VLGV_PRESENTE")
+                else if (aspect == SignalAspect.FR_BP_FP_25000VLGV_PRESENTE)
                 {
-                    TextSignalAspect += " BSP_ELGV";
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_ELGV;
                 }
-                else if (aspect == "FR_BP_FP_25000VET_PRESENTE")
+                else if (aspect == SignalAspect.FR_BP_FP_25000VET_PRESENTE)
                 {
-                    TextSignalAspect += " BSP_EET";
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_EET;
                 }
-            }
-            if (IsSignalFeatureEnabled("USER3"))
-            {
-                TextSignalAspect += " SILEC_BP";
-            }
-            if (IsSignalFeatureEnabled("USER4"))
-            {
-                TextSignalAspect += " KVB_BP";
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

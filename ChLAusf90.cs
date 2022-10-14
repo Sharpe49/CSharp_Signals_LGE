@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class ChLAusf60 : ChSignalScript
+    public class ChLAusf90 : ChSignalScript
     {
         public override void Update()
         {
@@ -32,11 +32,9 @@ namespace ORTS.Scripting.Script
             }
             else
             {
-                MstsSignalAspect = Aspect.Approach_2;
-                InfoAspect = ChInfoAspect.CH_INFO_IMAGE_3;
+                MstsSignalAspect = Aspect.Approach_3;
+                InfoAspect = ChInfoAspect.CH_INFO_IMAGE_5;
             }
-
-            SerializeAspect();
         }
     }
 }

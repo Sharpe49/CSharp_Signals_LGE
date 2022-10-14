@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
@@ -18,79 +17,79 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
             DrawState = -1;
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 if (IsSignalFeatureEnabled("USER1"))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    SignalAspect = FrSignalAspect.FR_SCLI;
+                    SignalAspect = SignalAspect.FR_SCLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    SignalAspect = FrSignalAspect.FR_S_BAL;
+                    SignalAspect = SignalAspect.FR_S_BAL;
                 }
             }
-            else if (AnnounceByA(nextNormalParts, false, DrawStateRCLI < 0))
+            else if (AnnounceByA(nextNormalSignalInfo, false, DrawStateRCLI < 0))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                SignalAspect = FrSignalAspect.FR_A;
+                SignalAspect = SignalAspect.FR_A;
             }
-            else if (AnnounceByR(nextNormalParts))
+            else if (AnnounceByR(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                SignalAspect = FrSignalAspect.FR_R;
+                SignalAspect = SignalAspect.FR_R;
             }
             else if (DrawStateRCLI_ACLI >= 0
                 && IsSignalFeatureEnabled("USER2")
-                && AnnounceByRCLI_ACLI(nextNormalParts))
+                && AnnounceByRCLI_ACLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                SignalAspect = FrSignalAspect.FR_RCLI_ACLI;
+                SignalAspect = SignalAspect.FR_RCLI_ACLI;
                 DrawState = DrawStateRCLI_ACLI;
             }
             else if (IsSignalFeatureEnabled("USER2")
-                && AnnounceByACLI(nextNormalParts))
+                && AnnounceByACLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                SignalAspect = FrSignalAspect.FR_ACLI;
+                SignalAspect = SignalAspect.FR_ACLI;
             }
             else if (DrawStateRCLI >= 0
-                && AnnounceByRCLI(nextNormalParts))
+                && AnnounceByRCLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                SignalAspect = FrSignalAspect.FR_RCLI;
+                SignalAspect = SignalAspect.FR_RCLI;
                 DrawState = DrawStateRCLI;
             }
             else if (IsSignalFeatureEnabled("USER3")
-                && AnnounceByVLCLI(nextNormalParts))
+                && AnnounceByVLCLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                SignalAspect = FrSignalAspect.FR_VLCLI_ANN;
+                SignalAspect = SignalAspect.FR_VLCLI_ANN;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
                 if (IsSignalFeatureEnabled("USER3"))
                 {
-                    SignalAspect = FrSignalAspect.FR_VL_SUP;
+                    SignalAspect = SignalAspect.FR_VL_SUP;
                 }
                 else
                 {
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             if (DrawState < 0)

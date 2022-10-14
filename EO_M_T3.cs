@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     // TLD
@@ -8,34 +6,35 @@ namespace ORTS.Scripting.Script
     {
         public override void Update()
         {
-            List<string> thisNormalSignalParts = TextSignalAspectToList(SignalId, "NORMAL");
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
 
-            if (thisNormalSignalParts.Contains("FR_C_BAL"))
+            if (thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_ETEINT";
+                SignalAspect = SignalAspect.FR_TLD_EFFACE;
             }
-            else if (thisNormalSignalParts.Contains("FR_RR")
-                || thisNormalSignalParts.Contains("FR_RR_A")
-                || thisNormalSignalParts.Contains("FR_RR_ACLI"))
+            else if (thisNormalSignalInfo.Aspect == SignalAspect.FR_RR
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_RR_A
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_RR_ACLI)
             {
                 if (RouteSet)
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "FR_TLD_1";
+                    SignalAspect = SignalAspect.FR_TLD_1;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_TLD_2";
+                    SignalAspect = SignalAspect.FR_TLD_2;
                 }
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_ETEINT";
+                SignalAspect = SignalAspect.FR_TLD_EFFACE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

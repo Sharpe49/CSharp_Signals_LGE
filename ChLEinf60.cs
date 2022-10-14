@@ -9,13 +9,15 @@ namespace ORTS.Scripting.Script
                 || !RouteSet)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "";
+                InfoAspect = ChInfoAspect.None;
             }
             else
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                TextSignalAspect = "CH_INFO_IMAGE_3";
+                InfoAspect = ChInfoAspect.CH_INFO_IMAGE_3;
             }
+
+            SerializeAspect();
         }
     }
 }

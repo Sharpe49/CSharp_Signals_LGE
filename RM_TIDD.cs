@@ -1,38 +1,37 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class RM_TIDD : FrSignalScript
     {
         public override void Update()
         {
-            string direction = FindSignalAspect("FR_ID", "ID", 1);
+            SignalInfo directionSignalInfo = FindSignalAspect("FR_ID", "ID", 1);
 
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
 
-            if (thisNormalParts.Contains("FR_C_BAL")
-                || thisNormalParts.Contains("FR_S_BAL")
-                || thisNormalParts.Contains("FR_SCLI"))
+            if (thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_S_BAL
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_SCLI)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TIDD_ETEINT";
+                SignalAspect = SignalAspect.FR_TIDD_ETEINT;
             }
-            else if (direction.Contains("FR_ID_1_FEU"))
+            else if (directionSignalInfo.Aspect == SignalAspect.FR_ID_1_FEU)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TIDD_GAUCHE";
+                SignalAspect = SignalAspect.FR_TIDD_GAUCHE;
             }
-            else if (direction.Contains("FR_ID_2_FEUX"))
+            else if (directionSignalInfo.Aspect == SignalAspect.FR_ID_2_FEUX)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_TIDD_DROITE";
+                SignalAspect = SignalAspect.FR_TIDD_DROITE;
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TIDD_ETEINT";
+                SignalAspect = SignalAspect.FR_TIDD_ETEINT;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

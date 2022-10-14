@@ -5,8 +5,9 @@ namespace ORTS.Scripting.Script
         public override void Initialize()
         {
             MstsSignalAspect = Aspect.Clear_2;
-            TextSignalAspect = "KVB_FVL";
+            KvbDivState = KvbDivState.KVB_FVL;
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

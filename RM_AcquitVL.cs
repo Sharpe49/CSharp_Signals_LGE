@@ -17,8 +17,9 @@ namespace ORTS.Scripting.Script
                 MstsSignalAspect = IdSignalAspect(NextSignalId("NORMAL"), "NORMAL");
             }
 
-            TextSignalAspect = "FR_REPRISE_VL";
+            SignalAspect = SignalAspect.FR_REPRISE_VL;
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

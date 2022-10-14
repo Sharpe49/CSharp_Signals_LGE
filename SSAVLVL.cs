@@ -1,35 +1,33 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class SSAVLVL : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
             if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                SignalAspect = FrSignalAspect.FR_SCLI;
+                SignalAspect = SignalAspect.FR_SCLI;
             }
-            else if (AnnounceByA(nextNormalParts))
+            else if (AnnounceByA(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                SignalAspect = FrSignalAspect.FR_A;
+                SignalAspect = SignalAspect.FR_A;
             }
-            else if (AnnounceByVLCLI(nextNormalParts))
+            else if (AnnounceByVLCLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                SignalAspect = FrSignalAspect.FR_VLCLI_ANN;
+                SignalAspect = SignalAspect.FR_VLCLI_ANN;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                SignalAspect = FrSignalAspect.FR_VL_SUP;
+                SignalAspect = SignalAspect.FR_VL_SUP;
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

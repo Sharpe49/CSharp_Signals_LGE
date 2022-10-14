@@ -8,15 +8,15 @@ namespace ORTS.Scripting.Script
                 || CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BM;
+                SignalAspect = SignalAspect.FR_C_BM;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                SignalAspect = FrSignalAspect.FR_VL_INF;
+                SignalAspect = SignalAspect.FR_VL_INF;
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

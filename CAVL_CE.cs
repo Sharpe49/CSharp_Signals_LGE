@@ -1,23 +1,21 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CAVL_CE : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (IsSignalFeatureEnabled("USER3")
-                && nextNormalParts.Contains("FR_C_BAL"))
+                && nextNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL)
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
@@ -25,29 +23,30 @@ namespace ORTS.Scripting.Script
                     || IsSignalFeatureEnabled("USER3"))
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    SignalAspect = FrSignalAspect.FR_C_BAL;
+                    SignalAspect = SignalAspect.FR_C_BAL;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    SignalAspect = FrSignalAspect.FR_S_BAL;
+                    SignalAspect = SignalAspect.FR_S_BAL;
                 }
             }
-            else if (AnnounceByA(nextNormalParts))
+            else if (AnnounceByA(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                SignalAspect = FrSignalAspect.FR_A;
+                SignalAspect = SignalAspect.FR_A;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                SignalAspect = FrSignalAspect.FR_VL_INF;
+                SignalAspect = SignalAspect.FR_VL_INF;
             }
 
-            FrenchTCS();
+            FrenchTcs();
+
+            ESUBO = true;
 
             SerializeAspect();
-            TextSignalAspect += " ESUBO";
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

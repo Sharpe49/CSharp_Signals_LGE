@@ -1,36 +1,37 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class RM_Id2d_TECS : FrSignalScript
     {
         public override void Update()
         {
-            string direction = FindSignalAspect("DIR", "INFO", 5);
+            SignalInfo directionSignalInfo = FindSignalAspect("DIR", "INFO", 5);
 
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
 
-            if (!Enabled || thisNormalParts.Contains("FR_C_BAL"))
+            if (!Enabled || thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_ID_ETEINT";
+                SignalAspect = SignalAspect.FR_ID_ETEINT;
             }
-            else if (direction.Contains("DIR1") || direction.Contains("DIR3"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR1
+                || directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR3)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_ID_1_FEU";
+                SignalAspect = SignalAspect.FR_ID_1_FEU;
             }
-            else if (direction.Contains("DIR2") || direction.Contains("DIR4"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR2 
+                || directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR4)
             {
                 MstsSignalAspect = Aspect.Restricting;
-                TextSignalAspect = "FR_ID_2_FEUX";
+                SignalAspect = SignalAspect.FR_ID_2_FEUX;
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_ID_ETEINT";
+                SignalAspect = SignalAspect.FR_ID_ETEINT;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

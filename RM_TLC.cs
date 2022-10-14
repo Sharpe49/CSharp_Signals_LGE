@@ -1,31 +1,30 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class RM_TLC : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLC_DAMIER";
+                SignalAspect = SignalAspect.FR_TLC_DAMIER;
             }
-            else if (nextNormalParts.Contains("FR_M")
-                || nextNormalParts.Contains("FR_MCLI"))
+            else if (nextNormalSignalInfo.Aspect == SignalAspect.FR_M
+                || nextNormalSignalInfo.Aspect == SignalAspect.FR_MCLI)
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                TextSignalAspect = "FR_TLC_T";
+                SignalAspect = SignalAspect.FR_TLC_T;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_TLC_SLD";
+                SignalAspect = SignalAspect.FR_TLC_SLD;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

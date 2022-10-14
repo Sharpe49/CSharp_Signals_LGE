@@ -7,19 +7,20 @@ namespace ORTS.Scripting.Script
             if (IsSignalFeatureEnabled("USER1"))
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_IPCS_ENTREE_CONTRE_SENS";
+                IpcsInfoAspect = IpcsInfoAspect.FR_IPCS_ENTREE_CONTRE_SENS;
             }
             else if (IsSignalFeatureEnabled("USER2"))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_IPCS_SORTIE_CONTRE_SENS";
+                IpcsInfoAspect = IpcsInfoAspect.FR_IPCS_SORTIE_CONTRE_SENS;
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_IPCS_NON_PARAMETRE";
+                IpcsInfoAspect = IpcsInfoAspect.FR_IPCS_NON_PARAMETRE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,30 +1,29 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
-    public class RM_CFL_TIVmobA : FrSignalScript
+    public class RM_CFL_TIVmobA : LuSignalScript
     {
         public override void Update()
         {
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
-            List<string> nextSpeedParts = TextSignalAspectToList(NextSignalId("TIVR"), "TIVR");
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
+            SignalInfo nextTivrSignalInfo = DeserializeAspect(NextSignalId("TIVR"), "TIVR");
 
-            if (thisNormalParts.Contains("LU_SFP1"))
+            if (thisNormalSignalInfo.Aspect == SignalAspect.LU_SFP1)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "LU_SFAvI_EFFACE";
+                SignalAspect = SignalAspect.LU_SFAvI_EFFACE;
             }
-            else if (nextSpeedParts.Contains("LU_SFI_PRESENTE"))
+            else if (nextTivrSignalInfo.Aspect == SignalAspect.LU_SFI_PRESENTE)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "LU_SFAvI_PRESENTE";
+                SignalAspect = SignalAspect.LU_SFAvI_PRESENTE;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "LU_SFAvI_EFFACE";
+                SignalAspect = SignalAspect.LU_SFAvI_EFFACE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,30 +1,28 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CVM_horiz : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear
-                || nextNormalParts.Contains("FR_FSO"))
+                || nextNormalSignalInfo.Aspect == SignalAspect.FR_FSO)
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_CV;
+                SignalAspect = SignalAspect.FR_CV;
             }
-            else if (nextNormalParts.Contains("ESUBO")
-                && (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV")))
+            else if (nextNormalSignalInfo.ESUBO
+                && (nextNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL || nextNormalSignalInfo.Aspect == SignalAspect.FR_CV))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_CV;
+                SignalAspect = SignalAspect.FR_CV;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                SignalAspect = FrSignalAspect.FR_M;
+                SignalAspect = SignalAspect.FR_M;
             }
 
             SerializeAspect();

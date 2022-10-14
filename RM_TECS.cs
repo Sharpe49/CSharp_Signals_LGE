@@ -1,48 +1,47 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class RM_TECS : FrSignalScript
     {
         public override void Update()
         {
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
-            List<string> thisTabGParts = TextSignalAspectToList(SignalId, "TABG");
-            List<string> nextTabGParts = TextSignalAspectToList(NextSignalId("TABG"), "TABG");
-            string ipcsInformation = FindSignalAspect("FR_IPCS", "INFO", 3);
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
+            SignalInfo thisTabGSignalInfo = DeserializeAspect(SignalId, "TABG");
+            SignalInfo nextTabGSignalInfo = DeserializeAspect(NextSignalId("TABG"), "TABG");
+            SignalInfo IpcsSignalInfo = FindSignalAspect("FR_IPCS", "INFO", 3);
 
             if (!Enabled
-                || thisNormalParts.Contains("FR_C_BAL")
-                || nextTabGParts.Contains("FR_TABLEAU_G_D")
-                || thisTabGParts.Contains("FR_TABLEAU_G_D"))
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL
+                || nextTabGSignalInfo.Aspect == SignalAspect.FR_TABLEAU_G_D
+                || thisTabGSignalInfo.Aspect == SignalAspect.FR_TABLEAU_G_D)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TECS_EFFACE";
+                SignalAspect = SignalAspect.FR_TECS_EFFACE;
             }
-            else if (ipcsInformation.Contains("FR_IPCS"))
+            else if (IpcsSignalInfo.IpcsInfoAspect != IpcsInfoAspect.None)
             {
-                if (ipcsInformation.Contains("FR_IPCS_ENTREE_CONTRE_SENS"))
+                if (IpcsSignalInfo.IpcsInfoAspect == IpcsInfoAspect.FR_IPCS_ENTREE_CONTRE_SENS)
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_TECS_PRESENTE";
+                    SignalAspect = SignalAspect.FR_TECS_PRESENTE;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "FR_TECS_EFFACE";
+                    SignalAspect = SignalAspect.FR_TECS_EFFACE;
                 }
             }
             else if (!RouteSet)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TECS_PRESENTE";
+                SignalAspect = SignalAspect.FR_TECS_PRESENTE;
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TECS_EFFACE";
+                SignalAspect = SignalAspect.FR_TECS_EFFACE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,6 +1,6 @@
 namespace ORTS.Scripting.Script
 {
-    public class RM_CFL_IU : FrSignalScript
+    public class RM_CFL_IU : LuSignalScript
     {
         public override void Update()
         {
@@ -8,14 +8,15 @@ namespace ORTS.Scripting.Script
                 && TrainHasCallOn())
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "LU_SFVo_PRESENTE";
+                SignalAspect = SignalAspect.LU_SFVo_PRESENTE;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "LU_SFVo_EFFACE";
+                SignalAspect = SignalAspect.LU_SFVo_EFFACE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

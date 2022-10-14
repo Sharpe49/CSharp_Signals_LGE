@@ -1,259 +1,459 @@
-﻿using Orts.Simulation.Signalling;
-using System.Collections.Generic;
+﻿using System;
 
 namespace ORTS.Scripting.Script
 {
+    public enum ChInfoAspect
+    {
+        None,
+        CH_SIGNAL_NORMAL,
+        CH_SIGNAL_AVANCE,
+        CH_SIGNAL_COMBINE,
+        CH_SIGNAL_SECTION_DE_LIGNE,
+        CH_MARQUEUR_DE_SORTIE_DE_GARE,
+        CH_PROCHAIN_SIGNAL_FERME,
+        CH_INFO_IMAGE_1,
+        CH_INFO_IMAGE_2,
+        CH_INFO_IMAGE_3,
+        CH_INFO_IMAGE_5,
+        CH_INFO_IMAGE_6,
+    }
+
     public abstract class ChSignalScript : SignalScript
     {
-        public bool AnnounceByImageW(List<string> aspects)
+        private readonly TextAspectBuilder TextAspectBuilder = new TextAspectBuilder();
+
+        private class SignalState : IEquatable<SignalState>
         {
-            foreach (string aspect in aspects)
+            public SignalAspect SignalAspect { get; set; } = SignalAspect.None;
+            public ChInfoAspect InfoAspect { get; set; } = ChInfoAspect.None;
+            public CrocodileState CrocodileState { get; set; } = CrocodileState.None;
+            public KvbSigState KvbSigState { get; set; } = KvbSigState.None;
+            public KvbTiveState KvbTiveState { get; set; } = KvbTiveState.None;
+            public KvbTivdState KvbTivdState { get; set; } = KvbTivdState.None;
+
+            public bool Equals(SignalState other)
             {
-                switch (aspect)
-                {
-                    case "EOA":
-                    case "CH_IMAGE_H":
-                    case "FR_C_BAL":
-                    case "FR_C_BAPR":
-                    case "FR_C_BM":
-                    case "FR_CV":
-                    case "FR_S_BAL":
-                    case "FR_S_BAPR":
-                    case "FR_S_BM":
-                    case "FR_SCLI":
-                    case "FR_MCLI":
-                    case "FR_M":
-                    case "FR_RR":
-                    case "FR_RR_A":
-                    case "FR_RR_ACLI":
-                        return true;
-                }
+                return SignalAspect == other.SignalAspect
+                       && InfoAspect == other.InfoAspect
+                       && CrocodileState == other.CrocodileState
+                       && KvbSigState == other.KvbSigState
+                       && KvbTiveState == other.KvbTiveState
+                       && KvbTivdState == other.KvbTivdState;
+            }
+
+            public void Copy(SignalState other)
+            {
+                SignalAspect = other.SignalAspect;
+                InfoAspect = other.InfoAspect;
+                CrocodileState = other.CrocodileState;
+                KvbSigState = other.KvbSigState;
+                KvbTiveState = other.KvbTiveState;
+                KvbTivdState = other.KvbTivdState;
+            }
+        }
+
+        public SignalAspect SignalAspect
+        {
+            get => State.SignalAspect;
+            set => State.SignalAspect = value;
+        }
+
+        public ChInfoAspect InfoAspect
+        {
+            get => State.InfoAspect;
+            set => State.InfoAspect = value;
+        }
+
+        public CrocodileState CrocodileState
+        {
+            get => State.CrocodileState;
+            set => State.CrocodileState = value;
+        }
+
+        public KvbSigState KvbSigState
+        {
+            get => State.KvbSigState;
+            set => State.KvbSigState = value;
+        }
+
+        public KvbTiveState KvbTiveState
+        {
+            get => State.KvbTiveState;
+            set => State.KvbTiveState = value;
+        }
+
+        public KvbTivdState KvbTivdState
+        {
+            get => State.KvbTivdState;
+            set => State.KvbTivdState = value;
+        }
+
+        private readonly SignalState State = new SignalState();
+        private readonly SignalState PreviousState = new SignalState();
+
+        public bool AnnounceByImageW(SignalInfo nextNormalSignalInfo)
+        {
+            switch (nextNormalSignalInfo.Aspect)
+            {
+                case SignalAspect.EOA:
+                case SignalAspect.CH_IMAGE_H:
+                case SignalAspect.FR_C_BAL:
+                case SignalAspect.FR_C_BAPR:
+                case SignalAspect.FR_C_BM:
+                case SignalAspect.FR_CV:
+                case SignalAspect.FR_S_BAL:
+                case SignalAspect.FR_S_BAPR:
+                case SignalAspect.FR_S_BM:
+                case SignalAspect.FR_SCLI:
+                case SignalAspect.FR_MCLI:
+                case SignalAspect.FR_M:
+                case SignalAspect.FR_RR:
+                case SignalAspect.FR_RR_A:
+                case SignalAspect.FR_RR_ACLI:
+                    return true;
             }
 
             return false;
         }
 
-        public bool AnnounceByImage2(List<string> aspects)
+        public bool AnnounceByImage2(SignalInfo nextNormalSignalInfo)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "CH_IMAGE_2":
-                    case "CH_IMAGE_6":
-                        return true;
-                }
+                case SignalAspect.CH_IMAGE_2:
+                case SignalAspect.CH_IMAGE_6:
+                    return true;
             }
 
             return false;
         }
 
-        public bool AnnounceByImage3(List<string> aspects)
+        public bool AnnounceByImage3(SignalInfo nextNormalSignalInfo)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "CH_IMAGE_3":
-                    case "FR_RRCLI":
-                    case "FR_RRCLI_A":
-                    case "FR_RRCLI_ACLI":
-                        return true;
-                }
+                case SignalAspect.CH_IMAGE_3:
+                case SignalAspect.FR_RRCLI:
+                case SignalAspect.FR_RRCLI_A:
+                case SignalAspect.FR_RRCLI_ACLI:
+                    return true;
             }
 
             return false;
         }
 
-        public bool AnnounceByImage5(List<string> aspects, bool doubleAnnounce = false)
+        public bool AnnounceByImage5(SignalInfo nextNormalSignalInfo, bool doubleAnnounce = false)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "CH_IMAGE_5":
-                        return true;
-                }
+                case SignalAspect.CH_IMAGE_5:
+                    return true;
             }
 
             return false;
         }
 
-        public string SwissTCS(string normalAspect, string distantAspect)
+        public void SwissTCS(SignalAspect normalAspect, SignalAspect distantAspect)
         {
-            return " " + SwissCrocodile(normalAspect, distantAspect) + " " + SwissKVB(normalAspect, distantAspect);
+            SwissCrocodile(normalAspect, distantAspect);
+            SwissKVB(normalAspect, distantAspect);
         }
 
-        public string SwissCombinedTCS(string aspect)
+        public void SwissCombinedTCS(SignalAspect aspect)
         {
-            return SwissTCS(aspect, aspect);
+            SwissTCS(aspect, aspect);
         }
 
-        public string SwissCrocodile(string normalAspect, string distantAspect)
+        public void SwissCrocodile(SignalAspect normalAspect, SignalAspect distantAspect)
         {
             switch (normalAspect)
             {
-                case "CH_IMAGE_H":
-                case "CH_IMAGE_6":
-                    return "CROCODILE_SF";
+                case SignalAspect.CH_IMAGE_H:
+                case SignalAspect.CH_IMAGE_6:
+                    CrocodileState = CrocodileState.CROCODILE_SF;
+                    break;
 
-                case "CH_IMAGE_2":
+                case SignalAspect.CH_IMAGE_2:
                     switch (distantAspect)
                     {
-                        case "CH_IMAGE_W":
-                            return "CROCODILE_SF";
+                        case SignalAspect.CH_IMAGE_W:
+                            CrocodileState = CrocodileState.CROCODILE_SF;
+                            break;
 
                         default:
-                            return "CROCODILE_SO";
+                            CrocodileState = CrocodileState.CROCODILE_SO;
+                            break;
                     }
+                    break;
 
-                case "CH_IMAGE_3":
+                case SignalAspect.CH_IMAGE_3:
                     switch (distantAspect)
                     {
-                        case "CH_IMAGE_W":
-                        case "CH_IMAGE_2*":
-                            return "CROCODILE_SF";
+                        case SignalAspect.CH_IMAGE_W:
+                        case SignalAspect.CH_IMAGE_2A:
+                            CrocodileState = CrocodileState.CROCODILE_SF;
+                            break;
 
                         default:
-                            return "CROCODILE_SO";
+                            CrocodileState = CrocodileState.CROCODILE_SO;
+                            break;
                     }
+                    break;
 
-                case "CH_IMAGE_5":
+                case SignalAspect.CH_IMAGE_5:
                     switch (distantAspect)
                     {
-                        case "CH_IMAGE_W":
-                        case "CH_IMAGE_2*":
-                        case "CH_IMAGE_3*":
-                            return "CROCODILE_SF";
+                        case SignalAspect.CH_IMAGE_W:
+                        case SignalAspect.CH_IMAGE_2A:
+                        case SignalAspect.CH_IMAGE_3A:
+                            CrocodileState = CrocodileState.CROCODILE_SF;
+                            break;
 
                         default:
-                            return "CROCODILE_SO";
+                            CrocodileState = CrocodileState.CROCODILE_SO;
+                            break;
                     }
+                    break;
 
                 default:
                     switch (distantAspect)
                     {
-                        case "CH_IMAGE_W":
-                        case "CH_IMAGE_2*":
-                        case "CH_IMAGE_3*":
-                        case "CH_IMAGE_5*":
-                            return "CROCODILE_SF";
+                        case SignalAspect.CH_IMAGE_W:
+                        case SignalAspect.CH_IMAGE_2A:
+                        case SignalAspect.CH_IMAGE_3A:
+                        case SignalAspect.CH_IMAGE_5A:
+                            CrocodileState = CrocodileState.CROCODILE_SF;
+                            break;
 
                         default:
-                            return "CROCODILE_SO";
+                            CrocodileState = CrocodileState.CROCODILE_SO;
+                            break;
                     }
+                    break;
             }
         }
 
-        public string SwissKVB(string normalAspect, string distantAspect)
+        public void SwissKVB(SignalAspect normalAspect, SignalAspect distantAspect)
         {
-            if (normalAspect.Length > 0)
+            if (normalAspect != SignalAspect.None)
             {
                 switch (normalAspect)
                 {
-                    case "CH_IMAGE_H":
-                        return "KVB_S_S_BM KVB_TIVE_G_AA";
+                    case SignalAspect.CH_IMAGE_H:
+                        KvbSigState = KvbSigState.KVB_S_S_BM;
+                        KvbTiveState = KvbTiveState.KVB_TIVE_G_AA;
+                        break;
 
-                    case "CH_IMAGE_6":
-                        return "KVB_S_A KVB_TIVE_G_V40";
+                    case SignalAspect.CH_IMAGE_6:
+                        KvbSigState = KvbSigState.KVB_S_A;
+                        KvbTiveState = KvbTiveState.KVB_TIVE_G_V40;
+                        break;
 
-                    case "CH_IMAGE_2":
+                    case SignalAspect.CH_IMAGE_2:
                         switch (distantAspect)
                         {
-                            case "CH_IMAGE_W":
-                                return "KVB_S_A KVB_TIVE_G_V40";
+                            case SignalAspect.CH_IMAGE_W:
+                                KvbSigState = KvbSigState.KVB_S_A;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V40;
+                                break;
 
-                            case "CH_IMAGE_2*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V40 KVB_TIVD_G_V40";
+                            case SignalAspect.CH_IMAGE_2A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V40;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V40;
+                                break;
 
-                            case "CH_IMAGE_3*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V40 KVB_TIVD_G_V60";
+                            case SignalAspect.CH_IMAGE_3A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V40;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V60;
+                                break;
 
-                            case "CH_IMAGE_5*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V40 KVB_TIVD_G_V90";
+                            case SignalAspect.CH_IMAGE_5A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V40;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V90;
+                                break;
 
                             default:
-                                return "KVB_S_VL_INF KVB_TIVE_G_V40";
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V40;
+                                break;
                         }
+                        break;
 
-                    case "CH_IMAGE_3":
+                    case SignalAspect.CH_IMAGE_3:
                         switch (distantAspect)
                         {
-                            case "CH_IMAGE_W":
-                                return "KVB_S_A KVB_TIVE_G_V60";
+                            case SignalAspect.CH_IMAGE_W:
+                                KvbSigState = KvbSigState.KVB_S_A;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V60;
+                                break;
 
-                            case "CH_IMAGE_2*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V60 KVB_TIVD_G_V40";
+                            case SignalAspect.CH_IMAGE_2A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V60;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V40;
+                                break;
 
-                            case "CH_IMAGE_3*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V60 KVB_TIVD_G_V60";
+                            case SignalAspect.CH_IMAGE_3A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V60;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V60;
+                                break;
 
-                            case "CH_IMAGE_5*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V60 KVB_TIVD_G_V90";
+                            case SignalAspect.CH_IMAGE_5A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V60;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V90;
+                                break;
 
                             default:
-                                return "KVB_S_VL_INF KVB_TIVE_G_V60";
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V60;
+                                break;
                         }
+                        break;
 
-                    case "CH_IMAGE_5":
+                    case SignalAspect.CH_IMAGE_5:
                         switch (distantAspect)
                         {
-                            case "CH_IMAGE_W":
-                                return "KVB_S_A KVB_TIVE_G_V90";
+                            case SignalAspect.CH_IMAGE_W:
+                                KvbSigState = KvbSigState.KVB_S_A;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V90;
+                                break;
 
-                            case "CH_IMAGE_2*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V90 KVB_TIVD_G_V40";
+                            case SignalAspect.CH_IMAGE_2A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V90;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V40;
+                                break;
 
-                            case "CH_IMAGE_3*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V90 KVB_TIVD_G_V60";
+                            case SignalAspect.CH_IMAGE_3A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V90;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V60;
+                                break;
 
-                            case "CH_IMAGE_5*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_V90 KVB_TIVD_G_V90";
+                            case SignalAspect.CH_IMAGE_5A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V90;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V90;
+                                break;
 
                             default:
-                                return "KVB_S_VL_INF KVB_TIVE_G_V90";
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_V90;
+                                break;
                         }
+                        break;
 
                     default:
                         switch (distantAspect)
                         {
-                            case "CH_IMAGE_W":
-                                return "KVB_S_A KVB_TIVE_G_AA";
+                            case SignalAspect.CH_IMAGE_W:
+                                KvbSigState = KvbSigState.KVB_S_A;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_AA;
+                                break;
 
-                            case "CH_IMAGE_2*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_AA KVB_TIVD_G_V40";
+                            case SignalAspect.CH_IMAGE_2A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_AA;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V40;
+                                break;
 
-                            case "CH_IMAGE_3*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_AA KVB_TIVD_G_V60";
+                            case SignalAspect.CH_IMAGE_3A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_AA;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V60;
+                                break;
 
-                            case "CH_IMAGE_5*":
-                                return "KVB_S_VL_INF KVB_TIVE_G_AA KVB_TIVD_G_V90";
+                            case SignalAspect.CH_IMAGE_5A:
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_AA;
+                                KvbTivdState = KvbTivdState.KVB_TIVD_G_V90;
+                                break;
 
                             default:
-                                return "KVB_S_VL_INF KVB_TIVE_G_AA";
+                                KvbSigState = KvbSigState.KVB_S_VL_INF;
+                                KvbTiveState = KvbTiveState.KVB_TIVE_G_AA;
+                                break;
                         }
+                        break;
                 }
             }
             else
             {
                 switch (distantAspect)
                 {
-                    case "CH_IMAGE_W":
-                        return "KVB_S_REOCS";
+                    case SignalAspect.CH_IMAGE_W:
+                        KvbSigState = KvbSigState.KVB_S_REOCS;
+                        break;
 
-                    case "CH_IMAGE_2*":
-                        return "KVB_S_REOVL KVB_TIVD_G_V40";
+                    case SignalAspect.CH_IMAGE_2A:
+                        KvbSigState = KvbSigState.KVB_S_REOVL;
+                        KvbTivdState = KvbTivdState.KVB_TIVD_G_V40;
+                        break;
 
-                    case "CH_IMAGE_3*":
-                        return "KVB_S_REOVL KVB_TIVD_G_V60";
+                    case SignalAspect.CH_IMAGE_3A:
+                        KvbSigState = KvbSigState.KVB_S_REOVL;
+                        KvbTivdState = KvbTivdState.KVB_TIVD_G_V60;
+                        break;
 
-                    case "CH_IMAGE_5*":
-                        return "KVB_S_REOVL KVB_TIVD_G_V90";
+                    case SignalAspect.CH_IMAGE_5A:
+                        KvbSigState = KvbSigState.KVB_S_REOVL;
+                        KvbTivdState = KvbTivdState.KVB_TIVD_G_V90;
+                        break;
 
                     default:
-                        return "KVB_S_REOVL";
+                        KvbSigState = KvbSigState.KVB_S_REOVL;
+                        break;
                 }
             }
+        }
+
+        protected void SerializeAspect()
+        {
+            if (State.Equals(PreviousState))
+            {
+                return;
+            }
+
+            TextAspectBuilder.Clear();
+
+            if (SignalAspect != SignalAspect.None)
+            {
+                TextAspectBuilder.Append(SignalAspect.ToString());
+            }
+
+            if (InfoAspect != ChInfoAspect.None)
+            {
+                TextAspectBuilder.Append(InfoAspect.ToString());
+            }
+
+            if (CrocodileState != CrocodileState.None)
+            {
+                TextAspectBuilder.Append(CrocodileState.ToString());
+            }
+
+            if (KvbSigState != KvbSigState.None)
+            {
+                TextAspectBuilder.Append(KvbSigState.ToString());
+            }
+
+            if (KvbTiveState != KvbTiveState.None)
+            {
+                TextAspectBuilder.Append(KvbTiveState.ToString());
+            }
+
+            if (KvbTivdState != KvbTivdState.None)
+            {
+                TextAspectBuilder.Append(KvbTivdState.ToString());
+            }
+
+            TextSignalAspect = TextAspectBuilder.ToString();
+
+            PreviousState.Copy(State);
         }
     }
 }

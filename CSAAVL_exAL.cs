@@ -1,43 +1,41 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CSAAVL_exAL : FrSignalScript
     {
         public override void Update()
         {
-            string direction = FindSignalAspect("DIR", "INFO", 5);
+            SignalInfo directionSignalInfo = FindSignalAspect("DIR", "INFO", 5);
 
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
-            else if (direction.Contains("DIR1")
-                || direction.Contains("DIR2"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR1
+                || directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR2)
             {
                 if (CommandAspectS())
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    SignalAspect = FrSignalAspect.FR_S_BAL;
+                    SignalAspect = SignalAspect.FR_S_BAL;
                 }
-                else if (AnnounceByA(nextNormalParts))
+                else if (AnnounceByA(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    SignalAspect = FrSignalAspect.FR_A;
+                    SignalAspect = SignalAspect.FR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
-                    && AnnounceByACLI(nextNormalParts))
+                    && AnnounceByACLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_2;
-                    SignalAspect = FrSignalAspect.FR_ACLI;
+                    SignalAspect = SignalAspect.FR_ACLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
             else
@@ -45,16 +43,16 @@ namespace ORTS.Scripting.Script
                 if (CurrentBlockState == BlockState.Occupied)
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    SignalAspect = FrSignalAspect.FR_C_BAL;
+                    SignalAspect = SignalAspect.FR_C_BAL;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

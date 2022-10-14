@@ -1,69 +1,69 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class ChLBlockSignal : ChSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> nextIdentifierParts = TextSignalAspectToList(SignalId, "REPEATER");
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo thisIdentifierSignalInfo = DeserializeAspect(SignalId, "REPEATER");
 
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear
                 || !RouteSet)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "CH_IMAGE_H";
+                SignalAspect = SignalAspect.CH_IMAGE_H;
                 DrawState = 0;
             }
-            else if (nextIdentifierParts.Contains("CH_SIGNAL_AVANCE"))
+            else if (thisIdentifierSignalInfo.ChInfoAspect == ChInfoAspect.CH_SIGNAL_AVANCE)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "CH_IMAGE_1";
+                SignalAspect = SignalAspect.CH_IMAGE_1;
                 DrawState = 5;
             }
-            else if (AnnounceByImageW(nextNormalParts))
+            else if (AnnounceByImageW(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "CH_IMAGE_W";
+                SignalAspect = SignalAspect.CH_IMAGE_W;
                 DrawState = 1;
             }
-            else if (AnnounceByImage2(nextNormalParts))
+            else if (AnnounceByImage2(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "CH_IMAGE_2*";
+                SignalAspect = SignalAspect.CH_IMAGE_2A;
                 DrawState = 2;
             }
-            else if (AnnounceByImage3(nextNormalParts))
+            else if (AnnounceByImage3(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "CH_IMAGE_3*";
+                SignalAspect = SignalAspect.CH_IMAGE_3A;
                 DrawState = 3;
             }
-            else if (AnnounceByImage5(nextNormalParts))
+            else if (AnnounceByImage5(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "CH_IMAGE_5*";
+                SignalAspect = SignalAspect.CH_IMAGE_5A;
                 DrawState = 4;
             }
             else
             {
-                if (nextIdentifierParts.Contains("CH_SIGNAL_COMBINE"))
+                if (thisIdentifierSignalInfo.ChInfoAspect == ChInfoAspect.CH_SIGNAL_COMBINE)
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "CH_IMAGE_1";
+                    SignalAspect = SignalAspect.CH_IMAGE_1;
                     DrawState = 5;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "CH_IMAGE_1*";
+                    SignalAspect = SignalAspect.CH_IMAGE_1A;
                     DrawState = 6;
                 }
             }
 
-            TextSignalAspect += SwissCombinedTCS(TextSignalAspect);
+            SwissCombinedTCS(SignalAspect);
+
+            SerializeAspect();
         }
     }
 }

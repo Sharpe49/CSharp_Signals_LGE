@@ -1,3 +1,5 @@
+using System;
+
 namespace ORTS.Scripting.Script
 {
     public class Info_0_7 : FrSignalScript
@@ -11,8 +13,9 @@ namespace ORTS.Scripting.Script
             direction += IsSignalFeatureEnabled("USER4") ? 4 : 0;
 
             MstsSignalAspect = (Aspect)direction;
-            TextSignalAspect = "DIR" + direction.ToString();
+            DirectionInfoAspect = (DirectionInfoAspect)Enum.Parse(typeof(DirectionInfoAspect), "DIR" + direction);
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

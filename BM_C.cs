@@ -9,12 +9,12 @@ namespace ORTS.Scripting.Script
                 || !RouteSet)
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BM;
+                SignalAspect = SignalAspect.FR_C_BM;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                SignalAspect = FrSignalAspect.FR_VL_INF;
+                SignalAspect = SignalAspect.FR_VL_INF;
             }
 
             SerializeAspect();

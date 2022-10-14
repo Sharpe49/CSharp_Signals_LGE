@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
@@ -20,52 +19,52 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
             DrawState = -1;
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                SignalAspect = FrSignalAspect.FR_S_BAL;
+                SignalAspect = SignalAspect.FR_S_BAL;
             }
             else if (RouteSet)
             {
-                if (AnnounceByA(nextNormalParts, true, false))
+                if (AnnounceByA(nextNormalSignalInfo, true, false))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    SignalAspect = FrSignalAspect.FR_A;
+                    SignalAspect = SignalAspect.FR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
                     && DrawStateRCLI_ACLI >= 0
-                    && AnnounceByRCLI_ACLI(nextNormalParts))
+                    && AnnounceByRCLI_ACLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_3;
-                    SignalAspect = FrSignalAspect.FR_RCLI_ACLI;
+                    SignalAspect = SignalAspect.FR_RCLI_ACLI;
                     DrawState = DrawStateRCLI_ACLI;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
-                    && AnnounceByACLI(nextNormalParts))
+                    && AnnounceByACLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_3;
-                    SignalAspect = FrSignalAspect.FR_ACLI;
+                    SignalAspect = SignalAspect.FR_ACLI;
                 }
-                else if (AnnounceByRCLI(nextNormalParts))
+                else if (AnnounceByRCLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_2;
-                    SignalAspect = FrSignalAspect.FR_RCLI;
+                    SignalAspect = SignalAspect.FR_RCLI;
                 }
                 else if (IsSignalFeatureEnabled("USER3")
                     && DrawStateVLCLI >= 0
-                    && AnnounceByVLCLI(nextNormalParts))
+                    && AnnounceByVLCLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_VLCLI_ANN;
+                    SignalAspect = SignalAspect.FR_VLCLI_ANN;
                     DrawState = DrawStateVLCLI;
                 }
                 else
@@ -73,37 +72,37 @@ namespace ORTS.Scripting.Script
                     MstsSignalAspect = Aspect.Clear_1;
                     if (IsSignalFeatureEnabled("USER3"))
                     {
-                        SignalAspect = FrSignalAspect.FR_VL_SUP;
+                        SignalAspect = SignalAspect.FR_VL_SUP;
                     }
                     else
                     {
-                        SignalAspect = FrSignalAspect.FR_VL_INF;
+                        SignalAspect = SignalAspect.FR_VL_INF;
                     }
                 }
             }
             else
             {
-                if (AnnounceByA(nextNormalParts))
+                if (AnnounceByA(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    SignalAspect = FrSignalAspect.FR_RR_A;
+                    SignalAspect = SignalAspect.FR_RR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
                     && DrawStateRR_ACLI >= 0
-                    && AnnounceByACLI(nextNormalParts))
+                    && AnnounceByACLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    SignalAspect = FrSignalAspect.FR_RR_ACLI;
+                    SignalAspect = SignalAspect.FR_RR_ACLI;
                     DrawState = DrawStateRR_ACLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    SignalAspect = FrSignalAspect.FR_RR;
+                    SignalAspect = SignalAspect.FR_RR;
                 }
             }
 
-            FrenchTCS(true);
+            FrenchTcs(true);
 
             SerializeAspect();
             if (DrawState < 0)

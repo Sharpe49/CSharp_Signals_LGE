@@ -1,29 +1,28 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class IndDir2fx : FrSignalScript
     {
         public override void Update()
         {
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
 
-            if (!Enabled || thisNormalParts.Contains("FR_C_BAL"))
+            if (!Enabled || thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_ID_ETEINT";
+                SignalAspect = SignalAspect.FR_ID_ETEINT;
             }
             else if (!RouteSet)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_ID_1_FEU";
+                SignalAspect = SignalAspect.FR_ID_1_FEU;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_ID_2_FEUX";
+                SignalAspect = SignalAspect.FR_ID_2_FEUX;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

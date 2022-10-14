@@ -5,25 +5,26 @@ namespace ORTS.Scripting.Script
         public override void Initialize()
         {
             MstsSignalAspect = Aspect.Clear_2;
-            TextSignalAspect = "FR_BP_ANNONCE_PRESENTE";
+            SignalAspect = SignalAspect.FR_BP_ANNONCE_PRESENTE;
 
             if (IsSignalFeatureEnabled("USER1"))
             {
-                TextSignalAspect += " EPI_BPT";
+                FrenchTvm300Epi();
             }
             if (IsSignalFeatureEnabled("USER2"))
             {
-                TextSignalAspect += " BSP_ABP";
+                FrenchTvm430Bsp();
             }
             if (IsSignalFeatureEnabled("USER3"))
             {
-                TextSignalAspect += " SILEC_BP";
+                FrenchSilec();
             }
             if (IsSignalFeatureEnabled("USER4"))
             {
-                TextSignalAspect += " KVB_BP";
+                FrenchKvbCssp();
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

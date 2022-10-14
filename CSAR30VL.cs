@@ -1,40 +1,38 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CSAR30VL : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                SignalAspect = FrSignalAspect.FR_S_BAL;
+                SignalAspect = SignalAspect.FR_S_BAL;
             }
-            else if (AnnounceByA(nextNormalParts, false, true))
+            else if (AnnounceByA(nextNormalSignalInfo, false, true))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                SignalAspect = FrSignalAspect.FR_A;
+                SignalAspect = SignalAspect.FR_A;
             }
-            else if (AnnounceByR(nextNormalParts))
+            else if (AnnounceByR(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                SignalAspect = FrSignalAspect.FR_R;
+                SignalAspect = SignalAspect.FR_R;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                SignalAspect = FrSignalAspect.FR_VL_INF;
+                SignalAspect = SignalAspect.FR_VL_INF;
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     // TLD
@@ -10,30 +8,31 @@ namespace ORTS.Scripting.Script
     {
         public override void Update()
         {
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
-            string direction = FindSignalAspect("DIR", "INFO", 5);
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
+            SignalInfo directionSignalInfo = FindSignalAspect("DIR", "INFO", 5);
 
-            if (thisNormalParts.Contains("FR_C_BAL"))
+            if (thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_EFFACE";
+                SignalAspect = SignalAspect.FR_TLD_EFFACE;
             }
-            else if (direction.Contains("DIR0"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR0)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_TLD_1";
+                SignalAspect = SignalAspect.FR_TLD_1;
             }
-            else if (direction.Contains("DIR1"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR1)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TLD_2";
+                SignalAspect = SignalAspect.FR_TLD_2;
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_EFFACE";
+                SignalAspect = SignalAspect.FR_TLD_EFFACE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

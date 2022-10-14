@@ -1,35 +1,52 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class TVM430_SAVL_FinCAB : FrSignalScript
     {
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            TvmType = TvmType.FR_TVM430;
+            VeE = TvmSpeedType._000;
+            VcE = TvmSpeedType._RRR;
+            VaE = TvmSpeedType.Any;
+        }
+
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
             if (CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_S_BAL FR_TVM430 Ve80 Vc000";
+                SignalAspect = SignalAspect.FR_S_BAL;
+                VeE = TvmSpeedType._80;
+                VcE = TvmSpeedType._000;
             }
-            else if (AnnounceByA(nextNormalParts))
+            else if (AnnounceByA(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_A FR_TVM430 Ve160 Vc160E";
+                SignalAspect = SignalAspect.FR_A;
+                VeE = TvmSpeedType._160;
+                VcE = TvmSpeedType._160E;
             }
             else if (IsSignalFeatureEnabled("USER1")
-                && AnnounceByACLI(nextNormalParts))
+                && AnnounceByACLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                TextSignalAspect = "FR_ACLI FR_TVM430 Ve160 Vc160E";
+                SignalAspect = SignalAspect.FR_ACLI;
+                VeE = TvmSpeedType._160;
+                VcE = TvmSpeedType._160E;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_VL_INF FR_TVM430 Ve160 Vc160E";
+                SignalAspect = SignalAspect.FR_VL_INF;
+                VeE = TvmSpeedType._160;
+                VcE = TvmSpeedType._160E;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

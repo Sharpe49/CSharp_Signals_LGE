@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     // Tableau P mobile
@@ -12,57 +10,57 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            int nextTIVDId = NextSignalId("TIVD");
-            string nextTIVDTextAspect = nextTIVDId >= 0 ? IdTextSignalAspect(nextTIVDId, "TIVD") : string.Empty;
+            SignalInfo nextTIVDSignalInfo = DeserializeAspect(NextSignalId("TIVD"), "TIVD");
 
             // Signal répéteur aval non TIVD => Tableau P effacé
-            if (nextTIVDId < 0
-                || !nextTIVDTextAspect.StartsWith("FR_TIVD"))
+            if (nextTIVDSignalInfo.Aspect != SignalAspect.None)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TABP_EFFACE";
+                SignalAspect = SignalAspect.FR_TABP_EFFACE;
             }
             else if (IsSignalFeatureEnabled("USER1"))
             {
                 if (RouteSet)
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "FR_TABP_EFFACE";
+                    SignalAspect = SignalAspect.FR_TABP_EFFACE;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    TextSignalAspect = "FR_TABP_PRESENTE";
+                    SignalAspect = SignalAspect.FR_TABP_PRESENTE;
                 }
             }
             // Tableau P présenté
-            else if (nextNormalParts.Contains("FR_C_BAL")
-                || nextNormalParts.Contains("FR_S_BAL")
-                || nextNormalParts.Contains("FR_SCLI")
-                || nextTIVDTextAspect.Contains("FR_TIVD_PRESENTE"))
+            else if (nextNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL
+                || nextNormalSignalInfo.Aspect == SignalAspect.FR_S_BAL
+                || nextNormalSignalInfo.Aspect == SignalAspect.FR_SCLI
+                || nextTIVDSignalInfo.Aspect == SignalAspect.FR_TIVD_PRESENTE)
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_TABP_PRESENTE";
+                SignalAspect = SignalAspect.FR_TABP_PRESENTE;
             }
             // Tableau P effacé
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TABP_EFFACE";
+                SignalAspect = SignalAspect.FR_TABP_EFFACE;
             }
 
-            if (TextSignalAspect == "FR_TABP_PRESENTE")
+            if (SignalAspect == SignalAspect.FR_TABP_PRESENTE)
             {
-                TextSignalAspect += " KVB_VPMOB";
+                KvbVanState = KvbVanState.KVB_VPMOB;
                 SetSpeedLimitKpH(160f, 100f, false, false, false, true);
             }
             else
             {
+                KvbVanState = KvbVanState.None;
                 RemoveSpeedLimit();
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

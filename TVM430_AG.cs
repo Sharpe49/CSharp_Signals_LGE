@@ -2,45 +2,45 @@ namespace ORTS.Scripting.Script
 {
     public class TVM430_AG : FrSignalScript
     {
-        TVMSpeedType VeAg = TVMSpeedType._320V;
+        TvmSpeedType VeAg = TvmSpeedType._320V;
 
         public override void Initialize()
         {
             if (HasHead(8))
             {
-                VeAg = TVMSpeedType._000;
+                VeAg = TvmSpeedType._000;
             }
             else if (HasHead(7))
             {
-                VeAg = TVMSpeedType._60;
+                VeAg = TvmSpeedType._60;
             }
             else if (HasHead(6))
             {
-                VeAg = TVMSpeedType._80;
+                VeAg = TvmSpeedType._80;
             }
             else if (HasHead(5))
             {
-                VeAg = TVMSpeedType._130;
+                VeAg = TvmSpeedType._130;
             }
             else if (HasHead(4))
             {
-                VeAg = TVMSpeedType._160;
+                VeAg = TvmSpeedType._160;
             }
             else if (HasHead(3))
             {
-                VeAg = TVMSpeedType._170;
+                VeAg = TvmSpeedType._170;
             }
             else if (HasHead(2))
             {
-                VeAg = TVMSpeedType._200;
+                VeAg = TvmSpeedType._200;
             }
             else if (HasHead(1))
             {
-                VeAg = TVMSpeedType._220;
+                VeAg = TvmSpeedType._220;
             }
             else
             {
-                VeAg = TVMSpeedType._230;
+                VeAg = TvmSpeedType._230;
             }
         }
 

@@ -1,28 +1,26 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class Carre_violet : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_CV;
+                SignalAspect = SignalAspect.FR_CV;
             }
-            else if (nextNormalParts.Contains("ESUBO")
-                && (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV")))
+            else if (nextNormalSignalInfo.ESUBO
+                && (nextNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL || nextNormalSignalInfo.Aspect == SignalAspect.FR_CV))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_CV;
+                SignalAspect = SignalAspect.FR_CV;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                SignalAspect = FrSignalAspect.FR_M;
+                SignalAspect = SignalAspect.FR_M;
             }
 
             SerializeAspect();

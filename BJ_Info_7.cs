@@ -7,14 +7,15 @@ namespace ORTS.Scripting.Script
             if (Enabled && CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "BJ_VOIE_OCCUPEE";
+                DirectionInfoAspect = DirectionInfoAspect.BJ_VOIE_OCCUPEE;
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "BJ_VOIE_LIBRE";
+                DirectionInfoAspect = DirectionInfoAspect.BJ_VOIE_LIBRE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

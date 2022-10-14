@@ -9,14 +9,15 @@ namespace ORTS.Scripting.Script
                 || RouteSet)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "";
+                SignalAspect = SignalAspect.None;
             }
             else
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                TextSignalAspect = "FR_RRCLI";
+                SignalAspect = SignalAspect.FR_RRCLI;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ORTS.Scripting.Script
@@ -17,63 +16,56 @@ namespace ORTS.Scripting.Script
 
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            int nextTIVRId = NextSignalId("TIVR");
-            string nextTIVRTextAspect = nextTIVRId >= 0 ? IdTextSignalAspect(nextTIVRId, "TIVR") : string.Empty;
+            SignalInfo nextTivrSignalInfo = DeserializeAspect(NextSignalId("TIVR"), "TIVR");
 
             // Signal aval non trouvé => TIVD présenté
-            if (nextNormalParts.Count < 1)
+            if (nextNormalSignalInfo.Aspect == SignalAspect.None)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_TIVD_PRESENTE";
+                SignalAspect = SignalAspect.FR_TIVD_PRESENTE;
             }
             // Signal aval non équipé de TIVR => TIVD effacé
-            else if (nextTIVRId < 0
-                || !nextTIVRTextAspect.StartsWith("FR_TIVR"))
+            else if (nextTivrSignalInfo.Aspect == SignalAspect.None)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TIVD_EFFACE";
+                SignalAspect = SignalAspect.FR_TIVD_EFFACE;
             }
             // TIVR éteint ou présenté
-            else if (nextNormalParts.Contains("FR_C_BAL")
-                || nextTIVRTextAspect.Contains("FR_TIVR_ETEINT")
-                || nextTIVRTextAspect.Contains("FR_TIVR_PRESENTE"))
+            else if (nextNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL
+                || nextTivrSignalInfo.Aspect == SignalAspect.FR_TIVR_ETEINT
+                || nextTivrSignalInfo.Aspect == SignalAspect.FR_TIVR_PRESENTE)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_TIVD_PRESENTE";
+                SignalAspect = SignalAspect.FR_TIVD_PRESENTE;
             }
             // TIVR effacé
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TIVD_EFFACE";
+                SignalAspect = SignalAspect.FR_TIVD_EFFACE;
             }
 
-            if (TextSignalAspect.Contains("FR_TIVD_PRESENTE"))
-            {
-                TextSignalAspect += " CROCODILE_SF";
-            }
-            else
-            {
-                TextSignalAspect += " CROCODILE_SO";
-            }
+            FrenchCrocodile();
 
             if (IsSignalFeatureEnabled("USER3"))
             {
-                TextSignalAspect += " KVB_TPAA";
+                KvbVraState = KvbVraState.KVB_TPAA;
             }
 
-            if (TextSignalAspect.Contains("FR_TIVD_PRESENTE"))
+            if (SignalAspect == SignalAspect.FR_TIVD_PRESENTE)
             {
-                TextSignalAspect += $" KVB_VAN_V{SpeedKpH}";
+                FrenchKvbTivd(SpeedKpH);
                 SetSpeedLimitKpH(SpeedKpH, Math.Min(SpeedKpH, 100f), false, false, false, true);
             }
             else
             {
+                KvbVanState = KvbVanState.None;
                 RemoveSpeedLimit();
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

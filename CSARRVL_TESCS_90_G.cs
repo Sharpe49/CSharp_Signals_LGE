@@ -1,59 +1,57 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CSARRVL_TESCS_90_G : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisTabGParts = TextSignalAspectToList(SignalId, "TABG");
-            List<string> nextTabGParts = TextSignalAspectToList(NextSignalId("TABG"), "TABG");
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo thisTabGSignalInfo = DeserializeAspect(SignalId, "TABG");
+            SignalInfo nextTabGSignalInfo = DeserializeAspect(NextSignalId("TABG"), "TABG");
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = Script.SignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
                 if (RouteSet)
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    SignalAspect = FrSignalAspect.FR_C_BAL;
+                    SignalAspect = Script.SignalAspect.FR_C_BAL;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    SignalAspect = FrSignalAspect.FR_S_BAL;
+                    SignalAspect = Script.SignalAspect.FR_S_BAL;
                 }
             }
-            else if (nextTabGParts.Contains("FR_TABLEAU_G_D")
-                || thisTabGParts.Contains("FR_TABLEAU_G_D"))
+            else if (nextTabGSignalInfo.Aspect == SignalAspect.FR_TABLEAU_G_D
+                || thisTabGSignalInfo.Aspect == SignalAspect.FR_TABLEAU_G_D)
             {
                 MstsSignalAspect = Aspect.Restricting;
-                SignalAspect = FrSignalAspect.FR_RR_A;
+                SignalAspect = Script.SignalAspect.FR_RR_A;
             }
             else if (RouteSet)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                SignalAspect = FrSignalAspect.FR_VL_INF;
+                SignalAspect = Script.SignalAspect.FR_VL_INF;
             }
             else
             {
-                if (AnnounceByA(nextNormalParts))
+                if (AnnounceByA(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    SignalAspect = FrSignalAspect.FR_A;
+                    SignalAspect = Script.SignalAspect.FR_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = Script.SignalAspect.FR_VL_INF;
                 }
             }
 
-            FrenchTCS(true);
+            FrenchTcs(true);
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

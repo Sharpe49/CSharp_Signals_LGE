@@ -1,57 +1,56 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class IdCS_1_6 : FrSignalScript
     {
         public override void Update()
         {
-            string direction = FindSignalAspect("DIR", "INFO", 5);
-            string groupe = FindSignalAspect("GROUPE", "SHUNTING", 5);
+            SignalInfo directionSignalInfo = FindSignalAspect("DIR", "INFO", 5);
+            SignalInfo groupeSignalInfo = FindSignalAspect("GROUPE", "SHUNTING", 5);
 
-            List<string> thisNormalSignalAspect = TextSignalAspectToList(SignalId, "NORMAL");
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
 
-            if (thisNormalSignalAspect.Contains("FR_C_BAL") || !groupe.Contains("GROUPE0"))
+            if (thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL || groupeSignalInfo.DirectionInfoAspect != DirectionInfoAspect.GROUPE0)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_EFFACE";
+                SignalAspect = SignalAspect.FR_TLD_EFFACE;
             }
-            else if (direction.Contains("DIR1"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR1)
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                TextSignalAspect = "FR_TLD_1";
+                SignalAspect = SignalAspect.FR_TLD_1;
             }
-            else if (direction.Contains("DIR2"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR2)
             {
                 MstsSignalAspect = Aspect.Restricting;
-                TextSignalAspect = "FR_TLD_2";
+                SignalAspect = SignalAspect.FR_TLD_2;
             }
-            else if (direction.Contains("DIR3"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR3)
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "FR_TLD_3";
+                SignalAspect = SignalAspect.FR_TLD_3;
             }
-            else if (direction.Contains("DIR4"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR4)
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                TextSignalAspect = "FR_TLD_4";
+                SignalAspect = SignalAspect.FR_TLD_4;
             }
-            else if (direction.Contains("DIR5"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR5)
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                TextSignalAspect = "FR_TLD_5";
+                SignalAspect = SignalAspect.FR_TLD_5;
             }
-            else if (direction.Contains("DIR6"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR6)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_TLD_6";
+                SignalAspect = SignalAspect.FR_TLD_6;
             }
             else
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_TLD_EFFACE";
+                SignalAspect = SignalAspect.FR_TLD_EFFACE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

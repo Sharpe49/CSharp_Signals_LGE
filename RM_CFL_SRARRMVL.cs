@@ -1,40 +1,45 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
-    public class RM_CFL_SRARRMVL : FrSignalScript
+    public class RM_CFL_SRARRMVL : LuSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisRepeaterParts = TextSignalAspectToList(SignalId, "REPEATER");
-            string direction = FindSignalAspect("DIR", "INFO", 5);
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo thisRepeaterSignalInfo = DeserializeAspect(SignalId, "REPEATER");
+            SignalInfo directionSignalInfo = FindSignalAspect("DIR", "INFO", 5);
 
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "LU_SFP1 LU_SFVb1";
+                SignalAspect = SignalAspect.LU_SFP1;
+                SecondSignalAspect = SignalAspect.LU_SFVb1;
             }
-            else if (direction.Contains("DIR5"))
+            else if (directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR5)
             {
                 MstsSignalAspect = Aspect.Restricting;
-                TextSignalAspect = "LU_SFP1 LU_SFVb2";
+                SignalAspect = SignalAspect.LU_SFP1;
+                SecondSignalAspect = SignalAspect.LU_SFVb2;
             }
             else if (!RouteSet
-                || nextNormalParts.Contains("FR_TABLEAU_G_D")
-                || thisRepeaterParts.Contains("LU_SFVo_PRESENTE")
+                || nextNormalSignalInfo.Aspect == SignalAspect.FR_TABLEAU_G_D
+                || thisRepeaterSignalInfo.Aspect == SignalAspect.LU_SFVo_PRESENTE
                 || IsSignalFeatureEnabled("USER2"))
             {
                 MstsSignalAspect = Aspect.Approach_2;
-                TextSignalAspect = "LU_SFP3 LU_SFVb2";
+                SignalAspect = SignalAspect.LU_SFP3;
+                SecondSignalAspect = SignalAspect.LU_SFVb2;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "LU_SFP2 LU_SFVb2";
+                SignalAspect = SignalAspect.LU_SFP2;
+                SecondSignalAspect = SignalAspect.LU_SFVb2;
             }
 
+            LuxembourgishTCS();
+
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Orts.Simulation.Signalling.CsSignalScript;
 
 namespace ORTS.Scripting.Script
 {
-    public enum TVMSpeedType
+
+    public enum TvmType
     {
+        None,
+        FR_TVM300,
+        FR_TVM430,
+    }
+
+    public enum TvmSpeedType
+    {
+        None,
         _RRR,
         _000,
         _30E,
@@ -36,7 +46,77 @@ namespace ORTS.Scripting.Script
         _300,
         _320V,
         _320,
-        Any
+        Any,
+    }
+
+    public static class TVM300Common
+    {
+        public static T Min<T>(T a, T b) where T : IComparable
+        {
+            return a.CompareTo(b) <= 0 ? a : b;
+        }
+
+        public static Dictionary<TvmSpeedType, TvmSpeedType> TAB1 = new Dictionary<TvmSpeedType, TvmSpeedType>
+        {
+            { TvmSpeedType._RRR,   TvmSpeedType._000 },
+            { TvmSpeedType._000,  TvmSpeedType._160 },
+            { TvmSpeedType._80E,  TvmSpeedType._80 },
+            { TvmSpeedType._80,   TvmSpeedType._160 },
+            { TvmSpeedType._160E, TvmSpeedType._160 },
+            { TvmSpeedType._160,  TvmSpeedType._220 },
+            { TvmSpeedType._220E, TvmSpeedType._220 },
+            { TvmSpeedType._220,  TvmSpeedType._270 },
+            { TvmSpeedType._270V, TvmSpeedType._270 },
+            { TvmSpeedType._270,  TvmSpeedType._300 },
+            { TvmSpeedType._300V, TvmSpeedType._300 },
+            { TvmSpeedType._300,  TvmSpeedType._000 }
+        };
+
+        public static Dictionary<TvmSpeedType, TvmSpeedType> TAB2 = new Dictionary<TvmSpeedType, TvmSpeedType>
+        {
+            { TvmSpeedType._RRR,   TvmSpeedType._000 },
+            { TvmSpeedType._000,  TvmSpeedType._000 },
+            { TvmSpeedType._80E,  TvmSpeedType._80 },
+            { TvmSpeedType._80,   TvmSpeedType._80 },
+            { TvmSpeedType._160E, TvmSpeedType._160 },
+            { TvmSpeedType._160,  TvmSpeedType._160 },
+            { TvmSpeedType._220E, TvmSpeedType._220 },
+            { TvmSpeedType._220,  TvmSpeedType._220 },
+            { TvmSpeedType._270V, TvmSpeedType._270 },
+            { TvmSpeedType._270,  TvmSpeedType._270 },
+            { TvmSpeedType._300V, TvmSpeedType._300 },
+            { TvmSpeedType._300,  TvmSpeedType._000 }
+        };
+
+
+        public static Dictionary<TvmSpeedType, Aspect> MstsTranslation = new Dictionary<TvmSpeedType, Aspect>
+        {
+            { TvmSpeedType.None, Aspect.StopAndProceed },
+            { TvmSpeedType.Any, Aspect.StopAndProceed },
+            { TvmSpeedType._300V, Aspect.Clear_2  },
+            { TvmSpeedType._270, Aspect.Clear_1 },
+            { TvmSpeedType._270V, Aspect.Approach_3 },
+            { TvmSpeedType._220, Aspect.Approach_2 },
+            { TvmSpeedType._220E, Aspect.Approach_1 },
+            { TvmSpeedType._160, Aspect.Restricting },
+            { TvmSpeedType._160E, Aspect.StopAndProceed },
+            { TvmSpeedType._80, Aspect.StopAndProceed },
+            { TvmSpeedType._80E, Aspect.StopAndProceed },
+            { TvmSpeedType._000, Aspect.StopAndProceed },
+            { TvmSpeedType._RRR, Aspect.StopAndProceed }
+        };
+
+        public static Aspect TVMSpeedTypeToAspect(TvmSpeedType Vc, bool permissive)
+        {
+            if (!permissive)
+            {
+                return Aspect.Stop;
+            }
+            else
+            {
+                return MstsTranslation[Vc];
+            }
+        }
     }
 
     public static class TVM430Common
@@ -46,180 +126,182 @@ namespace ORTS.Scripting.Script
             return a.CompareTo(b) <= 0 ? a : b;
         }
 
-        public static Dictionary<TVMSpeedType, TVMSpeedType> SNCFV300TAB1 = new Dictionary<TVMSpeedType, TVMSpeedType>
+        public static Dictionary<TvmSpeedType, TvmSpeedType> SNCFV300TAB1 = new Dictionary<TvmSpeedType, TvmSpeedType>
         {
-            { TVMSpeedType._RRR,   TVMSpeedType._000 },
-            { TVMSpeedType._000,  TVMSpeedType._170 },
-            { TVMSpeedType._60E,  TVMSpeedType._60 },
-            { TVMSpeedType._60,   TVMSpeedType._170 },
-            { TVMSpeedType._80E,  TVMSpeedType._80 },
-            { TVMSpeedType._80,   TVMSpeedType._170 },
-            { TVMSpeedType._130E, TVMSpeedType._130 },
-            { TVMSpeedType._130,  TVMSpeedType._200 },
-            { TVMSpeedType._160E, TVMSpeedType._160 },
-            { TVMSpeedType._160,  TVMSpeedType._230 },
-            { TVMSpeedType._170E, TVMSpeedType._170 },
-            { TVMSpeedType._170,  TVMSpeedType._230 },
-            { TVMSpeedType._200V, TVMSpeedType._200 },
-            { TVMSpeedType._200,  TVMSpeedType._230 },
-            { TVMSpeedType._220E, TVMSpeedType._220 },
-            { TVMSpeedType._220V, TVMSpeedType._220 },
-            { TVMSpeedType._220,  TVMSpeedType._270 },
-            { TVMSpeedType._230E, TVMSpeedType._230 },
-            { TVMSpeedType._230V, TVMSpeedType._230 },
-            { TVMSpeedType._230,  TVMSpeedType._270 },
-            { TVMSpeedType._270V, TVMSpeedType._270 },
-            { TVMSpeedType._270,  TVMSpeedType._300 },
-            { TVMSpeedType._300V, TVMSpeedType._300 },
-            { TVMSpeedType._300,  TVMSpeedType._000 }
+            { TvmSpeedType._RRR,   TvmSpeedType._000 },
+            { TvmSpeedType._000,  TvmSpeedType._170 },
+            { TvmSpeedType._60E,  TvmSpeedType._60 },
+            { TvmSpeedType._60,   TvmSpeedType._170 },
+            { TvmSpeedType._80E,  TvmSpeedType._80 },
+            { TvmSpeedType._80,   TvmSpeedType._170 },
+            { TvmSpeedType._130E, TvmSpeedType._130 },
+            { TvmSpeedType._130,  TvmSpeedType._200 },
+            { TvmSpeedType._160E, TvmSpeedType._160 },
+            { TvmSpeedType._160,  TvmSpeedType._230 },
+            { TvmSpeedType._170E, TvmSpeedType._170 },
+            { TvmSpeedType._170,  TvmSpeedType._230 },
+            { TvmSpeedType._200V, TvmSpeedType._200 },
+            { TvmSpeedType._200,  TvmSpeedType._230 },
+            { TvmSpeedType._220E, TvmSpeedType._220 },
+            { TvmSpeedType._220V, TvmSpeedType._220 },
+            { TvmSpeedType._220,  TvmSpeedType._270 },
+            { TvmSpeedType._230E, TvmSpeedType._230 },
+            { TvmSpeedType._230V, TvmSpeedType._230 },
+            { TvmSpeedType._230,  TvmSpeedType._270 },
+            { TvmSpeedType._270V, TvmSpeedType._270 },
+            { TvmSpeedType._270,  TvmSpeedType._300 },
+            { TvmSpeedType._300V, TvmSpeedType._300 },
+            { TvmSpeedType._300,  TvmSpeedType._000 }
         };
 
-        public static Dictionary<TVMSpeedType, TVMSpeedType> SNCFV300TAB2 = new Dictionary<TVMSpeedType, TVMSpeedType>
+        public static Dictionary<TvmSpeedType, TvmSpeedType> SNCFV300TAB2 = new Dictionary<TvmSpeedType, TvmSpeedType>
         {
-            { TVMSpeedType._RRR,   TVMSpeedType._000 },
-            { TVMSpeedType._000,  TVMSpeedType._000 },
-            { TVMSpeedType._60E,  TVMSpeedType._60 },
-            { TVMSpeedType._60,   TVMSpeedType._60 },
-            { TVMSpeedType._80E,  TVMSpeedType._80 },
-            { TVMSpeedType._80,   TVMSpeedType._80 },
-            { TVMSpeedType._130E, TVMSpeedType._130 },
-            { TVMSpeedType._130,  TVMSpeedType._130 },
-            { TVMSpeedType._160E, TVMSpeedType._160 },
-            { TVMSpeedType._160,  TVMSpeedType._160 },
-            { TVMSpeedType._170E, TVMSpeedType._170 },
-            { TVMSpeedType._170,  TVMSpeedType._170 },
-            { TVMSpeedType._200V, TVMSpeedType._200 },
-            { TVMSpeedType._200,  TVMSpeedType._200 },
-            { TVMSpeedType._220E, TVMSpeedType._220 },
-            { TVMSpeedType._220V, TVMSpeedType._220 },
-            { TVMSpeedType._220,  TVMSpeedType._220 },
-            { TVMSpeedType._230E, TVMSpeedType._230 },
-            { TVMSpeedType._230V, TVMSpeedType._230 },
-            { TVMSpeedType._230,  TVMSpeedType._230 },
-            { TVMSpeedType._270V, TVMSpeedType._270 },
-            { TVMSpeedType._270,  TVMSpeedType._270 },
-            { TVMSpeedType._300V, TVMSpeedType._300 },
-            { TVMSpeedType._300,  TVMSpeedType._000 }
+            { TvmSpeedType._RRR,   TvmSpeedType._000 },
+            { TvmSpeedType._000,  TvmSpeedType._000 },
+            { TvmSpeedType._60E,  TvmSpeedType._60 },
+            { TvmSpeedType._60,   TvmSpeedType._60 },
+            { TvmSpeedType._80E,  TvmSpeedType._80 },
+            { TvmSpeedType._80,   TvmSpeedType._80 },
+            { TvmSpeedType._130E, TvmSpeedType._130 },
+            { TvmSpeedType._130,  TvmSpeedType._130 },
+            { TvmSpeedType._160E, TvmSpeedType._160 },
+            { TvmSpeedType._160,  TvmSpeedType._160 },
+            { TvmSpeedType._170E, TvmSpeedType._170 },
+            { TvmSpeedType._170,  TvmSpeedType._170 },
+            { TvmSpeedType._200V, TvmSpeedType._200 },
+            { TvmSpeedType._200,  TvmSpeedType._200 },
+            { TvmSpeedType._220E, TvmSpeedType._220 },
+            { TvmSpeedType._220V, TvmSpeedType._220 },
+            { TvmSpeedType._220,  TvmSpeedType._220 },
+            { TvmSpeedType._230E, TvmSpeedType._230 },
+            { TvmSpeedType._230V, TvmSpeedType._230 },
+            { TvmSpeedType._230,  TvmSpeedType._230 },
+            { TvmSpeedType._270V, TvmSpeedType._270 },
+            { TvmSpeedType._270,  TvmSpeedType._270 },
+            { TvmSpeedType._300V, TvmSpeedType._300 },
+            { TvmSpeedType._300,  TvmSpeedType._000 }
         };
 
-        public static Dictionary<TVMSpeedType, Aspect> SNCFV300MstsTranslation = new Dictionary<TVMSpeedType, Aspect>
+        public static Dictionary<TvmSpeedType, Aspect> SNCFV300MstsTranslation = new Dictionary<TvmSpeedType, Aspect>
         {
-            { TVMSpeedType.Any, Aspect.StopAndProceed  },
-            { TVMSpeedType._300V, Aspect.Clear_2 },
-            { TVMSpeedType._270, Aspect.Clear_1 },
-            { TVMSpeedType._270V, Aspect.Clear_1  },
-            { TVMSpeedType._230, Aspect.Approach_3 },
-            { TVMSpeedType._230V, Aspect.Approach_3 },
-            { TVMSpeedType._230E, Aspect.Approach_3 },
-            { TVMSpeedType._220, Aspect.Approach_3 },
-            { TVMSpeedType._220V, Aspect.Approach_3 },
-            { TVMSpeedType._220E, Aspect.Approach_3 },
-            { TVMSpeedType._200, Aspect.Approach_2 },
-            { TVMSpeedType._200V, Aspect.Approach_2 },
-            { TVMSpeedType._170, Aspect.Approach_2 },
-            { TVMSpeedType._170E, Aspect.Approach_2 },
-            { TVMSpeedType._160, Aspect.Approach_1 },
-            { TVMSpeedType._160E, Aspect.Approach_1 },
-            { TVMSpeedType._130, Aspect.Restricting },
-            { TVMSpeedType._130E, Aspect.Restricting },
-            { TVMSpeedType._80, Aspect.Restricting },
-            { TVMSpeedType._80E, Aspect.Restricting },
-            { TVMSpeedType._60, Aspect.Restricting },
-            { TVMSpeedType._60E, Aspect.Restricting },
-            { TVMSpeedType._000, Aspect.Stop },
-            { TVMSpeedType._RRR, Aspect.StopAndProceed }
+            { TvmSpeedType.None, Aspect.StopAndProceed },
+            { TvmSpeedType.Any, Aspect.StopAndProceed  },
+            { TvmSpeedType._300V, Aspect.Clear_2 },
+            { TvmSpeedType._270, Aspect.Clear_1 },
+            { TvmSpeedType._270V, Aspect.Clear_1  },
+            { TvmSpeedType._230, Aspect.Approach_3 },
+            { TvmSpeedType._230V, Aspect.Approach_3 },
+            { TvmSpeedType._230E, Aspect.Approach_3 },
+            { TvmSpeedType._220, Aspect.Approach_3 },
+            { TvmSpeedType._220V, Aspect.Approach_3 },
+            { TvmSpeedType._220E, Aspect.Approach_3 },
+            { TvmSpeedType._200, Aspect.Approach_2 },
+            { TvmSpeedType._200V, Aspect.Approach_2 },
+            { TvmSpeedType._170, Aspect.Approach_2 },
+            { TvmSpeedType._170E, Aspect.Approach_2 },
+            { TvmSpeedType._160, Aspect.Approach_1 },
+            { TvmSpeedType._160E, Aspect.Approach_1 },
+            { TvmSpeedType._130, Aspect.Restricting },
+            { TvmSpeedType._130E, Aspect.Restricting },
+            { TvmSpeedType._80, Aspect.Restricting },
+            { TvmSpeedType._80E, Aspect.Restricting },
+            { TvmSpeedType._60, Aspect.Restricting },
+            { TvmSpeedType._60E, Aspect.Restricting },
+            { TvmSpeedType._000, Aspect.Stop },
+            { TvmSpeedType._RRR, Aspect.StopAndProceed }
         };
 
-        public static Dictionary<TVMSpeedType, TVMSpeedType> SNCFV320TAB1 = new Dictionary<TVMSpeedType, TVMSpeedType>
+        public static Dictionary<TvmSpeedType, TvmSpeedType> SNCFV320TAB1 = new Dictionary<TvmSpeedType, TvmSpeedType>
         {
-            { TVMSpeedType._RRR,   TVMSpeedType._000 },
-            { TVMSpeedType._000,  TVMSpeedType._170 },
-            { TVMSpeedType._60E,  TVMSpeedType._60 },
-            { TVMSpeedType._60,   TVMSpeedType._170 },
-            { TVMSpeedType._80E,  TVMSpeedType._80 },
-            { TVMSpeedType._80,   TVMSpeedType._170 },
-            { TVMSpeedType._130E, TVMSpeedType._130 },
-            { TVMSpeedType._130,  TVMSpeedType._200 },
-            { TVMSpeedType._160E, TVMSpeedType._160 },
-            { TVMSpeedType._160,  TVMSpeedType._230 },
-            { TVMSpeedType._170E, TVMSpeedType._170 },
-            { TVMSpeedType._170,  TVMSpeedType._230 },
-            { TVMSpeedType._200V, TVMSpeedType._200 },
-            { TVMSpeedType._200,  TVMSpeedType._230 },
-            { TVMSpeedType._220E, TVMSpeedType._220 },
-            { TVMSpeedType._220V, TVMSpeedType._220 },
-            { TVMSpeedType._220,  TVMSpeedType._270 },
-            { TVMSpeedType._230E, TVMSpeedType._230 },
-            { TVMSpeedType._230V, TVMSpeedType._230 },
-            { TVMSpeedType._230,  TVMSpeedType._270 },
-            { TVMSpeedType._270V, TVMSpeedType._270 },
-            { TVMSpeedType._270,  TVMSpeedType._300 },
-            { TVMSpeedType._300V, TVMSpeedType._300 },
-            { TVMSpeedType._300,  TVMSpeedType._320 },
-            { TVMSpeedType._320V, TVMSpeedType._320 },
-            { TVMSpeedType._320,  TVMSpeedType._000 }
+            { TvmSpeedType._RRR,   TvmSpeedType._000 },
+            { TvmSpeedType._000,  TvmSpeedType._170 },
+            { TvmSpeedType._60E,  TvmSpeedType._60 },
+            { TvmSpeedType._60,   TvmSpeedType._170 },
+            { TvmSpeedType._80E,  TvmSpeedType._80 },
+            { TvmSpeedType._80,   TvmSpeedType._170 },
+            { TvmSpeedType._130E, TvmSpeedType._130 },
+            { TvmSpeedType._130,  TvmSpeedType._200 },
+            { TvmSpeedType._160E, TvmSpeedType._160 },
+            { TvmSpeedType._160,  TvmSpeedType._230 },
+            { TvmSpeedType._170E, TvmSpeedType._170 },
+            { TvmSpeedType._170,  TvmSpeedType._230 },
+            { TvmSpeedType._200V, TvmSpeedType._200 },
+            { TvmSpeedType._200,  TvmSpeedType._230 },
+            { TvmSpeedType._220E, TvmSpeedType._220 },
+            { TvmSpeedType._220V, TvmSpeedType._220 },
+            { TvmSpeedType._220,  TvmSpeedType._270 },
+            { TvmSpeedType._230E, TvmSpeedType._230 },
+            { TvmSpeedType._230V, TvmSpeedType._230 },
+            { TvmSpeedType._230,  TvmSpeedType._270 },
+            { TvmSpeedType._270V, TvmSpeedType._270 },
+            { TvmSpeedType._270,  TvmSpeedType._300 },
+            { TvmSpeedType._300V, TvmSpeedType._300 },
+            { TvmSpeedType._300,  TvmSpeedType._320 },
+            { TvmSpeedType._320V, TvmSpeedType._320 },
+            { TvmSpeedType._320,  TvmSpeedType._000 }
         };
 
-        public static Dictionary<TVMSpeedType, TVMSpeedType> SNCFV320TAB2 = new Dictionary<TVMSpeedType, TVMSpeedType>
+        public static Dictionary<TvmSpeedType, TvmSpeedType> SNCFV320TAB2 = new Dictionary<TvmSpeedType, TvmSpeedType>
         {
-            { TVMSpeedType._RRR,   TVMSpeedType._000 },
-            { TVMSpeedType._000,  TVMSpeedType._000 },
-            { TVMSpeedType._60E,  TVMSpeedType._60 },
-            { TVMSpeedType._60,   TVMSpeedType._60 },
-            { TVMSpeedType._80E,  TVMSpeedType._80 },
-            { TVMSpeedType._80,   TVMSpeedType._80 },
-            { TVMSpeedType._130E, TVMSpeedType._130 },
-            { TVMSpeedType._130,  TVMSpeedType._130 },
-            { TVMSpeedType._160E, TVMSpeedType._160 },
-            { TVMSpeedType._160,  TVMSpeedType._160 },
-            { TVMSpeedType._170E, TVMSpeedType._170 },
-            { TVMSpeedType._170,  TVMSpeedType._170 },
-            { TVMSpeedType._200V, TVMSpeedType._200 },
-            { TVMSpeedType._200,  TVMSpeedType._200 },
-            { TVMSpeedType._220E, TVMSpeedType._220 },
-            { TVMSpeedType._220V, TVMSpeedType._220 },
-            { TVMSpeedType._220,  TVMSpeedType._220 },
-            { TVMSpeedType._230E, TVMSpeedType._230 },
-            { TVMSpeedType._230V, TVMSpeedType._230 },
-            { TVMSpeedType._230,  TVMSpeedType._230 },
-            { TVMSpeedType._270V, TVMSpeedType._270 },
-            { TVMSpeedType._270,  TVMSpeedType._270 },
-            { TVMSpeedType._300V, TVMSpeedType._300 },
-            { TVMSpeedType._300,  TVMSpeedType._300 },
-            { TVMSpeedType._320V, TVMSpeedType._320 },
-            { TVMSpeedType._320,  TVMSpeedType._000 }
+            { TvmSpeedType._RRR,   TvmSpeedType._000 },
+            { TvmSpeedType._000,  TvmSpeedType._000 },
+            { TvmSpeedType._60E,  TvmSpeedType._60 },
+            { TvmSpeedType._60,   TvmSpeedType._60 },
+            { TvmSpeedType._80E,  TvmSpeedType._80 },
+            { TvmSpeedType._80,   TvmSpeedType._80 },
+            { TvmSpeedType._130E, TvmSpeedType._130 },
+            { TvmSpeedType._130,  TvmSpeedType._130 },
+            { TvmSpeedType._160E, TvmSpeedType._160 },
+            { TvmSpeedType._160,  TvmSpeedType._160 },
+            { TvmSpeedType._170E, TvmSpeedType._170 },
+            { TvmSpeedType._170,  TvmSpeedType._170 },
+            { TvmSpeedType._200V, TvmSpeedType._200 },
+            { TvmSpeedType._200,  TvmSpeedType._200 },
+            { TvmSpeedType._220E, TvmSpeedType._220 },
+            { TvmSpeedType._220V, TvmSpeedType._220 },
+            { TvmSpeedType._220,  TvmSpeedType._220 },
+            { TvmSpeedType._230E, TvmSpeedType._230 },
+            { TvmSpeedType._230V, TvmSpeedType._230 },
+            { TvmSpeedType._230,  TvmSpeedType._230 },
+            { TvmSpeedType._270V, TvmSpeedType._270 },
+            { TvmSpeedType._270,  TvmSpeedType._270 },
+            { TvmSpeedType._300V, TvmSpeedType._300 },
+            { TvmSpeedType._300,  TvmSpeedType._300 },
+            { TvmSpeedType._320V, TvmSpeedType._320 },
+            { TvmSpeedType._320,  TvmSpeedType._000 }
         };
 
-        public static Dictionary<TVMSpeedType, Aspect> SNCFV320MstsTranslation = new Dictionary<TVMSpeedType, Aspect>
+        public static Dictionary<TvmSpeedType, Aspect> SNCFV320MstsTranslation = new Dictionary<TvmSpeedType, Aspect>
         {
-            { TVMSpeedType.Any, Aspect.StopAndProceed },
-            { TVMSpeedType._320V, Aspect.Clear_2 },
-            { TVMSpeedType._300, Aspect.Clear_1  },
-            { TVMSpeedType._300V, Aspect.Clear_1  },
-            { TVMSpeedType._270, Aspect.Approach_3 },
-            { TVMSpeedType._270V, Aspect.Approach_3 },
-            { TVMSpeedType._230, Aspect.Approach_2 },
-            { TVMSpeedType._230V, Aspect.Approach_2 },
-            { TVMSpeedType._230E, Aspect.Approach_2 },
-            { TVMSpeedType._220, Aspect.Approach_2 },
-            { TVMSpeedType._220E, Aspect.Approach_2 },
-            { TVMSpeedType._200, Aspect.Approach_1 },
-            { TVMSpeedType._200V, Aspect.Approach_1 },
-            { TVMSpeedType._170, Aspect.Approach_1 },
-            { TVMSpeedType._170E, Aspect.Approach_1 },
-            { TVMSpeedType._160, Aspect.Approach_1 },
-            { TVMSpeedType._160E, Aspect.Approach_1 },
-            { TVMSpeedType._130, Aspect.Approach_1 },
-            { TVMSpeedType._130E, Aspect.Approach_1 },
-            { TVMSpeedType._80, Aspect.Restricting },
-            { TVMSpeedType._80E, Aspect.Restricting },
-            { TVMSpeedType._60, Aspect.Restricting },
-            { TVMSpeedType._60E, Aspect.Restricting },
-            { TVMSpeedType._000, Aspect.StopAndProceed },
-            { TVMSpeedType._RRR, Aspect.StopAndProceed }
+            { TvmSpeedType.None, Aspect.StopAndProceed },
+            { TvmSpeedType.Any, Aspect.StopAndProceed },
+            { TvmSpeedType._320V, Aspect.Clear_2 },
+            { TvmSpeedType._300, Aspect.Clear_1  },
+            { TvmSpeedType._300V, Aspect.Clear_1  },
+            { TvmSpeedType._270, Aspect.Approach_3 },
+            { TvmSpeedType._270V, Aspect.Approach_3 },
+            { TvmSpeedType._230, Aspect.Approach_2 },
+            { TvmSpeedType._230V, Aspect.Approach_2 },
+            { TvmSpeedType._230E, Aspect.Approach_2 },
+            { TvmSpeedType._220, Aspect.Approach_2 },
+            { TvmSpeedType._220E, Aspect.Approach_2 },
+            { TvmSpeedType._200, Aspect.Approach_1 },
+            { TvmSpeedType._200V, Aspect.Approach_1 },
+            { TvmSpeedType._170, Aspect.Approach_1 },
+            { TvmSpeedType._170E, Aspect.Approach_1 },
+            { TvmSpeedType._160, Aspect.Approach_1 },
+            { TvmSpeedType._160E, Aspect.Approach_1 },
+            { TvmSpeedType._130, Aspect.Approach_1 },
+            { TvmSpeedType._130E, Aspect.Approach_1 },
+            { TvmSpeedType._80, Aspect.Restricting },
+            { TvmSpeedType._80E, Aspect.Restricting },
+            { TvmSpeedType._60, Aspect.Restricting },
+            { TvmSpeedType._60E, Aspect.Restricting },
+            { TvmSpeedType._000, Aspect.StopAndProceed },
+            { TvmSpeedType._RRR, Aspect.StopAndProceed }
         };
 
-        public static Aspect TVMSpeedTypeToAspectV320(TVMSpeedType Vc, bool permissive)
+        public static Aspect TVMSpeedTypeToAspectV320(TvmSpeedType Vc, bool permissive)
         {
             if (!permissive)
             {

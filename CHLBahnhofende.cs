@@ -1,41 +1,44 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CHLBahnhofende : ChSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> nextIdentifierParts = TextSignalAspectToList(NextSignalId("REPEATER"), "REPEATER");
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo nextIdentifierSignalInfo = DeserializeAspect(NextSignalId("REPEATER"), "REPEATER");
 
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear
                 || !RouteSet)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "CH_IMAGE_H";
+                SignalAspect = SignalAspect.CH_IMAGE_H;
+                InfoAspect = ChInfoAspect.None;
             }
-            else if (nextIdentifierParts.Contains("CH_SIGNAL_AVANCE"))
+            else if (nextIdentifierSignalInfo.ChInfoAspect == ChInfoAspect.CH_SIGNAL_AVANCE)
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "CH_IMAGE_1";
+                SignalAspect = SignalAspect.CH_IMAGE_1;
+                InfoAspect = ChInfoAspect.None;
             }
             else
             {
-                if (nextNormalParts.Contains("CH_IMAGE_H")
-                    || nextNormalParts.Contains("CH_IMAGE_6"))
+                if (nextNormalSignalInfo.Aspect == SignalAspect.CH_IMAGE_H
+                    || nextNormalSignalInfo.Aspect == SignalAspect.CH_IMAGE_6)
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    TextSignalAspect = "CH_IMAGE_1 CH_PROCHAIN_SIGNAL_FERME";
+                    SignalAspect = SignalAspect.CH_IMAGE_1;
+                    InfoAspect = ChInfoAspect.CH_PROCHAIN_SIGNAL_FERME;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    TextSignalAspect = "CH_IMAGE_1";
+                    SignalAspect = SignalAspect.CH_IMAGE_1;
+                    InfoAspect = ChInfoAspect.None;
                 }
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

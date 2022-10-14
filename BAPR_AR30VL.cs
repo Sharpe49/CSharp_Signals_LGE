@@ -1,30 +1,28 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class BAPR_AR30VL : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            if (AnnounceByA(nextNormalParts, false, true))
+            if (AnnounceByA(nextNormalSignalInfo, false, true))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                SignalAspect = FrSignalAspect.FR_A;
+                SignalAspect = SignalAspect.FR_A;
             }
-            else if (AnnounceByR(nextNormalParts))
+            else if (AnnounceByR(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Approach_3;
-                SignalAspect = FrSignalAspect.FR_R;
+                SignalAspect = SignalAspect.FR_R;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                SignalAspect = FrSignalAspect.FR_VL_INF;
+                SignalAspect = SignalAspect.FR_VL_INF;
             }
 
-            FrenchTCS(false, true);
+            FrenchTcs(false, true);
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

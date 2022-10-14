@@ -1,90 +1,88 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CSMAAR60VL : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            string ipcsInformation = FindSignalAspect("FR_IPCS", "INFO", 3);
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo ipcsSignalInfo = FindSignalAspect("FR_IPCS", "INFO", 3);
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (CommandAspectS())
             {
-                if (ipcsInformation.Contains("FR_IPCS_ENTREE_CONTRE_SENS")
+                if (ipcsSignalInfo.IpcsInfoAspect == IpcsInfoAspect.FR_IPCS_ENTREE_CONTRE_SENS
                     && !IsSignalFeatureEnabled("USER3"))
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    SignalAspect = FrSignalAspect.FR_C_BAL;
+                    SignalAspect = SignalAspect.FR_C_BAL;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    SignalAspect = FrSignalAspect.FR_S_BAL;
+                    SignalAspect = SignalAspect.FR_S_BAL;
                 }
             }
-            else if (nextNormalParts.Contains("FR_TABLEAU_G_D"))
+            else if (nextNormalSignalInfo.Aspect == SignalAspect.FR_TABLEAU_G_D)
             {
                 MstsSignalAspect = Aspect.Restricting;
-                SignalAspect = FrSignalAspect.FR_M;
+                SignalAspect = SignalAspect.FR_M;
             }
-            else if (ipcsInformation.Contains("FR_IPCS_ENTREE_CONTRE_SENS"))
+            else if (ipcsSignalInfo.IpcsInfoAspect == IpcsInfoAspect.FR_IPCS_ENTREE_CONTRE_SENS)
             {
                 if (IsSignalFeatureEnabled("USER3")
-                    && AnnounceByA(nextNormalParts, true, false))
+                    && AnnounceByA(nextNormalSignalInfo, true, false))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    SignalAspect = FrSignalAspect.FR_A;
+                    SignalAspect = SignalAspect.FR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER3")
-                    && AnnounceByRCLI(nextNormalParts, IsSignalFeatureEnabled("USER2")))
+                    && AnnounceByRCLI(nextNormalSignalInfo, IsSignalFeatureEnabled("USER2")))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_RCLI;
+                    SignalAspect = SignalAspect.FR_RCLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
             else
             {
-                if (AnnounceByA(nextNormalParts, true, false))
+                if (AnnounceByA(nextNormalSignalInfo, true, false))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    SignalAspect = FrSignalAspect.FR_A;
+                    SignalAspect = SignalAspect.FR_A;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
-                    && AnnounceByRCLI_ACLI(nextNormalParts))
+                    && AnnounceByRCLI_ACLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_3;
-                    SignalAspect = FrSignalAspect.FR_RCLI_ACLI;
+                    SignalAspect = SignalAspect.FR_RCLI_ACLI;
                 }
                 else if (IsSignalFeatureEnabled("USER1")
-                    && AnnounceByACLI(nextNormalParts))
+                    && AnnounceByACLI(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_2;
-                    SignalAspect = FrSignalAspect.FR_ACLI;
+                    SignalAspect = SignalAspect.FR_ACLI;
                 }
-                else if (AnnounceByRCLI(nextNormalParts, IsSignalFeatureEnabled("USER2")))
+                else if (AnnounceByRCLI(nextNormalSignalInfo, IsSignalFeatureEnabled("USER2")))
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_RCLI;
+                    SignalAspect = SignalAspect.FR_RCLI;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_2;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

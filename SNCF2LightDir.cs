@@ -1,29 +1,28 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class SNCF2LightDir : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            if (nextNormalParts.Contains("FR_C_BAL"))
+            if (nextNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_ID_ETEINT";
+                SignalAspect = SignalAspect.FR_ID_ETEINT;
             }
             else if (RouteSet)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_ID_1_FEU";
+                SignalAspect = SignalAspect.FR_ID_1_FEU;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_ID_2_FEUX";
+                SignalAspect = SignalAspect.FR_ID_2_FEUX;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

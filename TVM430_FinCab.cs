@@ -1,4 +1,3 @@
-using Orts.Simulation.Signalling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ namespace ORTS.Scripting.Script
 {
     public class TVM430_FinCab : FrSignalScript
     {
-        Dictionary<TVMSpeedType, Aspect> MstsTranslation = SNCFV320MstsTranslation;
+        Dictionary<TvmSpeedType, Aspect> MstsTranslation = SNCFV320MstsTranslation;
 
         public override void Update()
         {
@@ -22,12 +21,12 @@ namespace ORTS.Scripting.Script
                 || x.StartsWith("Vc")
                 || x.StartsWith("Va")));
 
-            TVMSpeedType Vc = TVMSpeedType.Any;
+            TvmSpeedType Vc = TvmSpeedType.Any;
             foreach (string part in nextNormalParts)
             {
                 if (part.StartsWith("Vc"))
                 {
-                    Vc = (TVMSpeedType)Enum.Parse(typeof(TVMSpeedType), "_" + part.Substring(2));
+                    Vc = (TvmSpeedType)Enum.Parse(typeof(TvmSpeedType), "_" + part.Substring(2));
                 }
             }
 

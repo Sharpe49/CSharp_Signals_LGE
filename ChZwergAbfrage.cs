@@ -1,19 +1,17 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class ChZwergAbfrage : ChSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
             if (CurrentBlockState != BlockState.Clear
                 || !RouteSet)
             {
                 MstsSignalAspect = Aspect.Stop;
             }
-            else if (nextNormalParts.Contains("CH_IMAGE_H"))
+            else if (nextNormalSignalInfo.Aspect == SignalAspect.CH_IMAGE_H)
             {
                 MstsSignalAspect = Aspect.Stop;
             }

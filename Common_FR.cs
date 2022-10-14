@@ -1,66 +1,57 @@
 ﻿using System;
 using Orts.Simulation.Signalling;
-using System.Collections.Generic;
 
 namespace ORTS.Scripting.Script
 {
-    public enum FrSignalAspect
-    {
-        None,
-        FR_C_BAL,
-        FR_C_BAPR,
-        FR_C_BM,
-        FR_CV,
-        FR_S_BAL,
-        FR_S_BAPR,
-        FR_S_BM,
-        FR_SCLI,
-        FR_MCLI,
-        FR_M,
-        FR_D,
-        FR_RR_A,
-        FR_RR_ACLI,
-        FR_RR,
-        FR_RRCLI_A,
-        FR_RRCLI_ACLI,
-        FR_RRCLI,
-        FR_A,
-        FR_R,
-        FR_ACLI,
-        FR_RCLI,
-        FR_RCLI_ACLI,
-        FR_VLCLI_ANN,
-        FR_VLCLI_EXE,
-        FR_VL_INF,
-        FR_VL_SUP,
-        LU_SFP1,
-        LU_SFAv1,
-        LU_SFAv3,
-    }
-
-    public enum FrCrocodileState
+    public enum CrocodileState
     {
         None,
         CROCODILE_SF,
         CROCODILE_SO
     }
 
-    public enum FrKvbVanState
+    public enum KvbVanState
     {
         None,
         KVB_VAN_V30,
-        KVB_VAN_V60
+        KVB_VAN_V40,
+        KVB_VAN_V50,
+        KVB_VAN_V60,
+        KVB_VAN_V70,
+        KVB_VAN_V80,
+        KVB_VAN_V90,
+        KVB_VAN_V100,
+        KVB_VAN_V110,
+        KVB_VAN_V120,
+        KVB_VAN_V130,
+        KVB_VAN_V140,
+        KVB_VAN_V150,
+        KVB_VAN_V160,
+        KVB_VPMOB,
     }
 
-    public enum FrKvbVraState
+    public enum KvbVraState
     {
         None,
         KVB_VRA_V30,
+        KVB_VRA_V40,
+        KVB_VRA_V50,
         KVB_VRA_V60,
-        KVB_VRA_AA
+        KVB_VRA_V70,
+        KVB_VRA_V80,
+        KVB_VRA_V90,
+        KVB_VRA_V100,
+        KVB_VRA_V110,
+        KVB_VRA_V120,
+        KVB_VRA_V130,
+        KVB_VRA_V140,
+        KVB_VRA_V150,
+        KVB_VRA_V160,
+        KVB_VRA_AA,
+        KVB_TPAA,
     }
-
-    public enum FrKvbSigState
+    
+    public enum KvbSigState
     {
         None,
         KVB_S_C_BAL,
@@ -75,194 +66,427 @@ namespace ORTS.Scripting.Script
         KVB_S_REOVL
     }
 
+    public enum KvbTivdState
+    {
+        None,
+        KVB_TIVD_G_V40,
+        KVB_TIVD_G_V60,
+        KVB_TIVD_G_V90,
+        KVB_PFIX,
+    }
+
+    public enum KvbTiveState
+    {
+        None,
+        KVB_TIVE_G_V40,
+        KVB_TIVE_G_V60,
+        KVB_TIVE_G_V90,
+        KVB_TIVE_G_AA,
+        KVB_TPEX,
+    }
+
+    public enum KvbDivState
+    {
+        None,
+        KVB_DGV,
+        KVB_FGV,
+        KVB_DVL,
+        KVB_FVL,
+        KVB_FZ,
+    }
+
+    public enum KvbCsspMessage
+    {
+        None,
+        KVB_CSSP_LP,
+        KVB_CSSP_BP,
+        KVB_CSSP_AODJA,
+        KVB_CSSP_FODJA,
+    }
+
+    public enum SilecMessage
+    {
+        None,
+        SILEC_LP,
+        SILEC_BP,
+        SILEC_AODJA,
+        SILEC_FODJA,
+    }
+
+    public enum Tvm300EpiMessage
+    {
+        None,
+        EPI_ECS,
+        EPI_ECR,
+        EPI_EB,
+        EPI_NF,
+        EPI_KV65,
+        EPI_BP,
+        EPI_CCT,
+    }
+
+    public enum Tvm430BspMessage
+    {
+        None,
+        BSP_ECS,
+        BSP_ESL,
+        BSP_ESL2,
+        BSP_C300,
+        BSP_C430,
+        BSP_CNf,
+        BSP_KV22,
+        BSP_ABP,
+        BSP_ELC25,
+        BSP_ELC1_5,
+        BSP_ELGV,
+        BSP_ELC3,
+        BSP_EET,
+        BSP_AODJ,
+        BSP_EODJ,
+    }
+
     public abstract class FrSignalScript : SignalScript
     {
         private readonly TextAspectBuilder TextAspectBuilder = new TextAspectBuilder();
 
-        public FrSignalAspect SignalAspect { get; protected set; } = FrSignalAspect.None;
-        public FrCrocodileState CrocodileState { get; protected set; } = FrCrocodileState.None;
-        public FrKvbVanState KvbVanState { get; protected set; } = FrKvbVanState.None;
-        public FrKvbVraState KvbVraState { get; protected set; } = FrKvbVraState.None;
-        public FrKvbSigState KvbSigState { get; protected set; } = FrKvbSigState.None;
+        private class SignalState : IEquatable<SignalState>
+        {
+            public SignalAspect SignalAspect { get; set; } = SignalAspect.None;
+            public TvmType TvmType { get; set; } = TvmType.None;
+            public TvmSpeedType VeE { get; set; } = TvmSpeedType.None;
+            public TvmSpeedType VcE { get; set; } = TvmSpeedType.None;
+            public TvmSpeedType VaE { get; set; } = TvmSpeedType.None;
+            public DirectionInfoAspect DirectionInfoAspect { get; set; } = DirectionInfoAspect.None;
+            public SpeedInfoAspect SpeedInfoAspect { get; set; } = SpeedInfoAspect.None;
+            public IpcsInfoAspect IpcsInfoAspect { get; set; } = IpcsInfoAspect.None;
+            public CrocodileState CrocodileState { get; set; } = CrocodileState.None;
+            public KvbVanState KvbVanState { get; set; } = KvbVanState.None;
+            public KvbVraState KvbVraState { get; set; } = KvbVraState.None;
+            public KvbSigState KvbSigState { get; set; } = KvbSigState.None;
+            public KvbDivState KvbDivState { get; set; } = KvbDivState.None;
+            public KvbCsspMessage KvbCsspMessage { get; set; } = KvbCsspMessage.None;
+            public SilecMessage SilecMessage { get; set; } = SilecMessage.None;
+            public Tvm300EpiMessage Tvm300EpiMessage { get; set; } = Tvm300EpiMessage.None;
+            public Tvm430BspMessage Tvm430BspMessage { get; set; } = Tvm430BspMessage.None;
+            public bool ESUBO { get; set; } = false;
 
-        public bool CommandAspectC(List<string> nextNormalParts, bool absoluteBlock = false, bool automatic = false) =>
+            public bool Equals(SignalState other)
+            {
+                return SignalAspect == other.SignalAspect
+                       && TvmType == other.TvmType
+                       && VeE == other.VeE
+                       && VcE == other.VcE
+                       && VaE == other.VaE
+                       && DirectionInfoAspect == other.DirectionInfoAspect
+                       && SpeedInfoAspect == other.SpeedInfoAspect
+                       && IpcsInfoAspect == other.IpcsInfoAspect
+                       && CrocodileState == other.CrocodileState
+                       && KvbVanState == other.KvbVanState
+                       && KvbVraState == other.KvbVraState
+                       && KvbSigState == other.KvbSigState
+                       && KvbDivState == other.KvbDivState
+                       && KvbCsspMessage == other.KvbCsspMessage
+                       && SilecMessage == other.SilecMessage
+                       && Tvm300EpiMessage == other.Tvm300EpiMessage
+                       && Tvm430BspMessage == other.Tvm430BspMessage
+                       && ESUBO == other.ESUBO;
+            }
+
+            public void Copy(SignalState other)
+            {
+                SignalAspect = other.SignalAspect;
+                TvmType = other.TvmType;
+                VeE = other.VeE;
+                VcE = other.VcE;
+                VaE = other.VaE;
+                DirectionInfoAspect = other.DirectionInfoAspect;
+                SpeedInfoAspect = other.SpeedInfoAspect;
+                IpcsInfoAspect = other.IpcsInfoAspect;
+                CrocodileState = other.CrocodileState;
+                KvbVanState = other.KvbVanState;
+                KvbVraState = other.KvbVraState;
+                KvbSigState = other.KvbSigState;
+                KvbDivState = other.KvbDivState;
+                KvbCsspMessage = other.KvbCsspMessage;
+                SilecMessage = other.SilecMessage;
+                Tvm300EpiMessage = other.Tvm300EpiMessage;
+                Tvm430BspMessage = other.Tvm430BspMessage;
+                ESUBO = other.ESUBO;
+            }
+        }
+
+        public SignalAspect SignalAspect
+        {
+            get => State.SignalAspect;
+            set => State.SignalAspect = value;
+        }
+
+        public TvmType TvmType
+        {
+            get => State.TvmType;
+            set => State.TvmType = value;
+        }
+
+        public TvmSpeedType VeE
+        {
+            get => State.VeE;
+            set => State.VeE = value;
+        }
+
+        public TvmSpeedType VcE
+        {
+            get => State.VcE;
+            set => State.VcE = value;
+        }
+
+        public TvmSpeedType VaE
+        {
+            get => State.VaE;
+            set => State.VaE = value;
+        }
+
+        public DirectionInfoAspect DirectionInfoAspect
+        {
+            get => State.DirectionInfoAspect;
+            set => State.DirectionInfoAspect = value;
+        }
+
+        public SpeedInfoAspect SpeedInfoAspect
+        {
+            get => State.SpeedInfoAspect;
+            set => State.SpeedInfoAspect = value;
+        }
+
+        public IpcsInfoAspect IpcsInfoAspect
+        {
+            get => State.IpcsInfoAspect;
+            set => State.IpcsInfoAspect = value;
+        }
+
+        public CrocodileState CrocodileState
+        {
+            get => State.CrocodileState;
+            set => State.CrocodileState = value;
+        }
+
+        public KvbVanState KvbVanState
+        {
+            get => State.KvbVanState;
+            set => State.KvbVanState = value;
+        }
+
+        public KvbVraState KvbVraState
+        {
+            get => State.KvbVraState;
+            set => State.KvbVraState = value;
+        }
+
+        public KvbSigState KvbSigState
+        {
+            get => State.KvbSigState;
+            set => State.KvbSigState = value;
+        }
+
+        public KvbDivState KvbDivState
+        {
+            get => State.KvbDivState;
+            set => State.KvbDivState = value;
+        }
+
+        public KvbCsspMessage KvbCsspMessage
+        {
+            get => State.KvbCsspMessage;
+            set => State.KvbCsspMessage = value;
+        }
+
+        public SilecMessage SilecMessage
+        {
+            get => State.SilecMessage;
+            set => State.SilecMessage = value;
+        }
+
+        public Tvm300EpiMessage Tvm300EpiMessage
+        {
+            get => State.Tvm300EpiMessage;
+            set => State.Tvm300EpiMessage = value;
+        }
+
+        public Tvm430BspMessage Tvm430BspMessage
+        {
+            get => State.Tvm430BspMessage;
+            set => State.Tvm430BspMessage = value;
+        }
+
+        public bool ESUBO
+        {
+            get => State.ESUBO;
+            set => State.ESUBO = value;
+        }
+
+        private readonly SignalState State = new SignalState();
+        private readonly SignalState PreviousState = new SignalState();
+
+        public bool CommandAspectC(SignalInfo nextNormalSignalInfo, bool absoluteBlock = false, bool automatic = false) =>
                 !automatic && !Enabled
                 || CurrentBlockState == BlockState.Obstructed
                 || absoluteBlock && CurrentBlockState == BlockState.Occupied
-                || nextNormalParts.Contains("FR_FSO")
+                || nextNormalSignalInfo.Aspect == SignalAspect.FR_FSO
                 || HoldState == HoldState.StationStop
                 || HoldState == HoldState.ManualLock;
 
         public bool CommandAspectS() => CurrentBlockState != BlockState.Clear
                 || HoldState == HoldState.ManualLock;
 
-        public bool AnnounceByA(List<string> aspects, bool announceRR = true, bool announceRRCLI = true)
+        public bool AnnounceByA(SignalInfo nextNormalSignalInfo, bool announceRR = true, bool announceRRCLI = true)
         {
             if (HoldState == HoldState.ManualApproach)
             {
                 return true;
             }
 
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "EOA":
-                    case "FR_C_BAL":
-                    case "FR_C_BAPR":
-                    case "FR_C_BM":
-                    case "FR_CV":
-                    case "FR_S_BAL":
-                    case "FR_S_BAPR":
-                    case "FR_S_BM":
-                    case "FR_SCLI":
-                    case "FR_MCLI":
-                    case "FR_M":
-                        return true;
+                case SignalAspect.EOA:
+                case SignalAspect.FR_C_BAL:
+                case SignalAspect.FR_C_BAPR:
+                case SignalAspect.FR_C_BM:
+                case SignalAspect.FR_CV:
+                case SignalAspect.FR_S_BAL:
+                case SignalAspect.FR_S_BAPR:
+                case SignalAspect.FR_S_BM:
+                case SignalAspect.FR_SCLI:
+                case SignalAspect.FR_MCLI:
+                case SignalAspect.FR_M:
+                    return true;
 
-                    case "FR_RR_A":
-                    case "FR_RR_ACLI":
-                    case "FR_RR":
-                        return announceRR;
+                case SignalAspect.FR_RR_A:
+                case SignalAspect.FR_RR_ACLI:
+                case SignalAspect.FR_RR:
+                    return announceRR;
 
-                    case "FR_RRCLI_A":
-                    case "FR_RRCLI_ACLI":
-                    case "FR_RRCLI":
-                        return announceRRCLI;
-                }
+                case SignalAspect.FR_RRCLI_A:
+                case SignalAspect.FR_RRCLI_ACLI:
+                case SignalAspect.FR_RRCLI:
+                    return announceRRCLI;
             }
 
             return false;
         }
 
-        public bool AnnounceByACLI(List<string> aspects)
+        public bool AnnounceByACLI(SignalInfo nextNormalSignalInfo)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "FR_A":
-                    case "FR_R":
-                        return true;
-                }
+                case SignalAspect.FR_A:
+                case SignalAspect.FR_R:
+                    return true;
             }
 
             return false;
         }
 
-        public bool AnnounceByVLCLI(List<string> aspects)
+        public bool AnnounceByVLCLI(SignalInfo nextNormalSignalInfo)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "FR_A":
-                    case "FR_R":
-                    case "FR_ACLI":
-                    case "FR_RCLI":
-                    case "FR_RCLI_ACLI":
-                        return true;
-                }
+                case SignalAspect.FR_A:
+                case SignalAspect.FR_R:
+                case SignalAspect.FR_ACLI:
+                case SignalAspect.FR_RCLI:
+                case SignalAspect.FR_RCLI_ACLI:
+                    return true;
             }
 
             return false;
         }
 
-        public bool AnnounceByR(List<string> aspects, bool doubleAnnounce = false)
+        public bool AnnounceByR(SignalInfo nextNormalSignalInfo, bool doubleAnnounce = false)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "FR_RR":
-                    case "FR_RR_A":
-                    case "FR_RR_ACLI":
-                        return true;
+                case SignalAspect.FR_RR:
+                case SignalAspect.FR_RR_A:
+                case SignalAspect.FR_RR_ACLI:
+                    return true;
 
-                    case "FR_R":
-                        return doubleAnnounce;
-                }
+                case SignalAspect.FR_R:
+                    return doubleAnnounce;
             }
 
             return false;
         }
 
-        public bool AnnounceByRCLI(List<string> aspects, bool doubleAnnounce = false)
+        public bool AnnounceByRCLI(SignalInfo nextNormalSignalInfo, bool doubleAnnounce = false)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "FR_RRCLI":
-                    case "FR_RRCLI_A":
-                    case "FR_RRCLI_ACLI":
-                        return true;
+                case SignalAspect.FR_RRCLI:
+                case SignalAspect.FR_RRCLI_A:
+                case SignalAspect.FR_RRCLI_ACLI:
+                    return true;
 
-                    case "FR_RCLI":
-                        return doubleAnnounce;
-                }
+                case SignalAspect.FR_RCLI:
+                    return doubleAnnounce;
             }
 
             return false;
         }
 
-        public bool AnnounceByRCLI_ACLI(List<string> aspects)
+        public bool AnnounceByRCLI_ACLI(SignalInfo nextNormalSignalInfo)
         {
-            foreach (string aspect in aspects)
+            switch (nextNormalSignalInfo.Aspect)
             {
-                switch (aspect)
-                {
-                    case "FR_RRCLI_A":
-                        return true;
-                }
+                case SignalAspect.FR_RRCLI_A:
+                    return true;
             }
 
             return false;
         }
 
-        protected void FrenchTCS(bool signalHasSpeedRepeater = false, bool distantSignal = false)
+        protected void FrenchTcs(bool signalHasSpeedRepeater = false, bool distantSignal = false)
         {
             FrenchCrocodile();
-            FrenchKVB(signalHasSpeedRepeater, distantSignal);
+            FrenchKvb(signalHasSpeedRepeater, distantSignal);
         }
 
         protected void FrenchCrocodile()
         {
-            switch (SignalAspect)
+            switch (State.SignalAspect)
             {
-                case FrSignalAspect.FR_C_BAL:
-                case FrSignalAspect.FR_C_BAPR:
-                case FrSignalAspect.FR_C_BM:
-                case FrSignalAspect.FR_CV:
-                case FrSignalAspect.FR_S_BAL:
-                case FrSignalAspect.FR_S_BAPR:
-                case FrSignalAspect.FR_S_BM:
-                case FrSignalAspect.FR_SCLI:
-                case FrSignalAspect.FR_MCLI:
-                case FrSignalAspect.FR_M:
-                case FrSignalAspect.FR_D:
-                case FrSignalAspect.FR_RR_A:
-                case FrSignalAspect.FR_RR_ACLI:
-                case FrSignalAspect.FR_RRCLI_A:
-                case FrSignalAspect.FR_RRCLI_ACLI:
-                case FrSignalAspect.FR_A:
-                case FrSignalAspect.FR_R:
-                case FrSignalAspect.FR_ACLI:
-                case FrSignalAspect.FR_RCLI:
-                case FrSignalAspect.FR_RCLI_ACLI:
-                case FrSignalAspect.LU_SFP1:
-                case FrSignalAspect.LU_SFAv1:
-                case FrSignalAspect.LU_SFAv3:
-                    CrocodileState = FrCrocodileState.CROCODILE_SF;
+                case SignalAspect.FR_C_BAL:
+                case SignalAspect.FR_C_BAPR:
+                case SignalAspect.FR_C_BM:
+                case SignalAspect.FR_CV:
+                case SignalAspect.FR_S_BAL:
+                case SignalAspect.FR_S_BAPR:
+                case SignalAspect.FR_S_BM:
+                case SignalAspect.FR_SCLI:
+                case SignalAspect.FR_MCLI:
+                case SignalAspect.FR_M:
+                case SignalAspect.FR_D:
+                case SignalAspect.FR_RR_A:
+                case SignalAspect.FR_RR_ACLI:
+                case SignalAspect.FR_RRCLI_A:
+                case SignalAspect.FR_RRCLI_ACLI:
+                case SignalAspect.FR_A:
+                case SignalAspect.FR_R:
+                case SignalAspect.FR_ACLI:
+                case SignalAspect.FR_RCLI:
+                case SignalAspect.FR_RCLI_ACLI:
+                case SignalAspect.FR_TIVD_PRESENTE:
+                case SignalAspect.LU_SFP1:
+                case SignalAspect.LU_SFAv1:
+                case SignalAspect.LU_SFAv3:
+                    State.CrocodileState = CrocodileState.CROCODILE_SF;
                     break;
 
                 default:
-                    CrocodileState = FrCrocodileState.CROCODILE_SO;
+                    State.CrocodileState = CrocodileState.CROCODILE_SO;
                     break;
             }
         }
 
-        protected void FrenchKVB(bool signalHasSpeedRepeater = false, bool distantSignal = false, bool diskSignal = false)
+        protected void FrenchKvb(bool signalHasSpeedRepeater = false, bool distantSignal = false, bool diskSignal = false)
         {
             if (diskSignal)
             {
@@ -272,17 +496,17 @@ namespace ORTS.Scripting.Script
             // VAN
             switch (SignalAspect)
             {
-                case FrSignalAspect.FR_R:
-                    KvbVanState = FrKvbVanState.KVB_VAN_V30;
+                case SignalAspect.FR_R:
+                    KvbVanState = KvbVanState.KVB_VAN_V30;
                     break;
 
-                case FrSignalAspect.FR_RCLI:
-                case FrSignalAspect.FR_RCLI_ACLI:
-                    KvbVanState = FrKvbVanState.KVB_VAN_V60;
+                case SignalAspect.FR_RCLI:
+                case SignalAspect.FR_RCLI_ACLI:
+                    KvbVanState = KvbVanState.KVB_VAN_V60;
                     break;
 
                 default:
-                    KvbVanState = FrKvbVanState.None;
+                    KvbVanState = KvbVanState.None;
                     break;
             }
 
@@ -291,15 +515,15 @@ namespace ORTS.Scripting.Script
                 // S
                 switch (SignalAspect)
                 {
-                    case FrSignalAspect.FR_D:
-                    case FrSignalAspect.FR_A:
-                    case FrSignalAspect.FR_ACLI:
-                    case FrSignalAspect.FR_RCLI_ACLI:
-                        KvbSigState = FrKvbSigState.KVB_S_REOCS;
+                    case SignalAspect.FR_D:
+                    case SignalAspect.FR_A:
+                    case SignalAspect.FR_ACLI:
+                    case SignalAspect.FR_RCLI_ACLI:
+                        KvbSigState = KvbSigState.KVB_S_REOCS;
                         break;
 
                     default:
-                        KvbSigState = FrKvbSigState.KVB_S_REOVL;
+                        KvbSigState = KvbSigState.KVB_S_REOVL;
                         break;
                 }
             }
@@ -308,111 +532,307 @@ namespace ORTS.Scripting.Script
                 // VRA
                 switch (SignalAspect)
                 {
-                    case FrSignalAspect.FR_RR_A:
-                    case FrSignalAspect.FR_RR_ACLI:
-                    case FrSignalAspect.FR_RR:
-                        KvbVraState = FrKvbVraState.KVB_VRA_V30;
+                    case SignalAspect.FR_RR_A:
+                    case SignalAspect.FR_RR_ACLI:
+                    case SignalAspect.FR_RR:
+                        KvbVraState = KvbVraState.KVB_VRA_V30;
                         break;
 
-                    case FrSignalAspect.FR_RRCLI_A:
-                    case FrSignalAspect.FR_RRCLI_ACLI:
-                    case FrSignalAspect.FR_RRCLI:
-                        KvbVraState = FrKvbVraState.KVB_VRA_V60;
+                    case SignalAspect.FR_RRCLI_A:
+                    case SignalAspect.FR_RRCLI_ACLI:
+                    case SignalAspect.FR_RRCLI:
+                        KvbVraState = KvbVraState.KVB_VRA_V60;
                         break;
 
                     default:
-                        KvbVraState = signalHasSpeedRepeater ? FrKvbVraState.KVB_VRA_AA : FrKvbVraState.None;
+                        KvbVraState = signalHasSpeedRepeater ? KvbVraState.KVB_VRA_AA : KvbVraState.None;
                         break;
                 }
 
                 switch (SignalAspect)
                 {
-                    case FrSignalAspect.FR_C_BAL:
-                    case FrSignalAspect.FR_C_BAPR:
-                    case FrSignalAspect.FR_CV:
-                        KvbSigState = FrKvbSigState.KVB_S_C_BAL;
+                    case SignalAspect.FR_C_BAL:
+                    case SignalAspect.FR_C_BAPR:
+                    case SignalAspect.FR_CV:
+                        KvbSigState = KvbSigState.KVB_S_C_BAL;
                         break;
 
-                    case FrSignalAspect.FR_C_BM:
-                    case FrSignalAspect.FR_S_BM:
-                        KvbSigState = FrKvbSigState.KVB_S_S_BM;
+                    case SignalAspect.FR_C_BM:
+                    case SignalAspect.FR_S_BM:
+                        KvbSigState = KvbSigState.KVB_S_S_BM;
                         break;
 
-                    case FrSignalAspect.FR_S_BAL:
-                    case FrSignalAspect.FR_S_BAPR:
-                    case FrSignalAspect.FR_SCLI:
-                    case FrSignalAspect.FR_MCLI:
-                    case FrSignalAspect.FR_M:
-                        KvbSigState = FrKvbSigState.KVB_S_S_BAL;
+                    case SignalAspect.FR_S_BAL:
+                    case SignalAspect.FR_S_BAPR:
+                    case SignalAspect.FR_SCLI:
+                    case SignalAspect.FR_MCLI:
+                    case SignalAspect.FR_M:
+                        KvbSigState = KvbSigState.KVB_S_S_BAL;
                         break;
 
-                    case FrSignalAspect.FR_RR_A:
-                    case FrSignalAspect.FR_RRCLI_A:
-                    case FrSignalAspect.FR_A:
-                        KvbSigState = FrKvbSigState.KVB_S_A;
+                    case SignalAspect.FR_RR_A:
+                    case SignalAspect.FR_RRCLI_A:
+                    case SignalAspect.FR_A:
+                        KvbSigState = KvbSigState.KVB_S_A;
                         break;
 
-                    case FrSignalAspect.FR_RR_ACLI:
-                    case FrSignalAspect.FR_RRCLI_ACLI:
-                    case FrSignalAspect.FR_RCLI_ACLI:
-                    case FrSignalAspect.FR_ACLI:
-                        KvbSigState = FrKvbSigState.KVB_S_ACLI;
+                    case SignalAspect.FR_RR_ACLI:
+                    case SignalAspect.FR_RRCLI_ACLI:
+                    case SignalAspect.FR_RCLI_ACLI:
+                    case SignalAspect.FR_ACLI:
+                        KvbSigState = KvbSigState.KVB_S_ACLI;
                         break;
 
-                    case FrSignalAspect.FR_VLCLI_ANN:
-                    case FrSignalAspect.FR_VLCLI_EXE:
-                        KvbSigState = FrKvbSigState.KVB_S_VLCLI;
+                    case SignalAspect.FR_VLCLI_ANN:
+                    case SignalAspect.FR_VLCLI_EXE:
+                        KvbSigState = KvbSigState.KVB_S_VLCLI;
                         break;
 
-                    case FrSignalAspect.FR_RR:
-                    case FrSignalAspect.FR_RRCLI:
-                    case FrSignalAspect.FR_R:
-                    case FrSignalAspect.FR_RCLI:
-                    case FrSignalAspect.FR_VL_INF:
-                        KvbSigState = FrKvbSigState.KVB_S_VL_INF;
+                    case SignalAspect.FR_RR:
+                    case SignalAspect.FR_RRCLI:
+                    case SignalAspect.FR_R:
+                    case SignalAspect.FR_RCLI:
+                    case SignalAspect.FR_VL_INF:
+                        KvbSigState = KvbSigState.KVB_S_VL_INF;
                         break;
 
-                    case FrSignalAspect.FR_VL_SUP:
-                        KvbSigState = FrKvbSigState.KVB_S_VL_SUP;
+                    case SignalAspect.FR_VL_SUP:
+                        KvbSigState = KvbSigState.KVB_S_VL_SUP;
                         break;
 
                     default:
-                        KvbSigState = FrKvbSigState.None;
+                        KvbSigState = KvbSigState.None;
                         break;
                 }
             }
         }
 
+        protected void FrenchKvbTivd(int speedKpH)
+        {
+            if (SignalAspect == SignalAspect.FR_TIVD_PRESENTE)
+            {
+                KvbVanState = (KvbVanState)Enum.Parse(typeof(KvbVanState), $"KVB_VAN_V{speedKpH}");
+            }
+            else
+            {
+                KvbVanState = KvbVanState.None;
+            }
+        }
+
+        protected void FrenchKvbTivr(int speedKpH)
+        {
+            if (SignalAspect == SignalAspect.FR_TIVR_PRESENTE)
+            {
+                KvbVraState = (KvbVraState) Enum.Parse(typeof(KvbVraState), $"KVB_VRA_V{speedKpH}");
+            }
+            else
+            {
+                KvbVraState = KvbVraState.KVB_VRA_AA;
+            }
+        }
+
+        protected void FrenchKvbCssp()
+        {
+            switch (SignalAspect)
+            {
+                case SignalAspect.FR_BP_ANNONCE_PRESENTE:
+                    KvbCsspMessage = KvbCsspMessage.KVB_CSSP_BP;
+                    break;
+
+                case SignalAspect.FR_BP_FP_1500V_PRESENTE:
+                case SignalAspect.FR_BP_FP_3000V_PRESENTE:
+                case SignalAspect.FR_BP_FP_25000V_PRESENTE:
+                case SignalAspect.FR_BP_FP_25000VLGV_PRESENTE:
+                case SignalAspect.FR_BP_FP_25000VET_PRESENTE:
+                    KvbCsspMessage = KvbCsspMessage.KVB_CSSP_LP;
+                    break;
+
+                case SignalAspect.FR_CCT_ANNONCE_PRESENTE:
+                    KvbCsspMessage = KvbCsspMessage.KVB_CSSP_AODJA;
+                    break;
+
+                case SignalAspect.FR_CCT_FP_PRESENTE:
+                    KvbCsspMessage = KvbCsspMessage.KVB_CSSP_FODJA;
+                    break;
+
+                default:
+                    KvbCsspMessage = KvbCsspMessage.None;
+                    break;
+            }
+        }
+
+        protected void FrenchSilec()
+        {
+            switch (SignalAspect)
+            {
+                case SignalAspect.FR_BP_ANNONCE_PRESENTE:
+                    SilecMessage = SilecMessage.SILEC_BP;
+                    break;
+
+                case SignalAspect.FR_BP_FP_1500V_PRESENTE:
+                case SignalAspect.FR_BP_FP_3000V_PRESENTE:
+                case SignalAspect.FR_BP_FP_25000V_PRESENTE:
+                case SignalAspect.FR_BP_FP_25000VLGV_PRESENTE:
+                case SignalAspect.FR_BP_FP_25000VET_PRESENTE:
+                    SilecMessage = SilecMessage.SILEC_LP;
+                    break;
+
+                case SignalAspect.FR_CCT_ANNONCE_PRESENTE:
+                    SilecMessage = SilecMessage.SILEC_AODJA;
+                    break;
+
+                case SignalAspect.FR_CCT_FP_PRESENTE:
+                    SilecMessage = SilecMessage.SILEC_FODJA;
+                    break;
+
+                default:
+                    SilecMessage = SilecMessage.None;
+                    break;
+            }
+        }
+
+        protected void FrenchTvm300Epi()
+        {
+            switch (SignalAspect)
+            {
+                case SignalAspect.FR_BP_ANNONCE_PRESENTE:
+                    Tvm300EpiMessage = Tvm300EpiMessage.EPI_BP;
+                    break;
+
+                case SignalAspect.FR_CCT_ANNONCE_PRESENTE:
+                    Tvm300EpiMessage = Tvm300EpiMessage.EPI_CCT;
+                    break;
+
+                default:
+                    Tvm300EpiMessage = Tvm300EpiMessage.None;
+                    break;
+            }
+        }
+
+        protected void FrenchTvm430Bsp()
+        {
+            switch (SignalAspect)
+            {
+                case SignalAspect.FR_BP_ANNONCE_PRESENTE:
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_ABP;
+                    break;
+
+                case SignalAspect.FR_CCT_ANNONCE_PRESENTE:
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_AODJ;
+                    break;
+
+                case SignalAspect.FR_CCT_EXECUTION_PRESENTE:
+                    Tvm430BspMessage = Tvm430BspMessage.BSP_EODJ;
+                    break;
+
+                default:
+                    Tvm430BspMessage = Tvm430BspMessage.None;
+                    break;
+            }
+        }
+
         protected void SerializeAspect()
         {
+            if (State.Equals(PreviousState))
+            {
+                return;
+            }
+
             TextAspectBuilder.Clear();
 
-            if (SignalAspect != FrSignalAspect.None)
+            if (SignalAspect != SignalAspect.None)
             {
                 TextAspectBuilder.Append(SignalAspect.ToString());
             }
 
-            if (CrocodileState != FrCrocodileState.None)
+            if (TvmType != TvmType.None)
+            {
+                TextAspectBuilder.Append(TvmType.ToString());
+            }
+
+            if (VeE != TvmSpeedType.None)
+            {
+                TextAspectBuilder.Append("Ve" + VeE.ToString().Substring(1));
+            }
+
+            if (VcE != TvmSpeedType.None)
+            {
+                TextAspectBuilder.Append("Vc" + VcE.ToString().Substring(1));
+            }
+
+            if (VaE != TvmSpeedType.None && VaE != TvmSpeedType.Any)
+            {
+                TextAspectBuilder.Append("Va" + VaE.ToString().Substring(1));
+            }
+
+            if (DirectionInfoAspect != DirectionInfoAspect.None)
+            {
+                TextAspectBuilder.Append(DirectionInfoAspect.ToString());
+            }
+
+            if (SpeedInfoAspect != SpeedInfoAspect.None)
+            {
+                TextAspectBuilder.Append(SpeedInfoAspect.ToString());
+            }
+
+            if (IpcsInfoAspect != IpcsInfoAspect.None)
+            {
+                TextAspectBuilder.Append(IpcsInfoAspect.ToString());
+            }
+
+            if (CrocodileState != CrocodileState.None)
             {
                 TextAspectBuilder.Append(CrocodileState.ToString());
             }
 
-            if (KvbVanState != FrKvbVanState.None)
+            if (KvbVanState != KvbVanState.None)
             {
                 TextAspectBuilder.Append(KvbVanState.ToString());
             }
 
-            if (KvbVraState != FrKvbVraState.None)
+            if (KvbVraState != KvbVraState.None)
             {
                 TextAspectBuilder.Append(KvbVraState.ToString());
             }
 
-            if (KvbSigState != FrKvbSigState.None)
+            if (KvbSigState != KvbSigState.None)
             {
                 TextAspectBuilder.Append(KvbSigState.ToString());
             }
 
+            if (KvbDivState != KvbDivState.None)
+            {
+                TextAspectBuilder.Append(KvbDivState.ToString());
+            }
+
+            if (KvbCsspMessage != KvbCsspMessage.None)
+            {
+                TextAspectBuilder.Append(KvbCsspMessage.ToString());
+            }
+
+            if (SilecMessage != SilecMessage.None)
+            {
+                TextAspectBuilder.Append(SilecMessage.ToString());
+            }
+
+            if (Tvm300EpiMessage != Tvm300EpiMessage.None)
+            {
+                TextAspectBuilder.Append(Tvm300EpiMessage.ToString());
+            }
+
+            if (Tvm430BspMessage != Tvm430BspMessage.None)
+            {
+                TextAspectBuilder.Append(Tvm430BspMessage.ToString());
+            }
+
+            if (ESUBO)
+            {
+                TextAspectBuilder.Append("ESUBO");
+            }
+
             TextSignalAspect = TextAspectBuilder.ToString();
+
+            PreviousState.Copy(State);
         }
     }
 }

@@ -1,45 +1,43 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class CvMSAR60VL : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
 
-            if (CommandAspectC(nextNormalParts))
+            if (CommandAspectC(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_CV;
+                SignalAspect = SignalAspect.FR_CV;
             }
             else if (CommandAspectS())
             {
                 MstsSignalAspect = Aspect.StopAndProceed;
-                SignalAspect = FrSignalAspect.FR_S_BAL;
+                SignalAspect = SignalAspect.FR_S_BAL;
             }
-            else if (nextNormalParts.Contains("FR_C_BAL") || nextNormalParts.Contains("FR_CV"))
+            else if (nextNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL || nextNormalSignalInfo.Aspect == SignalAspect.FR_CV)
             {
                 MstsSignalAspect = Aspect.Restricting;
-                SignalAspect = FrSignalAspect.FR_MCLI;
+                SignalAspect = SignalAspect.FR_MCLI;
             }
-            else if (AnnounceByA(nextNormalParts, true, false))
+            else if (AnnounceByA(nextNormalSignalInfo, true, false))
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                SignalAspect = FrSignalAspect.FR_A;
+                SignalAspect = SignalAspect.FR_A;
             }
-            else if (AnnounceByRCLI(nextNormalParts))
+            else if (AnnounceByRCLI(nextNormalSignalInfo))
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                SignalAspect = FrSignalAspect.FR_RCLI;
+                SignalAspect = SignalAspect.FR_RCLI;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                SignalAspect = FrSignalAspect.FR_VL_INF;
+                SignalAspect = SignalAspect.FR_VL_INF;
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

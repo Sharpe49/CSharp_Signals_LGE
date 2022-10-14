@@ -8,56 +8,60 @@ namespace ORTS.Scripting.Script
         public override void Update()
         {
             int nextNormalSignalId = NextSignalId("NORMAL");
-            List<string> nextNormalParts = new List<string>();
             if (nextNormalSignalId >= 0)
             {
-                nextNormalParts = IdTextSignalAspect(nextNormalSignalId, "NORMAL").Split(' ').ToList();
                 SendSignalMessage(nextNormalSignalId, "FR_TVM430 Vpf170E");
             }
+
+            SignalInfo nextNormalSignalInfo = DeserializeAspect(nextNormalSignalId, "NORMAL");
 
             if (!Enabled
                 || CurrentBlockState == BlockState.Obstructed)
             {
                 MstsSignalAspect = Aspect.Stop;
-                SignalAspect = FrSignalAspect.FR_C_BAL;
+                SignalAspect = SignalAspect.FR_C_BAL;
             }
             else if (RouteSet) // Vers LGV - To HSL
             {
                 if (CurrentBlockState == BlockState.Occupied
-                    || !nextNormalParts.Contains("FR_TVM430"))
+                    || nextNormalSignalInfo.TvmType != TvmType.FR_TVM430
+                    || nextNormalSignalInfo.Ve == TvmSpeedType.None
+                    || nextNormalSignalInfo.Vc == TvmSpeedType.None
+                    || nextNormalSignalInfo.Ve == TvmSpeedType.Any
+                    || nextNormalSignalInfo.Vc == TvmSpeedType.Any)
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    SignalAspect = FrSignalAspect.FR_C_BAL;
+                    SignalAspect = SignalAspect.FR_C_BAL;
                 }
-                else if (nextNormalParts.Contains("VcRRR"))
+                else if (nextNormalSignalInfo.Vc == TvmSpeedType._RRR)
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    SignalAspect = FrSignalAspect.FR_M;
+                    SignalAspect = SignalAspect.FR_M;
                 }
-                else if (nextNormalParts.Contains("Ve60")
-                    && nextNormalParts.Contains("Ve80"))
+                else if (nextNormalSignalInfo.Ve == TvmSpeedType._60
+                    || nextNormalSignalInfo.Ve == TvmSpeedType._80)
                 {
                     if (ApproachControlPosition(100f))
                     {
                         MstsSignalAspect = Aspect.Approach_1;
-                        SignalAspect = FrSignalAspect.FR_A;
+                        SignalAspect = SignalAspect.FR_A;
                     }
                     else
                     {
                         MstsSignalAspect = Aspect.Stop;
-                        SignalAspect = FrSignalAspect.FR_C_BAL;
+                        SignalAspect = SignalAspect.FR_C_BAL;
                     }
                 }
-                else if (nextNormalParts.Contains("Vc000")
-                    && nextNormalParts.Contains("Ve170"))
+                else if (nextNormalSignalInfo.Vc == TvmSpeedType._000
+                    && nextNormalSignalInfo.Ve == TvmSpeedType._170)
                 {
                     MstsSignalAspect = Aspect.Approach_2;
-                    SignalAspect = FrSignalAspect.FR_A;
+                    SignalAspect = SignalAspect.FR_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
             else
@@ -65,21 +69,21 @@ namespace ORTS.Scripting.Script
                 if (CurrentBlockState == BlockState.Occupied)
                 {
                     MstsSignalAspect = Aspect.StopAndProceed;
-                    SignalAspect = FrSignalAspect.FR_S_BAL;
+                    SignalAspect = SignalAspect.FR_S_BAL;
                 }
-                else if (AnnounceByA(nextNormalParts))
+                else if (AnnounceByA(nextNormalSignalInfo))
                 {
                     MstsSignalAspect = Aspect.Approach_1;
-                    SignalAspect = FrSignalAspect.FR_A;
+                    SignalAspect = SignalAspect.FR_A;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Clear_1;
-                    SignalAspect = FrSignalAspect.FR_VL_INF;
+                    SignalAspect = SignalAspect.FR_VL_INF;
                 }
             }
 
-            FrenchTCS();
+            FrenchTcs();
 
             SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);

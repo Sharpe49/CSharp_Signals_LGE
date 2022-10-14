@@ -1,28 +1,27 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class Oeilleton : FrSignalScript
     {
         public override void Update()
         {
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
 
             if (!Enabled
-                || thisNormalParts.Contains("FR_C_BAL")
-                || thisNormalParts.Contains("FR_C_BAPR")
-                || thisNormalParts.Contains("FR_C_BM")
-                || thisNormalParts.Contains("FR_CV"))
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAPR
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BM
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_CV)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "FR_OEILLETON_ETEINT";
+                SignalAspect = SignalAspect.FR_OEILLETON_ETEINT;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_OEILLETON_ALLUME";
+                SignalAspect = SignalAspect.FR_OEILLETON_ALLUME;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,29 +1,28 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class Plaque_G_D : FrSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisNormalParts = TextSignalAspectToList(SignalId, "NORMAL");
-            string direction = FindSignalAspect("DIR", "INFO", 5);
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo thisNormalSignalInfo = DeserializeAspect(SignalId, "NORMAL");
+            SignalInfo directionSignalInfo = FindSignalAspect("DIR", "INFO", 5);
 
             if (!Enabled
-                || thisNormalParts.Contains("FR_C_BAL")
-                || !nextNormalParts.Contains("FR_TABLEAU_G_D")
-                || direction.Contains("DIR7"))
+                || thisNormalSignalInfo.Aspect == SignalAspect.FR_C_BAL
+                || nextNormalSignalInfo.Aspect != SignalAspect.FR_TABLEAU_G_D
+                || directionSignalInfo.DirectionInfoAspect == DirectionInfoAspect.DIR7)
             {
                 MstsSignalAspect = Aspect.Clear_1;
-                TextSignalAspect = "FR_TABLEAU_G_D_EFFACE";
+                SignalAspect = SignalAspect.FR_TABLEAU_G_D_EFFACE;
             }
             else
             {
                 MstsSignalAspect = Aspect.Clear_2;
-                TextSignalAspect = "FR_TABLEAU_G_D_PRESENTE";
+                SignalAspect = SignalAspect.FR_TABLEAU_G_D_PRESENTE;
             }
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

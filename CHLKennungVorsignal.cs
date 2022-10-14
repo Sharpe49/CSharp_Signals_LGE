@@ -5,8 +5,9 @@ namespace ORTS.Scripting.Script
         public override void Update()
         {
             MstsSignalAspect = Aspect.Approach_3;
-            TextSignalAspect = "CH_SIGNAL_AVANCE";
+            InfoAspect = ChInfoAspect.CH_SIGNAL_AVANCE;
 
+            SerializeAspect();
             DrawState = DefaultDrawState(MstsSignalAspect);
         }
     }

@@ -1,42 +1,42 @@
-using System.Collections.Generic;
-
 namespace ORTS.Scripting.Script
 {
     public class ChLAusf40 : ChSignalScript
     {
         public override void Update()
         {
-            List<string> nextNormalParts = NextNormalSignalTextAspects;
-            List<string> thisDistantParts = TextSignalAspectToList(SignalId, "DISTANCE");
-            List<string> nextIdentifierParts = TextSignalAspectToList(NextSignalId("REPEATER"), "REPEATER");
+            SignalInfo nextNormalSignalInfo = NextNormalSignalInfo;
+            SignalInfo thisDistantSignalInfo = DeserializeAspect(SignalId, "DISTANCE");
+            SignalInfo nextIdentifierSignalInfo = DeserializeAspect(NextSignalId("REPEATER"), "REPEATER");
 
             if (!Enabled
                 || CurrentBlockState != BlockState.Clear
                 || !RouteSet)
             {
                 MstsSignalAspect = Aspect.Stop;
-                TextSignalAspect = "";
+                InfoAspect = ChInfoAspect.None;
             }
-            else if (thisDistantParts.Count <= 0
-                && (nextNormalParts.Contains("CH_IMAGE_H")
-                    || nextNormalParts.Contains("CH_IMAGE_6")))
+            else if (thisDistantSignalInfo.Aspect != SignalAspect.None
+                && (nextNormalSignalInfo.Aspect == SignalAspect.CH_IMAGE_H
+                    || nextNormalSignalInfo.Aspect == SignalAspect.CH_IMAGE_6))
             {
-                if (nextIdentifierParts.Contains("CH_MARQUEUR_DE_SORTIE_DE_GARE"))
+                if (nextIdentifierSignalInfo.ChInfoAspect == ChInfoAspect.CH_MARQUEUR_DE_SORTIE_DE_GARE)
                 {
                     MstsSignalAspect = Aspect.Stop;
-                    TextSignalAspect = "";
+                    InfoAspect = ChInfoAspect.None;
                 }
                 else
                 {
                     MstsSignalAspect = Aspect.Restricting;
-                    TextSignalAspect = "CH_INFO_IMAGE_6";
+                    InfoAspect = ChInfoAspect.CH_INFO_IMAGE_6;
                 }
             }
             else
             {
                 MstsSignalAspect = Aspect.Approach_1;
-                TextSignalAspect = "CH_INFO_IMAGE_2";
+                InfoAspect = ChInfoAspect.CH_INFO_IMAGE_2;
             }
+
+            SerializeAspect();
         }
     }
 }
