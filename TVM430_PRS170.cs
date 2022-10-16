@@ -26,6 +26,7 @@ namespace ORTS.Scripting.Script
             VeE = TvmSpeedType._000;
             VcE = TvmSpeedType._RRR;
             VaE = TvmSpeedType.Any;
+            TvmEndOfBlock = true;
         }
 
         public override void Update()

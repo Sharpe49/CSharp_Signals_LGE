@@ -156,6 +156,7 @@ namespace ORTS.Scripting.Script
             public TvmSpeedType VeE { get; set; } = TvmSpeedType.None;
             public TvmSpeedType VcE { get; set; } = TvmSpeedType.None;
             public TvmSpeedType VaE { get; set; } = TvmSpeedType.None;
+            public bool TvmEndOfBlock { get; set; } = false;
             public DirectionInfoAspect DirectionInfoAspect { get; set; } = DirectionInfoAspect.None;
             public SpeedInfoAspect SpeedInfoAspect { get; set; } = SpeedInfoAspect.None;
             public IpcsInfoAspect IpcsInfoAspect { get; set; } = IpcsInfoAspect.None;
@@ -177,6 +178,7 @@ namespace ORTS.Scripting.Script
                        && VeE == other.VeE
                        && VcE == other.VcE
                        && VaE == other.VaE
+                       && TvmEndOfBlock == other.TvmEndOfBlock
                        && DirectionInfoAspect == other.DirectionInfoAspect
                        && SpeedInfoAspect == other.SpeedInfoAspect
                        && IpcsInfoAspect == other.IpcsInfoAspect
@@ -199,6 +201,7 @@ namespace ORTS.Scripting.Script
                 VeE = other.VeE;
                 VcE = other.VcE;
                 VaE = other.VaE;
+                TvmEndOfBlock = other.TvmEndOfBlock;
                 DirectionInfoAspect = other.DirectionInfoAspect;
                 SpeedInfoAspect = other.SpeedInfoAspect;
                 IpcsInfoAspect = other.IpcsInfoAspect;
@@ -243,6 +246,12 @@ namespace ORTS.Scripting.Script
         {
             get => State.VaE;
             set => State.VaE = value;
+        }
+
+        public bool TvmEndOfBlock
+        {
+            get => State.TvmEndOfBlock;
+            set => State.TvmEndOfBlock = value;
         }
 
         public DirectionInfoAspect DirectionInfoAspect
@@ -763,6 +772,11 @@ namespace ORTS.Scripting.Script
             if (VaE != TvmSpeedType.None && VaE != TvmSpeedType.Any)
             {
                 TextAspectBuilder.Append("Va" + VaE.ToString().Substring(1));
+            }
+
+            if (TvmEndOfBlock)
+            {
+                TextAspectBuilder.Append("EOB");
             }
 
             if (DirectionInfoAspect != DirectionInfoAspect.None)
