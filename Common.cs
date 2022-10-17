@@ -422,6 +422,13 @@ namespace ORTS.Scripting.Script
                 {
                     if (Enum.TryParse(part, out signalInfo.TvmType))
                     {
+                        if (signalInfo.TvmType != TvmType.None)
+                        {
+                            signalInfo.Ve = TvmSpeedType._000;
+                            signalInfo.Vc = TvmSpeedType._RRR;
+                            signalInfo.Va = TvmSpeedType.Any;
+                        }
+
                         continue;
                     }
                 }
